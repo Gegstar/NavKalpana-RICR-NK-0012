@@ -3,8 +3,8 @@
 :root {
   --primary-yellow: #FACC15;
   --primary-yellow-hover: #EAB308;
-  --primary-yellow-light: #FEF9C3;   /* newly added for light backgrounds */
-  --primary-yellow-dark: #854d0e;     /* newly added for dark text on light yellow */
+  --primary-yellow-light: #FEF9C3;
+  --primary-yellow-dark: #854d0e;
   --bg-light: #F8FAFC;
   --bg-white: #FFFFFF;
   --text-primary: #0F172A;
@@ -16,7 +16,6 @@
   --transition-speed: 0.3s;
 }
 
-
 * {
   margin: 0;
   padding: 0;
@@ -26,7 +25,7 @@
 body {
   margin: 0;
   padding: 0;
- background-color: var(--bg-light); 
+  background-color: var(--bg-light);
   color: var(--text-primary);
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   line-height: 1.6;
@@ -35,7 +34,7 @@ body {
 
 .btn-primary {
   background-color: var(--primary-yellow);
-  color: #000000; 
+  color: #000000;
   padding: 10px 20px;
   border: none;
   border-radius: 10px;
@@ -62,24 +61,26 @@ body {
   min-height: 100vh;
 }
 
+/* Main content area – base padding (sidebar margin is applied in layout) */
 .mainContent {
-  padding-top: 70px; 
+  padding-top: 70px;
   min-height: calc(100vh - 70px);
+  transition: margin-left var(--transition-speed) ease;
 }
 
 @media (max-width: 768px) {
   .mainContent {
-    padding-top: 60px; 
+    padding-top: 60px;
   }
 }
 
-/* Selection Color */
+/* Selection color */
 ::selection {
   background-color: var(--primary-yellow);
   color: #000;
 }
 
-/* Scrollbar Styling for Modern Look */
+/* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -95,13 +96,4 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-secondary);
-}
-
-.mainContent {
-  flex: 1;
-  margin-left: 220px; 
-  margin-top: 80px;   
-  padding: 40px;
-  background: var(--bg-light);
-  transition: all 0.3s ease;
 }

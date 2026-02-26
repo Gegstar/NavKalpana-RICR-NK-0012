@@ -1,11 +1,12 @@
+/* CourseCard1.module.css */
+
 .wrapper {
   display: flex;
-  justify-content: center; /* horizontal center */
-  align-items: center;     /* vertical center */
+  justify-content: center;
+  align-items: center;
   padding: 5px;
-  background: var(--bg-light);
+  background: transparent;
   width: 100%;
-  min-height: 100vh;       /* ensures single card is vertically centered */
   box-sizing: border-box;
 }
 
@@ -13,7 +14,7 @@
   background: var(--bg-white);
   border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-sm);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   width: 100%;
   max-width: 350px;
@@ -22,53 +23,19 @@
 
 .card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 25px 45px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-lg);
   border-color: var(--primary-yellow);
 }
-
-
-/* Skeleton styles */
-.skeletonCard {
-  animation: pulse 1.5s infinite;
-}
-
-.skeletonText {
-  height: 12px;
-  background: #e5e7eb; /* gray */
-  border-radius: 6px;
-}
-
-.skeletonButton {
-  width: 60%;
-  height: 36px;
-  background: #e5e7eb;
-  border-radius: 8px;
-  margin-top: 10px;
-}
-
-@keyframes pulse {
-  0% {
-    background-color: #f3f4f6;
-  }
-  50% {
-    background-color: #e5e7eb;
-  }
-  100% {
-    background-color: #f3f4f6;
-  }
-}
-
-/* Keep the rest of your CSS unchanged (image, content, buttons) */
 
 .image {
   width: 100%;
   height: 200px;
   object-fit: cover;
-  background: #F1F5F9;
+  background: var(--bg-light);
 }
 
 .content {
-  padding: 10px;
+  padding: 16px;
 }
 
 .title {
@@ -77,33 +44,41 @@
   color: var(--text-primary);
   margin-bottom: 8px;
   letter-spacing: -0.5px;
+  line-height: 1.3;
 }
 
 .description {
-  height: 40px;
   font-size: 14px;
   color: var(--text-secondary);
-  margin-bottom: 7px;
+  margin-bottom: 12px;
   line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .instructor {
   font-size: 14px;
   color: var(--text-primary);
-  margin-bottom: 15px;
+  margin-bottom: 16px;
   font-weight: 600;
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
+.instructor svg {
+  color: var(--primary-yellow);
+}
+
 .progressContainer {
   width: 100%;
-  height: 10px;
-  background: #F1F5F9;
+  height: 8px;
+  background: var(--bg-light);
   border-radius: 20px;
   overflow: hidden;
-  margin-bottom: 10px;
+  margin: 16px 0 8px;
   border: 1px solid var(--border-light);
 }
 
@@ -118,20 +93,20 @@
 .progressText {
   font-size: 13px;
   color: var(--text-primary);
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   font-weight: 700;
   text-align: right;
 }
 
 .button {
   width: 100%;
-  padding: 14px;
+  padding: 12px 14px;
   background: var(--primary-yellow);
-  color: #000;
+  color: var(--text-primary);
   border: none;
   border-radius: 12px;
   cursor: pointer;
-  font-weight: 800;
+  font-weight: 700;
   font-size: 15px;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(250, 204, 21, 0.2);
@@ -141,8 +116,41 @@
   gap: 8px;
 }
 
-.button:hover {
+.button:hover:not(:disabled) {
   background: var(--primary-yellow-hover);
   transform: scale(1.02);
   box-shadow: 0 8px 20px rgba(250, 204, 21, 0.4);
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Small inline button variant for "Mark Complete" */
+.button.small {
+  padding: 6px 10px;
+  font-size: 12px;
+  width: fit-content;
+  border-radius: 8px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .card {
+    max-width: 100%;
+  }
+  
+  .title {
+    font-size: 18px;
+  }
+  
+  .content {
+    padding: 12px;
+  }
+  
+  .button {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
 }

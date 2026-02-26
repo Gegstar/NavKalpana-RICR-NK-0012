@@ -1,31 +1,3 @@
-/* ─── CourseDetail.module.css ─────────────────────────────────────────────── */
-
-/* ─── Light mode (default) - Unified with globals.css ─────────────────────── */
-:root {
-  --primary:      #FACC15;      /* Yellow from globals.css */
-  --primary-lit:  #EAB308;      /* Yellow hover state */
-  --primary-pale: rgba(250, 204, 21, 0.10);
-  --primary-rule: rgba(250, 204, 21, 0.22);
-  --bg:           #F8FAFC;      /* Light gray-white from globals.css */
-  --bg-2:         #FFFFFF;      /* Pure white from globals.css */
-  --bg-3:         #E2E8F0;      /* Light border color */
-  --text:         #0F172A;      /* Dark navy-black from globals.css */
-  --text-2:       #1E293B;      /* Darker text variant */
-  --text-3:       #64748B;      /* Secondary text from globals.css */
-  --text-4:       #94A3B8;      /* Light gray text */
-  --border:       #E2E8F0;      /* Light border from globals.css */
-  --green:        #22c55e;
-  --green-pale:   rgba(34, 197, 94, 0.08);
-  --green-rule:   rgba(34, 197, 94, 0.25);
-  --shadow:       0 4px 24px rgba(0, 0, 0, 0.08);
-  --r:            8px;
-  --r-sm:         5px;
-  --speed:        0.2s;
-
-  /* Panel widths */
-  --left-w:  260px;
-  --right-w: 280px;
-}
 
 
 

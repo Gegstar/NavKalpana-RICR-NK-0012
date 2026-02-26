@@ -1,40 +1,32 @@
-.container {
-  display: flex;
-  width: 100%;
-  min-height: 100vh;
-  overflow-x: hidden; /* हॉरिजॉन्टल स्क्रॉल रोकने के लिए */
-}
-
-.mainContent {
-  flex: 1; /* यह सबसे ज़रूरी है: यह बची हुई सारी जगह ले लेगा */
-  width: 100%; 
-  display: flex;
-  flex-direction: column;
-  background: var(--bg-light);
-  transition: all 0.3s ease; /* साइडबार के साथ स्मूथ एनीमेशन */
-  /* padding: 20px; */
-}
-
-/* अगर साइडबार Fixed है, तो सिर्फ margin-left को dynamic रखें */
-.noMargin {
-  margin-left: 0 !important; 
-}
+/* Layout.module.css */
 
 .container {
   display: flex;
   width: 100%;
   min-height: 100vh;
+  overflow-x: hidden; /* prevent horizontal scroll */
+  background-color: var(--bg-light);
 }
 
 .sidebarWrapper {
   height: 100vh;
-  position: fixed; /* साइडबार को एक जगह रखने के लिए */
+  position: fixed;
   z-index: 50;
 }
 
 .mainContent {
-  flex: 1;
-  background-color: var(--bg-light); /* आपकी व्हाइट थीम */
+  flex: 1; /* takes remaining width */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-light);
+  transition: margin-left 0.3s ease;
+  /* padding: 20px; – uncomment if you want inner spacing */
+}
+
+/* When sidebar is hidden or collapsed */
+.noMargin {
+  margin-left: 0 !important;
 }
 
 .fullWidth {
@@ -42,15 +34,15 @@
   width: 100% !important;
 }
 
-/* स्टेट कार्ड्स और अन्य डिज़ाइन */
+/* Dashboard card example (can be moved to a component‑specific file) */
 .statCard {
-  background: white;
+  background: var(--bg-white);
   padding: 25px;
   border-radius: 16px;
   border: 1px solid var(--border-light);
   text-align: center;
   box-shadow: var(--shadow-sm);
-  transition: 0.3s;
+  transition: all var(--transition-speed) ease;
 }
 
 .statCard:hover {
@@ -58,7 +50,7 @@
   transform: translateY(-5px);
 }
 
-/* मोबाइल के लिए रिस्पॉन्सिव */
+/* Mobile adjustments */
 @media (max-width: 768px) {
   .mainContent {
     margin-left: 0;
