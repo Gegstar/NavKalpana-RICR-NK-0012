@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useId } from "react";
 import styles from "@/styles/Auth.module.css";
 import { authService } from "@/services/auth.services";
 import {
@@ -20,6 +20,7 @@ import { useDispatch } from "react-redux";
 import type { AppDispatch } from "@/redux/store";
 import { Eye, EyeOff, Mail, Lock, AlertCircle, CheckCircle } from "lucide-react";
 
+
 export default function StudentLogin() {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
@@ -28,6 +29,9 @@ export default function StudentLogin() {
     email: "",
     password: "",
   });
+
+  const emailId = useId();
+  const passwordId = useId();
 
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -210,7 +214,9 @@ export default function StudentLogin() {
               Email Address
             </label>
             <TextField
+              id={emailId}
               name="email"
+              inputProps={{ suppressHydrationWarning: true }}
               value={form.email}
               onChange={handleChange}
               onBlur={() => handleBlur('email')}
@@ -244,7 +250,9 @@ export default function StudentLogin() {
               Password
             </label>
             <TextField
+              id={passwordId}
               name="password"
+              inputProps={{ suppressHydrationWarning: true }}
               value={form.password}
               onChange={handleChange}
               onBlur={() => handleBlur('password')}

@@ -1,28 +1,30 @@
-/* -------------------------------
-   Submission Data Interface
--------------------------------- */
-export interface SubmissionData {
+export interface AssignmentData {
   id: number;
-  content: string;
-  fileUrl?: string;
-  marks?: number;
-  feedback?: string;
-  status: "PENDING" | "SUBMITTED" | "EVALUATED";
-  submittedAt: string; 
-  submissionTime?: string;
-  lateFlag?: boolean;
+  title: string;
+  description: string;
+  deadline: string; // ISO string
+  createdAt: string;
+  updatedAt: string;
 }
 
-/* -------------------------------
-   Assignment With Submission
--------------------------------- */
+export interface SubmissionData {
+  id: number;
+  assignmentId: number;
+  studentId: number;
+  fileUrl?: string;
+  textAnswer?: string;
+  externalLink?: string;
+  submissionTime: string;
+  lateFlag: boolean;
+  status: "NOT_SUBMITTED" | "SUBMITTED" | "LATE_SUBMITTED" | "EVALUATED" | "PENDING";
+  marks?: number;
+  feedback?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface AssignmentWithSubmissionResponse {
-  assignment: {
-    id: number;
-    title: string;
-    description: string;
-    deadline: string;
-  };
-  submission?: SubmissionData;
-  isSubmitted?: SubmissionData;
+  assignment: AssignmentData;
+  submission: SubmissionData | null;
+  isSubmitted: boolean;
 }

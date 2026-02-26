@@ -53,8 +53,9 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
 
   const menuItems = [
     { name: "Dashboard", icon: <LayoutDashboard size={20} />, path: "/student/student-dashboard" },
+    { name: "Growth Dashboard", icon: <LayoutDashboard size={20} />, path: "/student/growth-dashboard" },
     { name: "Courses", icon: <BookOpen size={20} />, path: "/student/my-courses" },
-    { name: "Assignments", icon: <Flame size={20} />, path: "/student/assignments" },
+    { name: "Assignments", icon: <Flame size={20} />, path: "/student/assignments/4" },
     { name: "Quizzes", icon: <GraduationCap size={20} />, path: "/student/quiz-model" },
     { name: "Attendance", icon: <Calendar size={20} />, path: "/student/attendance/1" },
     { name: "Learning Support", icon: <BookUser size={20} />, path: "/student/learning-support" },

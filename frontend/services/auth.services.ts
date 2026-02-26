@@ -36,4 +36,9 @@ class AuthService {
   }
 }
 
+login: async (data: { email: string; password: string }) => {
+  const response = await api.post('/auth/login/student', data);
+  return response.data;
+}
+
 export const authService = new AuthService();

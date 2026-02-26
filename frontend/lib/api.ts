@@ -27,15 +27,15 @@ const getCookie = (name: string): string | null => {
 export const api = axios.create({
   baseURL: API_URL,
   headers: { "Content-Type": "application/json" },
+  timeout: 10000, // Add timeout
 });
 
-// ===============================
-// 🔹 Request Interceptor
-// ===============================
+// Add request logging for debugging
 api.interceptors.request.use(
   (config) => {
+    console.log(`🚀 ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`);
+    
     const accessToken = getCookie("accessToken");
-
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
@@ -49,8 +49,20 @@ api.interceptors.request.use(
 // 🔹 Response Interceptor
 // ===============================
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    console.log(`✅ ${response.status} ${response.config.url}`);
+    return response;
+  },
   async (error) => {
+    // Log error details
+    if (error.response) {
+      console.error(`❌ ${error.response.status} ${error.config?.url}`, error.response.data);
+    } else if (error.request) {
+      console.error(`❌ No response from server: ${error.config?.url}`);
+    } else {
+      console.error(`❌ Request error: ${error.message}`);
+    }
+
     const originalRequest = error.config;
 
     if (error.response?.status === 403) {
@@ -118,5 +130,4 @@ export const getImageUrl = (path: string) => `${IMAGE_URL}/${path}`;
 // ===============================
 
 export const getJobs = () => api.get("/jobs");
-
 export const getInternships = () => api.get("/jobs?type=Internship");

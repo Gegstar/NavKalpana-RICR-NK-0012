@@ -1,10 +1,10 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import styles from '@/styles/StudentDashboard.module.css';
-import { studentService } from '@/services/student.services';
 import { courseService } from '@/services/user.services';
 import { useRouter } from "next/navigation";
 import { dashboardService } from '@/services/dashboard.services';
+import { studentService } from '@/services/student.services';
 import { useSelector } from 'react-redux';
 import {
   Search, Bell, Trophy, Flame, Target,
@@ -157,19 +157,9 @@ export default function StudentDashboard() {
         setLoading(true);
 
         // Fetch dashboard data
+        let apiResponse: any = null;
         try {
-          const apiResponse = await dashboardService.getStudentDashboard();
-          setDashboardData(apiResponse);
-
-          // Set weekly stats if available
-          if (apiResponse.weeklyActivity) {
-            setWeeklyStats(apiResponse.weeklyActivity);
-          }
-
-          // Set attendance if available
-          if (apiResponse.attendance) {
-            setAttendanceData(apiResponse.attendance);
-          }
+          apiResponse = await dashboardService.getStudentDashboard();
         } catch (error) {
           console.error("Dashboard API error:", error);
           toast.error("Failed to load dashboard data");
@@ -201,7 +191,6 @@ export default function StudentDashboard() {
           }));
           setMyCourses(mappedCourses);
         } else if (profileData?.student?.enrolledCourses && profileData.student.enrolledCourses.length > 0) {
-          // Fallback to enrolled courses from profile
           const mappedEnrolled: Course[] = profileData.student.enrolledCourses.map((course: any) => ({
             id: course.id,
             title: course.title,
@@ -209,6 +198,40 @@ export default function StudentDashboard() {
             progress: course.progress || 0
           }));
           setMyCourses(mappedEnrolled);
+        }
+
+        // Map API response to DashboardData structure
+        if (apiResponse) {
+          const mappedDashboardData: DashboardData = {
+            name: apiResponse.studentName,
+            email: '', // not provided by API, will fallback to auth
+            assignments: apiResponse.assignments,
+            academicScore: apiResponse.academicScore,
+            learningStreak: apiResponse.learningStreak,
+            recentAssignments: [], // API doesn't have recent submissions
+            jobPosts: apiResponse.jobPosts,
+            alumni: apiResponse.alumni,
+            topPerformers: apiResponse.topPerformers,
+            weeklyActivity: apiResponse.weeklyActivity?.map((item: any) => item.value) || [],
+            enrolledCourses: [], // will be filled from profile/courses if needed
+            upcomingQuizzes: [], // not provided
+            attendance: apiResponse.attendance,
+          };
+          setDashboardData(mappedDashboardData);
+
+          // Set weekly stats from weeklyActivity values
+          if (apiResponse.weeklyActivity) {
+            setWeeklyStats(apiResponse.weeklyActivity.map((item: any) => item.value));
+          }
+
+          // Set attendance if available
+          if (apiResponse.attendance) {
+            setAttendanceData({
+              totalClasses: apiResponse.attendance.total,
+              present: apiResponse.attendance.present,
+              percentage: apiResponse.attendance.percentage,
+            });
+          }
         }
 
       } catch (err) {

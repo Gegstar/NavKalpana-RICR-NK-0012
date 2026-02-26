@@ -1,216 +1,863 @@
-/* --- Main Container --- */
+/* Attendance.module.css */
+
+/* :root {
+  --primary-yellow: #FACC15;
+  --primary-yellow-hover: #EAB308;
+  --bg-light: #F8FAFC;
+  --bg-white: #000;
+  --text-primary: #ffff;
+  --text-secondary: #fff;
+  --border-light: #E2E8F0;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --transition-speed: 0.3s;
+} */
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-10px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+/* Container */
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
-  background-color: var(--bg-light);
+  background: var(--bg-light);
+  min-height: 100vh;
+  animation: fadeIn 0.5s ease;
 }
 
-.mainTitle {
-  font-weight: 800;
+/* Loading State */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--bg-light);
+  animation: fadeIn 0.5s ease;
+}
+
+.loadingSpinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid var(--border-light);
+  border-top-color: var(--primary-yellow);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow-md);
+}
+
+.loadingContainer p {
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+  animation: slideIn 0.5s ease;
+}
+
+.headerLeft {
+  flex: 1;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
   color: var(--text-primary);
+  margin: 0 0 0.5rem 0;
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--primary-yellow) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.mainTitle span { 
-  color: var(--primary-yellow); 
+.subtitle {
+  color: var(--text-secondary);
+  margin: 0;
+  font-size: 1rem;
 }
 
-/* --- Top Layout Grid --- */
-.topLayout {
-  display: grid;
-  grid-template-columns: 1.5fr 1fr;
-  gap: 2rem;
-  margin-bottom: 2rem;
-  align-items: start;
+.headerActions {
+  display: flex;
+  gap: 0.75rem;
 }
 
-/* --- Horizontal Side Scroll Section (Fixed) --- */
-.courseScrollWrapper {
-  width: 100%;
-  overflow-x: auto; /* Side scroll enable */
-  overflow-y: hidden;
-  padding-bottom: 15px;
-  cursor: grab;
-  scrollbar-width: thin;
-  scrollbar-color: var(--primary-yellow) transparent;
-  -webkit-overflow-scrolling: touch; /* For smooth mobile scroll */
-}
-
-.courseGrid {
-  display: flex !important; /* Force flex for horizontal layout */
-  flex-direction: row;
-  flex-wrap: nowrap; /* Prevents cards from jumping to next line */
-  gap: 1.5rem;
-  width: max-content;
-  padding: 10px 5px;
-}
-
-/* --- Card Styles --- */
-.courseCard, .calendarCard, .historyCard {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 20px;
+.filterBtn, .downloadBtn {
+  padding: 0.6rem 1.2rem;
+  background: var(--bg-white);
   border: 1px solid var(--border-light);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  border-radius: 30px;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: var(--shadow-sm);
 }
 
-.courseCard {
-  width: 280px; /* Fixed width for consistent scrolling */
-  flex-shrink: 0; /* Prevents card from shrinking */
-  transition: transform 0.3s ease, border-color 0.3s ease;
+.filterBtn:hover, .downloadBtn:hover {
+  background: var(--primary-yellow);
+  border-color: var(--primary-yellow);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
-.courseCard:hover {
-  transform: translateY(-5px);
+/* Filters Panel */
+.filtersPanel {
+  background: var(--bg-white);
+  border-radius: 16px;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-light);
+  overflow: hidden;
+  animation: slideIn 0.5s ease;
+}
+
+.filtersContent {
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.filterGroup label {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.select {
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  background: var(--bg-white);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+}
+
+.select:hover {
   border-color: var(--primary-yellow);
 }
 
-/* --- Circular Progress Indicator --- */
-.circularProgress {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  margin: 1.5rem auto;
+.viewToggle {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
+  gap: 0.5rem;
 }
 
-.innerCircle {
-  width: 100px;
-  height: 100px;
-  background: white;
-  border-radius: 50%;
+.viewBtn {
+  flex: 1;
+  padding: 0.5rem;
+  background: var(--bg-light);
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 800;
-  font-size: 1.2rem;
+  gap: 0.25rem;
+}
+
+.viewBtn.active {
+  background: var(--primary-yellow);
+  border-color: var(--primary-yellow);
   color: var(--text-primary);
 }
 
-.cardStats {
+/* Stats Grid */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.statCard {
+  background: var(--bg-white);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-light);
   display: flex;
-  justify-content: space-around;
-  border-top: 1px solid var(--border-light);
-  padding-top: 1rem;
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-}
-
-/* --- Custom Calendar Styling --- */
-.customCalendar {
-  width: 100% !important;
-  border: none !important;
-  font-family: inherit;
-  background: white;
-  border-radius: 15px;
-}
-
-.tilePresent { 
-  background: #dcfce7 !important; 
-  color: #166534 !important; 
-  border-radius: 8px; 
-}
-
-.tileAbsent { 
-  background: #fee2e2 !important; 
-  color: #991b1b !important; 
-  border-radius: 8px; 
-}
-
-.legend {
-  display: flex;
+  align-items: center;
   gap: 1rem;
-  margin-top: 1rem;
+  transition: all var(--transition-speed) ease;
+  animation: scaleIn 0.5s ease;
+}
+
+.statCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.statIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.statInfo {
+  flex: 1;
+}
+
+.statLabel {
+  display: block;
+  color: var(--text-secondary);
   font-size: 0.8rem;
+  margin-bottom: 0.25rem;
+}
+
+.statValue {
+  display: block;
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* Courses Section */
+.coursesSection {
+  margin-bottom: 2rem;
+  animation: fadeIn 0.5s ease;
+}
+
+.sectionTitle {
+  color: var(--text-primary);
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 0 1.5rem 0;
+}
+
+.coursesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.courseCard {
+  background: var(--bg-white);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-light);
+  transition: all var(--transition-speed) ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.courseCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.courseCard::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, rgba(250, 204, 21, 0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity var(--transition-speed) ease;
+}
+
+.courseCard:hover::after {
+  opacity: 1;
+}
+
+.courseHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.courseIcon {
+  color: var(--primary-yellow);
+}
+
+.courseHeader h3 {
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.courseStats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.courseStat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.courseStat .statLabel {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.courseStat .statNumber {
+  font-size: 1.1rem;
   font-weight: 600;
 }
 
-.dotPresent::before { content: "●"; color: #22c55e; margin-right: 5px; }
-.dotAbsent::before { content: "●"; color: #ef4444; margin-right: 5px; }
+/* Progress Bar */
+.progressSection {
+  margin-bottom: 1rem;
+}
 
-/* --- Table Styling --- */
-.table {
+.progressHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.progressPercentage {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.progressBar {
+  height: 6px;
+  background: var(--border-light);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 1s ease;
+}
+
+/* Status Tag */
+.statusTag {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 30px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* Records Section */
+.recordsSection {
+  background: var(--bg-white);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-light);
+  animation: slideIn 0.5s ease;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.monthNavigation {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navBtn {
+  width: 36px;
+  height: 36px;
+  background: var(--bg-light);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+  color: var(--text-primary);
+}
+
+.navBtn:hover {
+  background: var(--primary-yellow);
+  border-color: var(--primary-yellow);
+  transform: scale(1.1);
+}
+
+.currentMonth {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  min-width: 140px;
+  text-align: center;
+}
+
+/* Records Grid */
+.recordsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.recordCard {
+  background: var(--bg-light);
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid var(--border-light);
+  transition: all var(--transition-speed) ease;
+  animation: scaleIn 0.5s ease;
+}
+
+.recordCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  background: var(--bg-white);
+}
+
+.recordHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.recordDate {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.recordStatus {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 30px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.recordStatus.present {
+  background: #10B98115;
+  color: #10B981;
+}
+
+.recordStatus.absent {
+  background: #EF444415;
+  color: #EF4444;
+}
+
+.recordStatus.late {
+  background: #F59E0B15;
+  color: #F59E0B;
+}
+
+.recordCourse {
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0 0 0.5rem 0;
+}
+
+.recordTime {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+/* Table View */
+.tableWrapper {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+}
+
+.recordsTable {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 1rem;
 }
 
-.table th {
+.recordsTable th {
   text-align: left;
   padding: 1rem;
-  background: #f8fafc;
+  background: var(--bg-light);
   color: var(--text-secondary);
-  font-weight: 600;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border-bottom: 2px solid var(--border-light);
 }
 
-.table td { 
-  padding: 1rem; 
-  border-bottom: 1px solid #f1f5f9; 
+.recordsTable td {
+  padding: 1rem;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  border-bottom: 1px solid var(--border-light);
 }
 
-.presentTag { 
-  background: #dcfce7; 
-  color: #166534; 
-  padding: 4px 12px; 
-  border-radius: 20px; 
-  font-size: 0.8rem; 
-  font-weight: 700; 
+.recordsTable tr:last-child td {
+  border-bottom: none;
 }
 
-.absentTag { 
-  background: #fee2e2; 
-  color: #991b1b; 
-  padding: 4px 12px; 
-  border-radius: 20px; 
-  font-size: 0.8rem; 
-  font-weight: 700; 
+.recordsTable tr {
+  transition: all var(--transition-speed) ease;
 }
 
-/* --- Scrollbar Customization --- */
-.courseScrollWrapper::-webkit-scrollbar {
-  height: 6px;
+.recordsTable tr:hover {
+  background: var(--bg-light);
 }
 
-.courseScrollWrapper::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 10px;
+.tableStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 30px;
+  font-size: 0.8rem;
+  font-weight: 500;
 }
 
-.courseScrollWrapper::-webkit-scrollbar-thumb {
-  background: var(--primary-yellow);
-  border-radius: 10px;
+.tableStatus.present {
+  background: #10B98115;
+  color: #10B981;
 }
 
-.courseScrollWrapper::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-yellow-hover);
+.tableStatus.absent {
+  background: #EF444415;
+  color: #EF4444;
 }
 
-/* --- Responsive Design --- */
+.tableStatus.late {
+  background: #F59E0B15;
+  color: #F59E0B;
+}
+
+/* Status Icons */
+.statusPresent {
+  color: #10B981;
+}
+
+.statusAbsent {
+  color: #EF4444;
+}
+
+.statusLate {
+  color: #F59E0B;
+}
+
+/* Empty State */
+.emptyState {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-secondary);
+  animation: fadeIn 0.5s ease;
+}
+
+.emptyState svg {
+  opacity: 0.3;
+  margin-bottom: 1rem;
+}
+
+.emptyState h3 {
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  margin: 0 0 0.5rem 0;
+}
+
+.emptyState p {
+  margin: 0;
+}
+
+/* Responsive Design */
+
+/* Tablet Landscape */
 @media (max-width: 1024px) {
-  .topLayout { 
-    grid-template-columns: 1fr; 
+  .container {
+    padding: 1.5rem;
+  }
+
+  .title {
+    font-size: 1.8rem;
+  }
+
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (max-width: 600px) {
+/* Tablet Portrait */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .headerActions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .filtersContent {
+    grid-template-columns: 1fr;
+  }
+
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .coursesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .sectionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .monthNavigation {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .recordsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mobile Landscape */
+@media (max-width: 640px) {
+  .title {
+    font-size: 1.3rem;
+  }
+
+  .headerActions {
+    flex-direction: column;
+  }
+
+  .filterBtn, .downloadBtn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .courseStats {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .recordsTable th,
+  .recordsTable td {
+    padding: 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  .tableStatus {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+  }
+}
+
+/* Mobile Small */
+@media (max-width: 480px) {
+  .container {
+    padding: 0.75rem;
+  }
+
+  .title {
+    font-size: 1.2rem;
+  }
+
+  .statCard {
+    padding: 1rem;
+  }
+
+  .statIcon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .statValue {
+    font-size: 1.2rem;
+  }
+
   .courseCard {
-    width: 240px;
+    padding: 1rem;
+  }
+
+  .courseHeader h3 {
+    font-size: 1rem;
+  }
+
+  .recordsSection {
+    padding: 1rem;
+  }
+
+  .currentMonth {
+    font-size: 0.9rem;
+    min-width: 120px;
   }
 }
 
-/* Attendance.module.css में */
-.tilePresent {
-  background-color: #dcfce7 !important; /* Light Green */
-  color: #166534 !important;
-  border-radius: 8px;
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .container {
+    background: #0F172A;
+  }
+
+  .statCard,
+  .courseCard,
+  .recordsSection,
+  .filtersPanel {
+    background: #1E293B;
+    border-color: #334155;
+  }
+
+  .recordCard {
+    background: #0F172A;
+    border-color: #334155;
+  }
+
+  .recordCard:hover {
+    background: #1E293B;
+  }
+
+  .recordsTable th {
+    background: #0F172A;
+  }
+
+  .recordsTable tr:hover {
+    background: #0F172A;
+  }
+
+  .viewBtn {
+    background: #0F172A;
+    border-color: #334155;
+  }
+
+  .navBtn {
+    background: #0F172A;
+    border-color: #334155;
+  }
+
+  .select {
+    background: #0F172A;
+    border-color: #334155;
+    color: #F1F5F9;
+  }
 }
 
-.tileAbsent {
-  background-color: #fee2e2 !important; /* Light Red */
-  color: #991b1b !important;
-  border-radius: 8px;
+
+
+/* Print Styles */
+@media print {
+  .container {
+    background: white;
+    padding: 0.5in;
+  }
+
+  .filterBtn,
+  .downloadBtn,
+  .navBtn,
+  .viewToggle {
+    display: none;
+  }
+
+  .statCard,
+  .courseCard,
+  .recordsSection {
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+}
+
+/* Accessibility */
+:focus-visible {
+  outline: 2px solid var(--primary-yellow);
+  outline-offset: 2px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-light);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
 }

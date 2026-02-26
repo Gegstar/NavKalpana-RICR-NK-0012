@@ -1,73 +1,18 @@
-import { api } from "../lib/api";
-import type {
-  AssignmentWithSubmissionResponse,
-  SubmissionData,
-  AssignmentData,
-} from "@/models/assignment-submission.model";
+import { api } from "@/lib/api";
+import type { AssignmentWithSubmissionResponse } from "@/models/assignment-submission.model";
 
 class AssignmentService {
-  private baseUrl = "/assignments";
+  private base = "/assignments";
 
-// 🔥 Get Assignment With Student Submission
-  async getAll(
-  ): Promise<AssignmentData[]> {
-    const response = await api.get(
-      `${this.baseUrl}`
-    );
-
+  async getAssignmentWithSubmission(id: number): Promise<AssignmentWithSubmissionResponse> {
+    const response = await api.get(`${this.base}/my-assignment/${id}`);
     return response.data;
   }
 
-  // 🔥 Get Single Assignment
-  async getById(id: number) {
-    const response = await api.get(`${this.baseUrl}/${id}`);
-    return response.data;
-  }
-
-  // 🔥 Submit Assignment
-  async submit(
-    assignmentId: number,
-    formData: FormData
-  ): Promise<SubmissionData> {
-    const response = await api.post(
-      `${this.baseUrl}/${assignmentId}/submit`,
-      formData
-    );
-
-    return response.data;
-  }
-
-  // 🔥 Evaluate Submission (Instructor)
-  async evaluate(
-    submissionId: number,
-    data: { marks: number; feedback: string }
-  ): Promise<SubmissionData> {
-    const response = await api.patch(
-      `${this.baseUrl}/evaluate/${submissionId}`,
-      data
-    );
-
-    return response.data;
-  }
-
-  // 🔥 Get Assignment With Student Submission
-  async getAssignmentWithSubmission(
-    assignmentId: number
-  ): Promise<AssignmentWithSubmissionResponse> {
-    const response = await api.get(
-      `${this.baseUrl}/my-assignment/${assignmentId}`
-    );
-
-    return response.data;
-  }
-
-  // ✅ 🔥 NEW: Request Revaluation
-  async requestRevaluation(submissionId: number) {
-    const response = await api.post(
-      `${this.baseUrl}/revaluation/${submissionId}`
-    );
-
-    return response.data;
+  async submit(id: number, formData: FormData): Promise<void> {
+    await api.post(`${this.base}/${id}/submit`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
   }
 }
 

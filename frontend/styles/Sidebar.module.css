@@ -4,14 +4,14 @@
   height: 100vh;
   position: fixed;
   left: 0;
-  background-color: #ffffff;
-  border-right: 1px solid #f1f5f9;
+  background-color: var(--bg-white);
+  border-right: 1px solid var(--border-light);
   display: flex;
   flex-direction: column;
   padding: 25px 15px;
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1000;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.02);
+  box-shadow: var(--shadow-md);
 }
 
 /* Collapsed State Width */
@@ -25,7 +25,7 @@
   position: absolute;
   right: -12px;
   top: 40px;
-  background: #FACC15; 
+  background: var(--primary-yellow);
   border: none;
   width: 26px;
   height: 26px;
@@ -36,12 +36,13 @@
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(250, 204, 21, 0.4);
   z-index: 1001;
-  color: #000;
-  transition: transform 0.2s ease;
+  color: var(--text-primary);
+  transition: transform var(--transition-speed) ease;
 }
 
 .toggleBtn:hover {
   transform: scale(1.1);
+  background: var(--primary-yellow-hover);
 }
 
 /* --- Logo Section --- */
@@ -56,8 +57,8 @@
 }
 
 .logoIcon {
-  background: #FACC15;
-  color: #000;
+  background: var(--primary-yellow);
+  color: var(--text-primary);
   min-width: 45px;
   height: 45px;
   display: flex;
@@ -72,12 +73,12 @@
 .logoText {
   font-size: 22px;
   font-weight: 800;
-  color: #0F172A;
+  color: var(--text-primary);
   letter-spacing: -0.5px;
 }
 
 .logoText span {
-  color: #FACC15;
+  color: var(--primary-yellow);
 }
 
 /* --- Navigation Menu --- */
@@ -94,25 +95,49 @@
   gap: 14px;
   padding: 14px 16px;
   text-decoration: none;
-  color: #64748B;
+  color: var(--text-secondary);
   font-size: 15px;
   font-weight: 600;
   border-radius: 12px;
-  transition: all 0.2s ease;
+  transition: all var(--transition-speed) ease;
   white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+}
+
+.navItem::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 3px;
+  background: var(--primary-yellow);
+  transform: scaleY(0);
+  transition: transform var(--transition-speed) ease;
+  border-radius: 0 3px 3px 0;
 }
 
 .navItem:hover {
-  background-color: #FEFCE8; /* हल्का पीला */
-  color: #FACC15;
+  background-color: var(--primary-yellow-light);
+  color: var(--primary-yellow);
   transform: translateX(5px);
+}
+
+.navItem:hover::before {
+  transform: scaleY(1);
 }
 
 /* --- Active Link Style --- */
 .navActive {
-  background-color: #FACC15 !important;
-  color: #000 !important;
-  box-shadow: 0 8px 15px -3px rgba(250, 204, 21, 0.3);
+  background-color: var(--primary-yellow) !important;
+  color: var(--text-primary) !important;
+  box-shadow: var(--shadow-lg);
+}
+
+.navActive::before {
+  transform: scaleY(1);
+  background: var(--text-primary);
 }
 
 /* Collapsed Navigation Adjustments */
@@ -122,13 +147,20 @@
 }
 
 .sidebar.collapsed .navItem:hover {
-  transform: scale(1.05); /* छोटे मोड में खिसकने के बजाय थोड़ा बड़ा होगा */
+  transform: scale(1.1);
+}
+
+.sidebar.collapsed .navItem::before {
+  width: 2px;
+  left: auto;
+  right: 0;
 }
 
 /* --- Logout Wrapper --- */
 .logoutWrapper {
-  border-top: 1px solid #f1f5f9;
+  border-top: 1px solid var(--border-light);
   padding-top: 20px;
+  margin-top: auto;
 }
 
 .logoutBtn {
@@ -137,16 +169,40 @@
   gap: 14px;
   padding: 14px 16px;
   text-decoration: none;
-  color: #EF4444; /* रेड कलर फॉर लॉगआउट */
+  color: #EF4444;
   font-size: 15px;
   font-weight: 600;
   border-radius: 12px;
-  transition: background 0.2s;
+  transition: all var(--transition-speed) ease;
   white-space: nowrap;
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.logoutBtn::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 3px;
+  background: #EF4444;
+  transform: scaleY(0);
+  transition: transform var(--transition-speed) ease;
+  border-radius: 0 3px 3px 0;
 }
 
 .logoutBtn:hover {
   background-color: #FEF2F2;
+  transform: translateX(5px);
+}
+
+.logoutBtn:hover::before {
+  transform: scaleY(1);
 }
 
 .sidebar.collapsed .logoutBtn {
@@ -154,7 +210,168 @@
   padding: 14px 0;
 }
 
+.sidebar.collapsed .logoutBtn::before {
+  width: 2px;
+  left: auto;
+  right: 0;
+}
+
 /* --- Smooth Transitions for Text --- */
-.navItem span, .logoText, .logoutBtn span {
-  transition: opacity 0.2s ease;
+.navItem span, 
+.logoText, 
+.logoutBtn span,
+.navItem svg,
+.logoutBtn svg {
+  transition: all var(--transition-speed) ease;
+}
+
+.sidebar.collapsed .navItem span,
+.sidebar.collapsed .logoutBtn span,
+.sidebar.collapsed .logoText {
+  opacity: 0;
+  width: 0;
+  display: none;
+}
+
+/* --- Tooltip for Collapsed Mode --- */
+.sidebar.collapsed .navItem {
+  position: relative;
+}
+
+.sidebar.collapsed .navItem:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--bg-dark);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  margin-left: 10px;
+  z-index: 1000;
+  box-shadow: var(--shadow-md);
+  pointer-events: none;
+}
+
+.sidebar.collapsed .logoutBtn:hover::after {
+  content: 'Logout';
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--bg-dark);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  margin-left: 10px;
+  z-index: 1000;
+  box-shadow: var(--shadow-md);
+  pointer-events: none;
+}
+
+/* --- Scrollbar Styling --- */
+.sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: var(--bg-light);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: var(--border-light);
+  border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+    box-shadow: var(--shadow-xl);
+  }
+  
+  .sidebar.mobileOpen {
+    transform: translateX(0);
+  }
+  
+  .toggleBtn {
+    display: none;
+  }
+  
+  .sidebar.collapsed {
+    width: 240px;
+    padding: 25px 15px;
+  }
+  
+  .sidebar.collapsed .navItem {
+    justify-content: flex-start;
+    padding: 14px 16px;
+  }
+  
+  .sidebar.collapsed .navItem span,
+  .sidebar.collapsed .logoutBtn span,
+  .sidebar.collapsed .logoText {
+    opacity: 1;
+    width: auto;
+    display: inline-block;
+  }
+  
+  .sidebar.collapsed .navItem:hover::after,
+  .sidebar.collapsed .logoutBtn:hover::after {
+    display: none;
+  }
+}
+
+/* --- Dark Mode Support --- */
+@media (prefers-color-scheme: dark) {
+  .sidebar {
+    background: var(--bg-dark);
+    border-right-color: var(--border-light);
+  }
+  
+  .navItem {
+    color: var(--text-secondary);
+  }
+  
+  .navItem:hover {
+    background-color: rgba(250, 204, 21, 0.1);
+  }
+  
+  .logoutWrapper {
+    border-top-color: var(--border-light);
+  }
+}
+
+/* --- Print Styles --- */
+@media print {
+  .sidebar {
+    display: none;
+  }
+}
+
+/* --- Animation for Active Indicator --- */
+@keyframes slideIn {
+  from {
+    transform: translateX(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.navActive {
+  animation: slideIn 0.3s ease;
 }
