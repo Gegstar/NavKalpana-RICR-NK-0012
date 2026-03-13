@@ -1,0 +1,725 @@
+/* Auth.module.css */
+
+:root {
+  --primary-yellow: #FACC15;
+  --primary-yellow-hover: #EAB308;
+  --primary-yellow-light: #FEF9C3;
+  --primary-yellow-dark: #854d0e;
+  --bg-light: #F8FAFC;
+  --bg-white: #FFFFFF;
+  --text-primary: #0F172A;
+  --text-secondary: #64748B;
+  --border-light: #E2E8F0;
+  --error-red: #EF4444;
+  --error-red-light: #FEE2E2;
+  --success-green: #10B981;
+  --success-green-light: #D1FAE5;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  --transition-speed: 0.3s;
+}
+
+/* ========== ANIMATIONS ========== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-10px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+  20%, 40%, 60%, 80% { transform: translateX(2px); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* ========== MAIN WRAPPER ========== */
+.authWrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  animation: fadeIn 0.5s ease;
+}
+
+/* Background circles */
+.bgCircle1,
+.bgCircle2 {
+  position: absolute;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-yellow) 0%, #764ba2 100%);
+  opacity: 0.2;
+  z-index: 0;
+  animation: float 6s ease infinite;
+}
+
+.bgCircle1 {
+  width: 400px;
+  height: 400px;
+  top: -150px;
+  right: -150px;
+}
+
+.bgCircle2 {
+  width: 300px;
+  height: 300px;
+  bottom: -150px;
+  left: -150px;
+  animation-delay: -3s;
+}
+
+/* ========== CARD ========== */
+.authCard {
+  width: 100%;
+  max-width: 480px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 32px;
+  padding: 2.5rem;
+  box-shadow: var(--shadow-xl);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  position: relative;
+  z-index: 1;
+  animation: scaleIn 0.5s ease;
+}
+
+.authCard.shake {
+  animation: shake 0.5s ease;
+}
+
+/* ========== LOGO ========== */
+.logoSection {
+  text-align: center;
+  margin-bottom: 2rem;
+  animation: slideIn 0.5s ease;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.logoText {
+  color: var(--text-primary);
+}
+
+.logoHighlight {
+  color: var(--primary-yellow);
+  background: linear-gradient(135deg, var(--primary-yellow), var(--primary-yellow-dark));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ========== HEADER ========== */
+.headerSection {
+  text-align: center;
+  margin-bottom: 2rem;
+  animation: slideIn 0.5s ease 0.1s both;
+}
+
+.title {
+  color: var(--text-primary);
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ========== FORM ========== */
+.formElement {
+  animation: slideIn 0.5s ease 0.2s both;
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+  position: relative;
+  width: 100%;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.labelIcon {
+  color: var(--primary-yellow);
+}
+
+/* Valid indicator */
+.validIndicator {
+  position: absolute;
+  right: 14px;
+  top: 42px;
+  color: var(--success-green);
+  animation: scaleIn 0.3s ease;
+  pointer-events: none;
+}
+
+/* ========== PASSWORD STRENGTH (for signup) ========== */
+.passwordStrength {
+  margin-top: 0.75rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.strengthBars {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.strengthBar {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  transition: background-color 0.3s ease;
+}
+
+.strengthBar.active {
+  animation: pulse 1.5s ease infinite;
+}
+
+.strengthText {
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* ========== OTP SECTION (for signup) ========== */
+.otpSection {
+  animation: fadeIn 0.5s ease;
+}
+
+.otpContainer {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin: 1.5rem 0 1rem;
+}
+
+.otpInput {
+  width: 48px;
+  height: 56px;
+  border: 2px solid var(--border-light);
+  border-radius: 12px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  color: var(--text-primary);
+  background: var(--bg-white);
+  transition: all var(--transition-speed) ease;
+  outline: none;
+}
+
+.otpInput:focus {
+  border-color: var(--primary-yellow);
+  box-shadow: 0 0 0 4px rgba(250, 204, 21, 0.1);
+  transform: scale(1.05);
+}
+
+.otpInput:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.timerSection {
+  text-align: center;
+  margin: 1rem 0;
+}
+
+.timer {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.timer span {
+  color: var(--primary-yellow);
+  font-weight: 600;
+  animation: pulse 1s ease infinite;
+}
+
+.resendButton {
+  background: none;
+  border: none;
+  color: var(--primary-yellow);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+}
+
+.resendButton:hover:not(:disabled) {
+  color: var(--primary-yellow-hover);
+  background: var(--bg-light);
+  transform: scale(1.05);
+}
+
+.resendButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.editEmailButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+  margin: 0 auto;
+  padding: 0.5rem;
+  border-radius: 6px;
+}
+
+.editEmailButton:hover {
+  color: var(--primary-yellow);
+  background: var(--bg-light);
+}
+
+/* ========== ROW (Remember me & Forgot password) ========== */
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.5rem 0 1.5rem;
+}
+
+.checkboxLabel {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.checkboxLabel :global(.MuiTypography-root) {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.forgotLink {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: all var(--transition-speed) ease;
+  position: relative;
+}
+
+.forgotLink::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--primary-yellow);
+  transition: width var(--transition-speed) ease;
+}
+
+.forgotLink:hover {
+  color: var(--primary-yellow);
+}
+
+.forgotLink:hover::after {
+  width: 100%;
+}
+
+/* ========== LOGIN BUTTON ========== */
+.loginBtn {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, var(--primary-yellow) 0%, var(--primary-yellow-hover) 100%);
+  color: var(--text-primary);
+  border: none;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+  margin: 1rem 0;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.loginBtn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.5s ease, height 0.5s ease;
+}
+
+.loginBtn:hover:not(:disabled)::before {
+  width: 300px;
+  height: 300px;
+}
+
+.loginBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.loginBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: linear-gradient(135deg, #94A3B8 0%, #64748B 100%);
+}
+
+.loginBtn.loading {
+  color: transparent;
+  pointer-events: none;
+}
+
+.loginBtn.loading span {
+  position: absolute;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ========== DIVIDER ========== */
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 1.5rem 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.divider span {
+  padding: 0 1rem;
+}
+
+/* ========== GOOGLE BUTTON ========== */
+.googleBtn {
+  width: 100%;
+  padding: 0.875rem;
+  background: var(--bg-white);
+  border: 2px solid var(--border-light);
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.googleBtn:hover {
+  border-color: var(--primary-yellow);
+  background: var(--bg-light);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.googleIcon {
+  width: 20px;
+  height: 20px;
+}
+
+/* ========== FOOTER ========== */
+.footerText {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.signupLink,
+.loginLink {
+  color: var(--primary-yellow);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all var(--transition-speed) ease;
+  position: relative;
+}
+
+.signupLink::after,
+.loginLink::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--primary-yellow);
+  transition: width var(--transition-speed) ease;
+}
+
+.signupLink:hover,
+.loginLink:hover {
+  color: var(--primary-yellow-dark);
+}
+
+.signupLink:hover::after,
+.loginLink:hover::after {
+  width: 100%;
+}
+
+/* ========== EYE BUTTON (for password visibility) ========== */
+.eyeButton {
+  color: var(--text-secondary) !important;
+  transition: all var(--transition-speed) ease !important;
+}
+
+.eyeButton:hover {
+  color: var(--primary-yellow) !important;
+  transform: scale(1.1);
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 1024px) {
+  .authCard {
+    max-width: 440px;
+    padding: 2rem;
+  }
+
+  .title {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .authWrapper {
+    padding: 1rem;
+  }
+
+  .authCard {
+    padding: 1.75rem;
+  }
+
+  .logo {
+    font-size: 1.5rem;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .subtitle {
+    font-size: 0.875rem;
+  }
+
+  .bgCircle1 {
+    width: 300px;
+    height: 300px;
+  }
+
+  .bgCircle2 {
+    width: 200px;
+    height: 200px;
+  }
+
+  .otpInput {
+    width: 40px;
+    height: 48px;
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .authCard {
+    padding: 1.5rem;
+  }
+
+  .row {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+
+  .forgotLink {
+    align-self: flex-start;
+  }
+
+  .otpContainer {
+    gap: 0.25rem;
+  }
+
+  .otpInput {
+    width: 35px;
+    height: 42px;
+    font-size: 1rem;
+  }
+
+  .googleBtn {
+    padding: 0.75rem;
+    font-size: 0.95rem;
+  }
+
+  .footerText {
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .authCard {
+    padding: 1.25rem;
+  }
+
+  .title {
+    font-size: 1.25rem;
+  }
+
+  .label {
+    font-size: 0.85rem;
+  }
+
+  .checkboxLabel :global(.MuiTypography-root) {
+    font-size: 0.85rem;
+  }
+
+  .forgotLink {
+    font-size: 0.85rem;
+  }
+
+  .loginBtn {
+    padding: 0.875rem;
+    font-size: 0.95rem;
+  }
+
+  .divider {
+    font-size: 0.85rem;
+    margin: 1rem 0;
+  }
+
+  .otpInput {
+    width: 32px;
+    height: 38px;
+    font-size: 0.875rem;
+  }
+
+  .timer {
+    font-size: 0.8rem;
+  }
+
+  .resendButton {
+    font-size: 0.8rem;
+  }
+}
+
+/* ========== DARK MODE SUPPORT ========== */
+@media (prefers-color-scheme: dark) {
+  .authWrapper {
+    background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+  }
+
+  .authCard {
+    background: rgba(30, 41, 59, 0.95);
+    border-color: #334155;
+  }
+
+  .title,
+  .logoText {
+    color: #F1F5F9;
+  }
+
+  .subtitle,
+  .label,
+  .footerText,
+  .checkboxLabel,
+  .forgotLink {
+    color: #94A3B8;
+  }
+
+  .googleBtn {
+    background: #1E293B;
+    border-color: #334155;
+    color: #F1F5F9;
+  }
+
+  .googleBtn:hover {
+    background: #334155;
+  }
+
+  .otpInput {
+    background: #0F172A;
+    border-color: #334155;
+    color: #F1F5F9;
+  }
+
+  .otpInput:focus {
+    border-color: var(--primary-yellow);
+  }
+
+  .passwordStrength .strengthBar {
+    background-color: #334155;
+  }
+}
+
+/* ========== REDUCED MOTION ========== */
+@media (prefers-reduced-motion: reduce) {
+  
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
