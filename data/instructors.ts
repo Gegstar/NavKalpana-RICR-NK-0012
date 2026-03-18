@@ -1,0 +1,38 @@
+export const instructors = [
+  {
+    id: 1,
+    name: 'Dr. Sarah Chen',
+    title: 'AI Research Scientist',
+    avatar: '/images/instructor1.jpg',
+    students: 45231,
+    courses: 12,
+    rating: 4.9,
+  },
+  {
+    id: 2,
+    name: 'Mark Thompson',
+    title: 'Senior Web Developer',
+    avatar: '/images/instructor2.jpg',
+    students: 38762,
+    courses: 8,
+    rating: 4.8,
+  },
+  {
+    id: 3,
+    name: 'Lisa Rodriguez',
+    title: 'UX Design Lead',
+    avatar: '/images/instructor3.jpg',
+    students: 29384,
+    courses: 6,
+    rating: 4.9,
+  },
+  {
+    id: 4,
+    name: 'James Wilson',
+    title: 'Marketing Strategist',
+    avatar: '/images/instructor4.jpg',
+    students: 21567,
+    courses: 5,
+    rating: 4.7,
+  },
+];

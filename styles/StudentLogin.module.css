@@ -1,725 +1,173 @@
-/* Auth.module.css */
+/* styles/StudentLogin.module.css */
 
-:root {
-  --primary-yellow: #FACC15;
-  --primary-yellow-hover: #EAB308;
-  --primary-yellow-light: #FEF9C3;
-  --primary-yellow-dark: #854d0e;
-  --bg-light: #F8FAFC;
-  --bg-white: #FFFFFF;
-  --text-primary: #0F172A;
-  --text-secondary: #64748B;
-  --border-light: #E2E8F0;
-  --error-red: #EF4444;
-  --error-red-light: #FEE2E2;
-  --success-green: #10B981;
-  --success-green-light: #D1FAE5;
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-  --transition-speed: 0.3s;
-}
-
-/* ========== ANIMATIONS ========== */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes slideIn {
-  from { transform: translateX(-10px); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
-}
-
-@keyframes scaleIn {
-  from { transform: scale(0.95); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
-  20%, 40%, 60%, 80% { transform: translateX(2px); }
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
-}
-
-/* ========== MAIN WRAPPER ========== */
-.authWrapper {
+/* Container for the entire page – ensures full viewport height with subtle background */
+.loginContainer {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 1.5rem;
-  position: relative;
-  overflow: hidden;
-  animation: fadeIn 0.5s ease;
-}
-
-/* Background circles */
-.bgCircle1,
-.bgCircle2 {
-  position: absolute;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary-yellow) 0%, #764ba2 100%);
-  opacity: 0.2;
-  z-index: 0;
-  animation: float 6s ease infinite;
-}
-
-.bgCircle1 {
-  width: 400px;
-  height: 400px;
-  top: -150px;
-  right: -150px;
-}
-
-.bgCircle2 {
-  width: 300px;
-  height: 300px;
-  bottom: -150px;
-  left: -150px;
-  animation-delay: -3s;
-}
-
-/* ========== CARD ========== */
-.authCard {
-  width: 100%;
-  max-width: 480px;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border-radius: 32px;
-  padding: 2.5rem;
-  box-shadow: var(--shadow-xl);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  position: relative;
-  z-index: 1;
-  animation: scaleIn 0.5s ease;
-}
-
-.authCard.shake {
-  animation: shake 0.5s ease;
-}
-
-/* ========== LOGO ========== */
-.logoSection {
-  text-align: center;
-  margin-bottom: 2rem;
-  animation: slideIn 0.5s ease;
-}
-
-.logo {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-size: 1.8rem;
-  font-weight: 700;
-}
-
-.logoText {
-  color: var(--text-primary);
-}
-
-.logoHighlight {
-  color: var(--primary-yellow);
-  background: linear-gradient(135deg, var(--primary-yellow), var(--primary-yellow-dark));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* ========== HEADER ========== */
-.headerSection {
-  text-align: center;
-  margin-bottom: 2rem;
-  animation: slideIn 0.5s ease 0.1s both;
-}
-
-.title {
-  color: var(--text-primary);
-  font-size: 2rem;
-  font-weight: 700;
-  margin: 0 0 0.5rem 0;
-}
-
-.subtitle {
-  color: var(--text-secondary);
-  font-size: 0.95rem;
-  margin: 0;
-  line-height: 1.5;
-}
-
-/* ========== FORM ========== */
-.formElement {
-  animation: slideIn 0.5s ease 0.2s both;
-}
-
-.formGroup {
-  margin-bottom: 1.5rem;
-  position: relative;
-  width: 100%;
-}
-
-.label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--text-primary);
-  font-size: 0.9rem;
-  font-weight: 500;
-  margin-bottom: 0.5rem;
-}
-
-.labelIcon {
-  color: var(--primary-yellow);
-}
-
-/* Valid indicator */
-.validIndicator {
-  position: absolute;
-  right: 14px;
-  top: 42px;
-  color: var(--success-green);
-  animation: scaleIn 0.3s ease;
-  pointer-events: none;
-}
-
-/* ========== PASSWORD STRENGTH (for signup) ========== */
-.passwordStrength {
-  margin-top: 0.75rem;
-  animation: fadeIn 0.3s ease;
-}
-
-.strengthBars {
-  display: flex;
-  gap: 0.25rem;
-  margin-bottom: 0.5rem;
-}
-
-.strengthBar {
-  flex: 1;
-  height: 4px;
-  border-radius: 2px;
-  transition: background-color 0.3s ease;
-}
-
-.strengthBar.active {
-  animation: pulse 1.5s ease infinite;
-}
-
-.strengthText {
-  font-size: 0.8rem;
-  font-weight: 500;
-}
-
-/* ========== OTP SECTION (for signup) ========== */
-.otpSection {
-  animation: fadeIn 0.5s ease;
-}
-
-.otpContainer {
-  display: flex;
-  gap: 0.5rem;
-  justify-content: center;
-  margin: 1.5rem 0 1rem;
-}
-
-.otpInput {
-  width: 48px;
-  height: 56px;
-  border: 2px solid var(--border-light);
-  border-radius: 12px;
-  font-size: 1.5rem;
-  font-weight: 600;
-  text-align: center;
-  color: var(--text-primary);
-  background: var(--bg-white);
-  transition: all var(--transition-speed) ease;
-  outline: none;
-}
-
-.otpInput:focus {
-  border-color: var(--primary-yellow);
-  box-shadow: 0 0 0 4px rgba(250, 204, 21, 0.1);
-  transform: scale(1.05);
-}
-
-.otpInput:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.timerSection {
-  text-align: center;
-  margin: 1rem 0;
-}
-
-.timer {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-}
-
-.timer span {
-  color: var(--primary-yellow);
-  font-weight: 600;
-  animation: pulse 1s ease infinite;
-}
-
-.resendButton {
-  background: none;
-  border: none;
-  color: var(--primary-yellow);
-  font-weight: 600;
-  cursor: pointer;
-  transition: all var(--transition-speed) ease;
-  font-size: 0.9rem;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-}
-
-.resendButton:hover:not(:disabled) {
-  color: var(--primary-yellow-hover);
-  background: var(--bg-light);
-  transform: scale(1.05);
-}
-
-.resendButton:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.editEmailButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  background: none;
-  border: none;
-  color: var(--text-secondary);
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: all var(--transition-speed) ease;
-  margin: 0 auto;
-  padding: 0.5rem;
-  border-radius: 6px;
-}
-
-.editEmailButton:hover {
-  color: var(--primary-yellow);
-  background: var(--bg-light);
-}
-
-/* ========== ROW (Remember me & Forgot password) ========== */
-.row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 0.5rem 0 1.5rem;
-}
-
-.checkboxLabel {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-}
-
-.checkboxLabel :global(.MuiTypography-root) {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-}
-
-.forgotLink {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  text-decoration: none;
-  transition: all var(--transition-speed) ease;
-  position: relative;
-}
-
-.forgotLink::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 1px;
-  background: var(--primary-yellow);
-  transition: width var(--transition-speed) ease;
-}
-
-.forgotLink:hover {
-  color: var(--primary-yellow);
-}
-
-.forgotLink:hover::after {
-  width: 100%;
-}
-
-/* ========== LOGIN BUTTON ========== */
-.loginBtn {
-  width: 100%;
   padding: 1rem;
-  background: linear-gradient(135deg, var(--primary-yellow) 0%, var(--primary-yellow-hover) 100%);
-  color: var(--text-primary);
-  border: none;
-  border-radius: 30px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all var(--transition-speed) ease;
-  margin: 1rem 0;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
+  animation: fadeIn 0.8s ease-out;
 }
 
-.loginBtn::before {
+/* Paper card – perfect sizing, shadow, and rounded corners */
+.paperCard {
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
+  border-radius: 16px !important; /* Override MUI default if needed */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1) !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.paperCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Title styling */
+.title {
+  font-weight: 600 !important;
+  color: #2d3748;
+  margin-bottom: 1.5rem !important;
+}
+
+/* Form field spacing */
+.form {
+  margin-top: 1rem;
+}
+
+/* Input field styling – smooth focus effect */
+.inputField {
+  margin-bottom: 1rem !important;
+}
+
+.inputField :global(.MuiOutlinedInput-root) {
+  transition: all 0.3s ease;
+}
+
+.inputField :global(.MuiOutlinedInput-root:hover) {
+  border-color: #4F46E5;
+}
+
+.inputField :global(.MuiOutlinedInput-root.Mui-focused) {
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* Custom button with gradient and animations */
+.customButton {
+  width: 100%;
+  padding: 0.75rem !important;
+  margin-top: 1.5rem !important;
+  background: linear-gradient(45deg, #4F46E5 30%, #0EA5E9 90%) !important;
+  color: white !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  text-transform: none !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+  transition: all 0.3s ease !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.customButton::after {
   content: '';
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 0;
-  height: 0;
+  width: 300%;
+  height: 300%;
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
-  transform: translate(-50%, -50%);
-  transition: width 0.5s ease, height 0.5s ease;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.5s ease;
 }
 
-.loginBtn:hover:not(:disabled)::before {
-  width: 300px;
-  height: 300px;
-}
-
-.loginBtn:hover:not(:disabled) {
+.customButton:hover {
+  background: linear-gradient(45deg, #4338CA 30%, #0284C7 90%) !important;
+  box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08) !important;
   transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
 }
 
-.loginBtn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  background: linear-gradient(135deg, #94A3B8 0%, #64748B 100%);
+.customButton:hover::after {
+  transform: translate(-50%, -50%) scale(1);
 }
 
-.loginBtn.loading {
-  color: transparent;
-  pointer-events: none;
+.customButton:active {
+  transform: translateY(0);
 }
 
-.loginBtn.loading span {
-  position: absolute;
-  color: var(--text-primary);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-/* ========== DIVIDER ========== */
-.divider {
-  display: flex;
-  align-items: center;
-  text-align: center;
-  margin: 1.5rem 0;
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-}
-
-.divider::before,
-.divider::after {
-  content: '';
-  flex: 1;
-  border-bottom: 1px solid var(--border-light);
-}
-
-.divider span {
-  padding: 0 1rem;
-}
-
-/* ========== GOOGLE BUTTON ========== */
-.googleBtn {
-  width: 100%;
-  padding: 0.875rem;
-  background: var(--bg-white);
-  border: 2px solid var(--border-light);
-  border-radius: 30px;
-  font-size: 1rem;
-  font-weight: 500;
-  color: var(--text-primary);
-  cursor: pointer;
-  transition: all var(--transition-speed) ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
-}
-
-.googleBtn:hover {
-  border-color: var(--primary-yellow);
-  background: var(--bg-light);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-.googleIcon {
-  width: 20px;
-  height: 20px;
-}
-
-/* ========== FOOTER ========== */
-.footerText {
-  text-align: center;
-  color: var(--text-secondary);
-  font-size: 0.95rem;
-  margin: 0;
-}
-
-.signupLink,
-.loginLink {
-  color: var(--primary-yellow);
+/* Forgot password link – optional if you add it later */
+.forgotLink {
+  display: block;
+  text-align: right;
+  margin-top: 0.5rem;
+  color: #4F46E5;
   text-decoration: none;
-  font-weight: 600;
-  transition: all var(--transition-speed) ease;
-  position: relative;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
 }
 
-.signupLink::after,
-.loginLink::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 1px;
-  background: var(--primary-yellow);
-  transition: width var(--transition-speed) ease;
+.forgotLink:hover {
+  color: #4338CA;
+  text-decoration: underline;
 }
 
-.signupLink:hover,
-.loginLink:hover {
-  color: var(--primary-yellow-dark);
+/* Keyframe animation for fade-in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.signupLink:hover::after,
-.loginLink:hover::after {
-  width: 100%;
-}
-
-/* ========== EYE BUTTON (for password visibility) ========== */
-.eyeButton {
-  color: var(--text-secondary) !important;
-  transition: all var(--transition-speed) ease !important;
-}
-
-.eyeButton:hover {
-  color: var(--primary-yellow) !important;
-  transform: scale(1.1);
-}
-
-/* ========== RESPONSIVE ========== */
-@media (max-width: 1024px) {
-  .authCard {
-    max-width: 440px;
-    padding: 2rem;
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .paperCard {
+    max-width: 100%;
+    margin: 1rem;
   }
 
   .title {
-    font-size: 1.75rem;
+    font-size: 1.75rem !important;
+  }
+
+  .customButton {
+    padding: 0.65rem !important;
+    font-size: 0.95rem !important;
   }
 }
 
-@media (max-width: 768px) {
-  .authWrapper {
-    padding: 1rem;
-  }
-
-  .authCard {
-    padding: 1.75rem;
-  }
-
-  .logo {
-    font-size: 1.5rem;
-  }
-
-  .title {
-    font-size: 1.5rem;
-  }
-
-  .subtitle {
-    font-size: 0.875rem;
-  }
-
-  .bgCircle1 {
-    width: 300px;
-    height: 300px;
-  }
-
-  .bgCircle2 {
-    width: 200px;
-    height: 200px;
-  }
-
-  .otpInput {
-    width: 40px;
-    height: 48px;
-    font-size: 1.25rem;
-  }
-}
-
-@media (max-width: 640px) {
-  .authCard {
-    padding: 1.5rem;
-  }
-
-  .row {
-    flex-direction: column;
-    gap: 0.75rem;
-    align-items: flex-start;
-  }
-
-  .forgotLink {
-    align-self: flex-start;
-  }
-
-  .otpContainer {
-    gap: 0.25rem;
-  }
-
-  .otpInput {
-    width: 35px;
-    height: 42px;
-    font-size: 1rem;
-  }
-
-  .googleBtn {
-    padding: 0.75rem;
-    font-size: 0.95rem;
-  }
-
-  .footerText {
-    font-size: 0.875rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .authCard {
-    padding: 1.25rem;
-  }
-
-  .title {
-    font-size: 1.25rem;
-  }
-
-  .label {
-    font-size: 0.85rem;
-  }
-
-  .checkboxLabel :global(.MuiTypography-root) {
-    font-size: 0.85rem;
-  }
-
-  .forgotLink {
-    font-size: 0.85rem;
-  }
-
-  .loginBtn {
-    padding: 0.875rem;
-    font-size: 0.95rem;
-  }
-
-  .divider {
-    font-size: 0.85rem;
-    margin: 1rem 0;
-  }
-
-  .otpInput {
-    width: 32px;
-    height: 38px;
-    font-size: 0.875rem;
-  }
-
-  .timer {
-    font-size: 0.8rem;
-  }
-
-  .resendButton {
-    font-size: 0.8rem;
-  }
-}
-
-/* ========== DARK MODE SUPPORT ========== */
+/* Dark mode support – if you implement theme switching */
 @media (prefers-color-scheme: dark) {
-  .authWrapper {
-    background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+  .loginContainer {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   }
 
-  .authCard {
-    background: rgba(30, 41, 59, 0.95);
-    border-color: #334155;
+  .paperCard {
+    background-color: #1e1e2f !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
   }
 
-  .title,
-  .logoText {
-    color: #F1F5F9;
+  .title {
+    color: #e0e0e0 !important;
   }
 
-  .subtitle,
-  .label,
-  .footerText,
-  .checkboxLabel,
-  .forgotLink {
-    color: #94A3B8;
+  .inputField :global(.MuiOutlinedInput-notchedOutline) {
+    border-color: #333;
   }
 
-  .googleBtn {
-    background: #1E293B;
-    border-color: #334155;
-    color: #F1F5F9;
+  .inputField :global(.MuiInputLabel-root) {
+    color: #aaa;
   }
 
-  .googleBtn:hover {
-    background: #334155;
-  }
-
-  .otpInput {
-    background: #0F172A;
-    border-color: #334155;
-    color: #F1F5F9;
-  }
-
-  .otpInput:focus {
-    border-color: var(--primary-yellow);
-  }
-
-  .passwordStrength .strengthBar {
-    background-color: #334155;
-  }
-}
-
-/* ========== REDUCED MOTION ========== */
-@media (prefers-reduced-motion: reduce) {
-  
-  ::before,
-  ::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+  .inputField :global(.MuiInputBase-input) {
+    color: #fff;
   }
 }

@@ -1,0 +1,47 @@
+.navbar {
+  background-color: var(--color-surface); /* Solid background using theme */
+  box-shadow: none;
+  transition: background-color var(--transition-base), box-shadow var(--transition-base);
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+}
+
+/* When scrolled, add a subtle shadow (optional) */
+.scrolled {
+  box-shadow: var(--shadow-md);
+}
+
+/* Dark mode support – the surface variable already changes */
+.dark .navbar {
+  background-color: var(--color-surface-dark); /* or rely on --color-surface */
+}
+
+.logo {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-xl);
+  color: var(--color-primary);
+  transition: color var(--transition-fast);
+}
+
+.logo:hover {
+  color: var(--color-primary-dark);
+}
+
+.navLink {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+  transition: color var(--transition-fast);
+}
+
+.navLink:hover {
+  color: var(--color-primary);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .logo {
+    font-size: var(--font-size-lg);
+  }
+}
