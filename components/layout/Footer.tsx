@@ -78,11 +78,11 @@ export default function Footer() {
           </Grid>
 
         </Grid>
-        <Box sx={{ textAlign: 'center', pt: 4, mt: 4, borderTop: '1px solid #374151' }}>
-          <Typography variant="body2" color="text.secondary">
-            © {new Date().getFullYear()} SkillVerse. All rights reserved.
-          </Typography>
-        </Box>
+      <Box className={styles.footerBottom}>
+  <Typography variant="body2">
+    © {new Date().getFullYear()} SkillVerse. All rights reserved.
+  </Typography>
+</Box>
 
       </Container>
     </footer>

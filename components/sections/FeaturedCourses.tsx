@@ -12,38 +12,80 @@ import {
   Button
 } from '@mui/material';
 import Link from 'next/link';
-import { courses } from '@/data/courses';
 import styles from '@/styles/FeaturedCourses.module.css';
+
+/* ✅ Dummy Course Data */
+const courses = [
+  {
+    id: 1,
+    title: 'Complete Web Development Bootcamp',
+    instructor: 'John Doe',
+    rating: 4.8,
+    students: 12500,
+    price: 49,
+    image: '/images/web-dev.svg',
+  },
+  {
+    id: 2,
+    title: 'React & Next.js Mastery',
+    instructor: 'Jane Smith',
+    rating: 4.7,
+    students: 9800,
+    price: 59,
+    image: '/images/react.svg',
+  },
+  {
+    id: 3,
+    title: 'Python for Beginners',
+    instructor: 'Alex Johnson',
+    rating: 4.6,
+    students: 15000,
+    price: 39,
+    image: '/images/python.svg',
+  },
+  {
+    id: 4,
+    title: 'UI/UX Design Fundamentals',
+    instructor: 'Emily Davis',
+    rating: 4.5,
+    students: 8700,
+    price: 29,
+    image: '/images/uiux.svg',
+  },
+];
 
 export default function FeaturedCourses() {
   return (
-    <section className={styles.section}>
+    <section className={styles.section} id="courses">
       <Container maxWidth="lg">
 
         <Typography variant="h2" className={styles.sectionTitle}>
-          Featured Courses
+          Featured <span>Courses</span>
         </Typography>
 
         <Grid container spacing={3}>
-          {courses.slice(0, 4).map((course) => (
+          {courses.map((course) => (
             
-            <Grid key={course.id} size={{ xs: 12, sm: 6, md: 3 }}>
+            <Grid item xs={12} sm={6} md={3} key={course.id}>
               
               <Card className={styles.card}>
                 
+                {/* Image */}
                 <CardMedia
-                  className={styles.cardMedia}
+                  component="img"
                   image={course.image}
-                  title={course.title}
+                  alt={course.title}
+                  className={styles.cardMedia}
                 />
 
+                {/* Content */}
                 <CardContent className={styles.cardContent}>
                   
-                  <Typography variant="h6" className={styles.cardTitle}>
+                  <Typography className={styles.cardTitle}>
                     {course.title}
                   </Typography>
 
-                  <Typography variant="body2" className={styles.instructor}>
+                  <Typography className={styles.instructor}>
                     {course.instructor}
                   </Typography>
 
@@ -54,24 +96,15 @@ export default function FeaturedCourses() {
                       readOnly
                       size="small"
                     />
-                    <Typography variant="body2">
-                      ({course.rating})
-                    </Typography>
+                    <span>({course.rating})</span>
                   </Box>
 
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography className={styles.students}>
                     {course.students.toLocaleString()} students
                   </Typography>
 
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      mt: 2
-                    }}
-                  >
-                    <Typography variant="h6" className={styles.price}>
+                  <Box className={styles.bottomRow}>
+                    <Typography className={styles.price}>
                       ${course.price}
                     </Typography>
 
@@ -90,7 +123,7 @@ export default function FeaturedCourses() {
         </Grid>
 
         {/* Bottom Button */}
-        <Box sx={{ textAlign: 'center', mt: 4 }}>
+        <Box className={styles.bottomButton}>
           <Link href="/courses">
             <Button variant="contained" size="large">
               View All Courses

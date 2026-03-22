@@ -7,10 +7,50 @@ import {
   Card,
   CardContent,
   Box,
-  Rating
+  Rating,
+  Avatar
 } from '@mui/material';
-import { instructors } from '@/data/instructors';
 import styles from '@/styles/PopularInstructors.module.css';
+
+/* ✅ Dummy Data */
+const instructors = [
+  {
+    id: 1,
+    name: 'John Doe',
+    title: 'Full Stack Developer',
+    rating: 4.8,
+    students: 12000,
+    courses: 12,
+    avatar: '/images/instructors/inst1.jpg',
+  },
+  {
+    id: 2,
+    name: 'Sarah Khan',
+    title: 'UI/UX Designer',
+    rating: 4.7,
+    students: 9800,
+    courses: 8,
+    avatar: '/images/instructors/inst2.jpg',
+  },
+  {
+    id: 3,
+    name: 'Amit Sharma',
+    title: 'Python Expert',
+    rating: 4.9,
+    students: 15000,
+    courses: 15,
+    avatar: '/images/instructors/inst3.jpg',
+  },
+  {
+    id: 4,
+    name: 'Emily Davis',
+    title: 'React Specialist',
+    rating: 4.6,
+    students: 8700,
+    courses: 10,
+    avatar: '/images/instructors/inst4.jpg',
+  },
+];
 
 export default function PopularInstructors() {
   return (
@@ -18,31 +58,31 @@ export default function PopularInstructors() {
       <Container maxWidth="lg">
 
         <Typography variant="h2" className={styles.sectionTitle}>
-          Popular Instructors
+          Popular <span>Instructors</span>
         </Typography>
 
         <Grid container spacing={3}>
           {instructors.map((instructor) => (
             
-            <Grid key={instructor.id} size={{ xs: 12, sm: 6, md: 3 }}>
+            <Grid item xs={12} sm={6} md={3} key={instructor.id}>
               
-              <Card className={styles.instructorCard}>
-                <CardContent>
+              <Card className={styles.card} elevation={0}>
+                <CardContent className={styles.cardContent}>
 
                   {/* Avatar */}
-                  <img
+                  <Avatar
                     src={instructor.avatar}
                     alt={instructor.name}
                     className={styles.avatar}
                   />
 
                   {/* Name */}
-                  <Typography variant="h6" className={styles.name}>
+                  <Typography className={styles.name}>
                     {instructor.name}
                   </Typography>
 
                   {/* Title */}
-                  <Typography variant="body2" className={styles.title}>
+                  <Typography className={styles.title}>
                     {instructor.title}
                   </Typography>
 
@@ -53,21 +93,17 @@ export default function PopularInstructors() {
                   <Box className={styles.stats}>
                     
                     <div className={styles.statItem}>
-                      <Typography variant="body2" className={styles.statValue}>
+                      <span className={styles.statValue}>
                         {instructor.students.toLocaleString()}
-                      </Typography>
-                      <Typography variant="caption" className={styles.statLabel}>
-                        Students
-                      </Typography>
+                      </span>
+                      <span className={styles.statLabel}>Students</span>
                     </div>
 
                     <div className={styles.statItem}>
-                      <Typography variant="body2" className={styles.statValue}>
+                      <span className={styles.statValue}>
                         {instructor.courses}
-                      </Typography>
-                      <Typography variant="caption" className={styles.statLabel}>
-                        Courses
-                      </Typography>
+                      </span>
+                      <span className={styles.statLabel}>Courses</span>
                     </div>
 
                   </Box>

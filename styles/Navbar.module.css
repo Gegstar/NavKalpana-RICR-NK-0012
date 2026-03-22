@@ -1,47 +1,185 @@
+/* ===== NAVBAR BASE ===== */
 .navbar {
-  background-color: var(--color-surface); /* Solid background using theme */
-  box-shadow: none;
-  transition: background-color var(--transition-base), box-shadow var(--transition-base);
-  position: fixed;
-  width: 100%;
-  top: 0;
-  z-index: 1000;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--color-border);
+  transition: all var(--transition-base);
+  z-index: 999;
 }
 
-/* When scrolled, add a subtle shadow (optional) */
+/* Dark mode */
+:global(.dark) .navbar {
+  background: rgba(2, 6, 23, 0.7);
+  border-color: var(--color-border-dark);
+}
+
+/* Scrolled */
 .scrolled {
+  background: var(--color-surface);
   box-shadow: var(--shadow-md);
 }
 
-/* Dark mode support – the surface variable already changes */
-.dark .navbar {
-  background-color: var(--color-surface-dark); /* or rely on --color-surface */
-}
-
+/* ===== LOGO ===== */
 .logo {
+  font-size: 1.4rem;
   font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-xl);
-  color: var(--color-primary);
-  transition: color var(--transition-fast);
+  letter-spacing: -0.02em;
+  text-transform: none;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: var(--transition-fast);
 }
 
 .logo:hover {
-  color: var(--color-primary-dark);
+  transform: scale(1.05);
 }
 
-.navLink {
-  color: var(--color-text-primary);
-  font-weight: var(--font-weight-medium);
-  transition: color var(--transition-fast);
-}
-
-.navLink:hover {
+/* Highlight part */
+.logoHighlight {
   color: var(--color-primary);
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
+/* ===== NAV LINKS ===== */
+.navLinks {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.navItem {
+  color: var(--color-text-secondary) !important;
+  font-size: var(--font-size-sm) !important;
+  font-weight: var(--font-weight-medium) !important;
+  text-transform: none !important;
+  position: relative;
+  transition: var(--transition-fast);
+}
+
+/* Hover */
+.navItem:hover {
+  color: var(--color-primary) !important;
+  transform: translateY(-2px);
+}
+
+/* Underline animation */
+.navItem::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: var(--gradient-primary);
+  transition: width 0.3s ease;
+}
+
+.navItem:hover::after {
+  width: 100%;
+}
+
+/* ===== ACTION BUTTONS ===== */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Theme toggle */
+.themeToggle {
+  color: var(--color-text-secondary) !important;
+  transition: var(--transition-fast);
+}
+
+.themeToggle:hover {
+  color: var(--color-primary) !important;
+  transform: rotate(20deg);
+}
+
+/* Login */
+.loginBtn {
+  color: var(--color-text-secondary) !important;
+  font-size: var(--font-size-sm) !important;
+  text-transform: none !important;
+}
+
+.loginBtn:hover {
+  color: var(--color-primary) !important;
+}
+
+/* Signup */
+.signupBtn {
+  background: var(--gradient-primary) !important;
+  color: #fff !important;
+  border-radius: var(--radius-full) !important;
+  padding: 6px 16px !important;
+  font-size: var(--font-size-sm) !important;
+  text-transform: none !important;
+  box-shadow: var(--shadow-sm);
+}
+
+.signupBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ===== MOBILE MENU BUTTON ===== */
+.menuButton {
+  color: var(--color-text-primary) !important;
+}
+
+/* ===== DRAWER ===== */
+.drawer {
+  width: 260px;
+  padding: 1rem;
+  background: var(--color-surface);
+  height: 100%;
+}
+
+/* Drawer items */
+.drawerItem {
+  justify-content: flex-start !important;
+  color: var(--color-text-primary) !important;
+  padding: 12px 10px !important;
+  text-transform: none !important;
+  font-size: var(--font-size-sm) !important;
+  border-radius: var(--radius-md) !important;
+  transition: var(--transition-fast);
+}
+
+.drawerItem:hover {
+  background: rgba(99, 102, 241, 0.1) !important;
+  color: var(--color-primary) !important;
+}
+
+/* ===== ANIMATION ===== */
+.fadeIn {
+  animation: fadeNav 0.6s ease forwards;
+}
+
+@keyframes fadeNav {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .navLinks {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
   .logo {
-    font-size: var(--font-size-lg);
+    font-size: 1.2rem;
+  }
+
+  .signupBtn {
+    padding: 5px 12px !important;
   }
 }

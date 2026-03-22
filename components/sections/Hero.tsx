@@ -20,7 +20,7 @@ export default function Hero() {
         >
 
           {/* Left Content */}
-          <Grid size={{ xs: 12, md: 6 }} className={styles.heroContent}>
+          <Grid item xs={12} md={6} className={styles.heroContent}>
             <Typography variant="h1" className={styles.heroTitle}>
               Learn Without Limits
             </Typography>
@@ -51,7 +51,7 @@ export default function Hero() {
           </Grid>
 
           {/* Right Image */}
-          <Grid size={{ xs: 12, md: 6 }} className={styles.heroImageColumn}>
+          <Grid item xs={12} md={6} className={styles.heroImageColumn}>
             <div className={styles.heroImageWrapper}>
               <Image
                 src="/images/hero-illustration.svg"

@@ -1,88 +1,153 @@
+/* ===== FOOTER BASE ===== */
 .footer {
-  background-color: #1f2937;
-  color: #e5e7eb;
+  background: var(--gradient-dark);
+  color: var(--color-text-secondary);
   padding: var(--spacing-3xl) 0 var(--spacing-xl);
+  position: relative;
+  overflow: hidden;
+
+  animation: fadeUp 0.8s ease forwards;
 }
 
-.dark .footer {
-  background-color: #111827;
+/* subtle premium glow */
+.footer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at top right,
+    rgba(99, 102, 241, 0.12),
+    transparent 55%
+  );
+  pointer-events: none;
 }
 
-.footerGrid {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
-  gap: var(--spacing-xl);
-  margin-bottom: var(--spacing-xl);
-}
-
-.footerLogo {
-  font-size: var(--font-size-xl);
+/* ===== BRAND ===== */
+.footer h6 {
   font-weight: var(--font-weight-bold);
-  color: var(--color-primary);
-  margin-bottom: var(--spacing-md);
-  display: inline-block;
-}
-
-.footerAbout {
-  color: #d1d5db;
-  margin-bottom: var(--spacing-md);
-  line-height: 1.6;
-}
-
-.socialLinks {
-  display: flex;
-  gap: var(--spacing-sm);
-}
-
-.socialIcon {
-  color: #d1d5db;
-  transition: color var(--transition-fast), transform var(--transition-fast);
-}
-
-.socialIcon:hover {
-  color: var(--color-primary);
-  transform: translateY(-2px);
-}
-
-.footerColumnTitle {
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-semibold);
-  color: white;
-  margin-bottom: var(--spacing-md);
-}
-
-.footerLink {
-  display: block;
-  color: #d1d5db;
+  font-size: var(--font-size-xl);
+  color: var(--color-primary-light);
   margin-bottom: var(--spacing-sm);
-  transition: color var(--transition-fast);
 }
 
-.footerLink:hover {
-  color: var(--color-primary);
+/* ===== TEXT ===== */
+.footer p {
+  font-size: var(--font-size-sm);
+  line-height: 1.6;
+  color: var(--color-text-secondary);
 }
 
+/* ===== LINKS ===== */
+.link {
+  display: inline-block;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: 0.5rem;
+  position: relative;
+  transition: var(--transition-fast);
+}
+
+/* underline animation */
+.link::after {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background: var(--gradient-primary);
+  transition: width var(--transition-base);
+}
+
+.link:hover {
+  color: var(--color-primary-light);
+}
+
+.link:hover::after {
+  width: 100%;
+}
+
+/* ===== SOCIAL ICONS ===== */
+.socialIcon {
+  color: var(--color-text-secondary) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  margin-right: 8px !important;
+  border-radius: var(--radius-md) !important;
+
+  transition: var(--transition-base) !important;
+}
+
+/* hover glow */
+.socialIcon:hover {
+  color: #fff !important;
+  background: var(--gradient-primary) !important;
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 10px 25px rgba(99,102,241,0.35);
+}
+
+/* ===== SECTION TITLES ===== */
+.footer .MuiTypography-subtitle1 {
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text-primary-dark);
+  font-size: var(--font-size-md);
+}
+
+/* ===== GRID ALIGNMENT ===== */
+.footer .MuiGrid-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* ===== BOTTOM COPYRIGHT ===== */
 .footerBottom {
   text-align: center;
-  padding-top: var(--spacing-xl);
-  border-top: 1px solid #374151;
-  color: #9ca3af;
-  font-size: var(--font-size-sm);
+  padding-top: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
+  border-top: 1px solid var(--color-border-dark);
 }
 
-/* Responsive */
-@media (max-width: 900px) {
-  .footerGrid {
-    grid-template-columns: repeat(3, 1fr);
+.footerBottom p {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .footer {
+    padding: var(--spacing-2xl) 0;
   }
 }
 
-@media (max-width: 600px) {
-  .footerGrid {
-    grid-template-columns: 1fr;
+@media (max-width: 768px) {
+  .footer {
     text-align: center;
   }
-  .socialLinks {
-    justify-content: center;
+
+  .footer .MuiGrid-item {
+    align-items: center;
+  }
+
+  .socialIcon {
+    margin: 6px !important;
+  }
+
+  .link {
+    margin-bottom: 0.4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding: var(--spacing-xl) 0;
+  }
+
+  .footer h6 {
+    font-size: var(--font-size-lg);
+  }
+
+  .footer p {
+    font-size: var(--font-size-xs);
   }
 }

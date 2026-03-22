@@ -187,7 +187,7 @@ export default function StudentSignup() {
       //   icon: '🎉',
       //   duration: 3000,
       // });
-      setTimeout(() => router.push("/auth/student-login"), 2000);
+      setTimeout(() => router.push("/auth/student_login"), 2000);
     } catch (err: any) {
       const msg = err?.response?.data?.message || err?.message || "Invalid OTP";
       toast.error(msg, { id: toastId });

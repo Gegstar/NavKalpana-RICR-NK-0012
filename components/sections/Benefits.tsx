@@ -35,32 +35,39 @@ export default function Benefits() {
     <section className={styles.section} id="features">
       <Container maxWidth="lg">
 
+        {/* Title */}
         <Typography variant="h2" className={styles.sectionTitle}>
-          Why Choose SkillVerse?
+          Why Choose <span>SkillVerse</span>?
         </Typography>
 
+        {/* Grid */}
         <Grid container spacing={4}>
-          {benefits.map((benefit, index) => (
-            <Grid key={index} size={{ xs: 12, sm: 6, md: 3 }}>
-              
-              <Card className={styles.benefitCard} elevation={0}>
-                <CardContent>
-                  
+          {benefits.map((benefit) => (
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={3}
+              key={benefit.title} // ✅ FIXED
+              display="flex" // ✅ equal height
+            >
+              <Card className={styles.card} elevation={0} sx={{ width: '100%' }}>
+                <CardContent className={styles.cardContent}>
+
                   <div className={styles.iconWrapper}>
                     {benefit.icon}
                   </div>
 
-                  <Typography variant="h6" className={styles.benefitTitle}>
+                  <Typography className={styles.benefitTitle}>
                     {benefit.title}
                   </Typography>
 
-                  <Typography variant="body2" className={styles.benefitDescription}>
+                  <Typography className={styles.benefitDescription}>
                     {benefit.description}
                   </Typography>
 
                 </CardContent>
               </Card>
-
             </Grid>
           ))}
         </Grid>
