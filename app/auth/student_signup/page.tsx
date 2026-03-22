@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import styles from '@/styles/StudentSignup.module.css';
-import authService from "@/services/auth.service";
+import {authService} from "@/services/auth.service";
 import { TextField, IconButton, InputAdornment, CircularProgress } from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation'; 
@@ -135,10 +135,10 @@ export default function StudentSignup() {
     const toastId = toast.loading("Resending OTP...");
     
     try {
-      await authService.resendOtp({ email: form.email });
-      toast.success("OTP resent successfully!", { id: toastId });
-      setTimer(60);
-      setCanResend(false);
+      // await authService.resendOtp({ email: form.email });
+      // toast.success("OTP resent successfully!", { id: toastId });
+      // setTimer(60);
+      // setCanResend(false);
     } catch (err: any) {
       toast.error(err?.response?.data?.message || "Failed to resend OTP", { id: toastId });
     } finally {
@@ -159,11 +159,11 @@ export default function StudentSignup() {
     setLoading(true);
     const toastId = toast.loading("Sending OTP to your email...");
     try {
-      await authService.signup({
-        name: form.name,
-        email: form.email,
-        password: form.password,
-      });
+      // await authService.signup({
+      //   name: form.name,
+      //   email: form.email,
+      //   password: form.password,
+      // });
       toast.success("OTP sent successfully! 📧", { id: toastId });
       setIsOtpSent(true);
       setTimer(60);
@@ -181,12 +181,12 @@ export default function StudentSignup() {
       if (otpValue.length !== 6) {
         throw new Error("Please enter complete OTP");
       }
-      await authService.verifyOtp({ email: form.email, otp: otpValue });
-      toast.success("Account verified! Redirecting to login...", {
-        id: toastId,
-        icon: '🎉',
-        duration: 3000,
-      });
+      // await authService.verifyOtp({ email: form.email, otp: otpValue });
+      // toast.success("Account verified! Redirecting to login...", {
+      //   id: toastId,
+      //   icon: '🎉',
+      //   duration: 3000,
+      // });
       setTimeout(() => router.push("/auth/student-login"), 2000);
     } catch (err: any) {
       const msg = err?.response?.data?.message || err?.message || "Invalid OTP";

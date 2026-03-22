@@ -1,84 +1,73 @@
 import api from "@/lib/api";
-
-/* ============================
-   Request Interfaces
-============================ */
-
-export interface SendOtpRequest {
-  email: string;
-}
-
-export interface VerifyOtpRequest {
-  email: string;
-  otp: string;
-}
-
-export interface StudentSignupRequest {
-  name: string;
-  email: string;
-  password: string;
-}
-
-export interface LoginRequest {
-  email: string;
-  password: string;
-}
-
-/* ============================
-   Response Interfaces
-============================ */
-
-export interface ApiResponse<T = any> {
-  success: boolean;
-  message: string;
-  data?: T;
-}
-
-/* ============================
-   Auth Service
-============================ */
+import {
+  LocalLoginRequest,
+  LoginResponse,
+} from "@/models/auth.model";
 
 class AuthService {
+  private baseUrl = "/auth";
 
-  /* Send OTP */
-  async sendOtp(data: SendOtpRequest): Promise<ApiResponse> {
-    const response = await api.post<ApiResponse>("/auth/send-otp", data);
+  // ================= LOGIN =================
+  async login(data: LocalLoginRequest): Promise<LoginResponse> {
+    const response = await api.post<LoginResponse>(
+      `${this.baseUrl}/login`,
+      data
+    );
+
     return response.data;
   }
 
-  /* Resend OTP */
-  async resendOtp(data: SendOtpRequest): Promise<ApiResponse> {
-    const response = await api.post<ApiResponse>("/auth/resend-otp", data);
+  // ================= SIGNUP =================
+  async signup(data: {
+    email: string;
+    username: string;
+    password: string;
+    fullName: string;
+  }): Promise<LoginResponse> {
+    const response = await api.post<LoginResponse>(
+      `${this.baseUrl}/signup`,
+      data
+    );
+
     return response.data;
   }
 
-  /* Verify OTP */
-  async verifyOtp(data: VerifyOtpRequest): Promise<ApiResponse> {
-    const response = await api.post<ApiResponse>("/auth/verify-otp", data);
-    return response.data;
+  // ================= GOOGLE LOGIN =================
+  loginWithGoogle() {
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google`;
   }
 
-  /* Signup (Student Registration) */
-  async signup(data: StudentSignupRequest): Promise<ApiResponse> {
-    const response = await api.post<ApiResponse>("/auth/student-signup", data);
-    return response.data;
+  // ================= FACEBOOK LOGIN =================
+  loginWithFacebook() {
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/facebook`;
   }
 
-  /* Optional Alias (अगर कहीं studentSignup use हो रहा हो) */
-  async studentSignup(data: StudentSignupRequest): Promise<ApiResponse> {
-    return this.signup(data);
+  // ================= MICROSOFT LOGIN =================
+  loginWithMicrosoft() {
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/microsoft`;
   }
 
-  /* Login */
-  async login(data: LoginRequest): Promise<ApiResponse> {
-    const response = await api.post<ApiResponse>("/auth/login", data);
+  // ================= SAVE TOKEN =================
+  setToken(token: string) {
+    localStorage.setItem("token", token);
+  }
+
+  // ================= GET TOKEN =================
+  getToken(): string | null {
+    return localStorage.getItem("token");
+  }
+
+  // ================= REMOVE TOKEN =================
+  logout() {
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+  }
+
+  // ================= GET PROFILE =================
+  async getProfile() {
+    const response = await api.get("/auth/profile");
     return response.data;
   }
 }
 
-/* ============================
-   Export Instance
-============================ */
-
-const authService = new AuthService();
-export default authService;
+export const authService = new AuthService();
