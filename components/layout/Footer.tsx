@@ -1,7 +1,5 @@
 'use client';
-
-import { Container, Typography, Box, IconButton } from '@mui/material';
-import Grid from '@mui/material/Grid';
+import { Container, Grid, Typography, Box, IconButton } from '@mui/material';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
@@ -15,9 +13,7 @@ export default function Footer() {
       <Container maxWidth="lg">
 
         <Grid container spacing={4}>
-
-          {/* Column 1 */}
-          <Grid size={{ xs: 12, md: 4 }}>
+          <Grid item xs={12} md={4}>
             <Typography variant="h6" color="primary" gutterBottom>
               SkillVerse
             </Typography>
@@ -41,9 +37,7 @@ export default function Footer() {
               </IconButton>
             </Box>
           </Grid>
-
-          {/* Column 2 */}
-          <Grid size={{ xs: 6, md: 2 }}>
+          <Grid item xs={6} md={2}>
             <Typography variant="subtitle1" color="white" gutterBottom>
               Company
             </Typography>
@@ -52,9 +46,7 @@ export default function Footer() {
             <Box><Link href="/careers" className={styles.link}>Careers</Link></Box>
             <Box><Link href="/blog" className={styles.link}>Blog</Link></Box>
           </Grid>
-
-          {/* Column 3 */}
-          <Grid size={{ xs: 6, md: 2 }}>
+          <Grid item xs={6} md={2}>
             <Typography variant="subtitle1" color="white" gutterBottom>
               Support
             </Typography>
@@ -63,9 +55,7 @@ export default function Footer() {
             <Box><Link href="/contact" className={styles.link}>Contact</Link></Box>
             <Box><Link href="/faq" className={styles.link}>FAQ</Link></Box>
           </Grid>
-
-          {/* Column 4 */}
-          <Grid size={{ xs: 6, md: 2 }}>
+          <Grid item xs={6} md={2}>
             <Typography variant="subtitle1" color="white" gutterBottom>
               Legal
             </Typography>
@@ -73,9 +63,7 @@ export default function Footer() {
             <Box><Link href="/privacy" className={styles.link}>Privacy Policy</Link></Box>
             <Box><Link href="/terms" className={styles.link}>Terms of Service</Link></Box>
           </Grid>
-
-          {/* Column 5 */}
-          <Grid size={{ xs: 6, md: 2 }}>
+          <Grid item xs={6} md={2}>
             <Typography variant="subtitle1" color="white" gutterBottom>
               Contact
             </Typography>
@@ -90,20 +78,11 @@ export default function Footer() {
           </Grid>
 
         </Grid>
-
-        {/* Bottom */}
-        <Box
-          sx={{
-            textAlign: 'center',
-            pt: 4,
-            mt: 4,
-            borderTop: '1px solid #374151'
-          }}
-        >
-          <Typography variant="body2" color="text.secondary">
-            © {new Date().getFullYear()} SkillVerse. All rights reserved.
-          </Typography>
-        </Box>
+      <Box className={styles.footerBottom}>
+  <Typography variant="body2">
+    © {new Date().getFullYear()} SkillVerse. All rights reserved.
+  </Typography>
+</Box>
 
       </Container>
     </footer>

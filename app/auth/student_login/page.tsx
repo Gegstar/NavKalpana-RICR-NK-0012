@@ -1,20 +1,56 @@
 "use client";
 
-import {
-  Box,
-  Typography,
-  TextField,
-  Button,
-  Paper,
-  Skeleton,
-} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import {
+  TextField,
+  Skeleton,
+  InputAdornment,
+  IconButton,
+} from "@mui/material";
+import { Chrome, Facebook, Mic2, Mail, Lock, Eye, EyeOff } from "lucide-react";
 
 import styles from "@/styles/StudentLogin.module.css";
 import { defaultService } from "@/services/default.service";
 import { authService } from "@/services/auth.service";
 import { toastService } from "@/services/toast.service";
+
+// Shared styles for TextFields (matches signup page)
+const muiThemeStyles = {
+  "& .MuiOutlinedInput-root": {
+    color: "var(--text-primary)",
+    borderRadius: "12px",
+    backgroundColor: "#F8FAFC",
+    transition: "all 0.3s ease",
+    "& fieldset": {
+      borderColor: "var(--border-light)",
+      borderWidth: "2px",
+    },
+    "&:hover fieldset": {
+      borderColor: "var(--primary-yellow)",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "var(--primary-yellow)",
+      borderWidth: "2px",
+    },
+    "&.Mui-error fieldset": {
+      borderColor: "#EF4444",
+    },
+  },
+  "& .MuiInputBase-input": {
+    padding: "14px 14px 14px 0",
+    "&::placeholder": {
+      color: "var(--text-secondary)",
+      opacity: 0.7,
+    },
+  },
+  "& .MuiFormHelperText-root": {
+    marginLeft: "0",
+    color: "#EF4444",
+    fontSize: "0.75rem",
+  },
+};
 
 export default function LoginPage() {
   const router = useRouter();
@@ -28,51 +64,71 @@ export default function LoginPage() {
     password: "",
   });
 
-  const [errors, setErrors] = useState<any>({});
+  const [touched, setTouched] = useState({
+    identifier: false,
+    password: false,
+  });
+  const [showPassword, setShowPassword] = useState(false);
   const [loginLoading, setLoginLoading] = useState(false);
 
   // ================= FETCH SETTINGS =================
-  const fetchSettings = async () => {
-    try {
-      setLoading(true);
-
-      const response = await defaultService.getSettings({
-        subdomain: "test.rajexpress.com",
-      });
-
-      setAuthSettings(response.data?.auth_settings);
-    } catch (error) {
-      toastService.error("Failed to load settings");
-    } finally {
-      setLoading(false);
-    }
-  };
+const fetchSettings = async () => {
+  try {
+    setLoading(true);
+    const response = await defaultService.getSettings({
+      subdomain: "test.rajexpress.com",
+    });
+    setAuthSettings(response.data?.auth_settings);
+  } catch (error) {
+    console.error("Settings API failed, using fallback:", error);
+    // 👇 Fallback settings – enables social login & signup
+    setAuthSettings({
+      social_login: {
+        google: true,
+        facebook: true,
+        microsoft: true,
+      },
+      student_signup_enabled: true,
+    });
+    // Optionally, you can remove or keep the toast
+    // toastService.error("Using demo settings – backend not ready");
+  } finally {
+    setLoading(false);
+  }
+};
 
   useEffect(() => {
     fetchSettings();
   }, []);
 
   // ================= VALIDATION =================
-  const validate = () => {
-    const newErrors: any = {};
+  const validateIdentifier = (value: string) => {
+    return value.trim() !== "";
+  };
 
-    if (!form.identifier) {
-      newErrors.identifier = "Email or Username is required";
-    }
+  const validatePassword = (value: string) => {
+    return value.length >= 6;
+  };
 
-    if (!form.password) {
-      newErrors.password = "Password is required";
-    } else if (form.password.length < 6) {
-      newErrors.password = "Minimum 6 characters required";
-    }
+  const isFormValid = () => {
+    return validateIdentifier(form.identifier) && validatePassword(form.password);
+  };
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleBlur = (field: string) => {
+    setTouched((prev) => ({ ...prev, [field]: true }));
   };
 
   // ================= LOGIN HANDLER =================
   const handleLogin = async () => {
-    if (!validate()) return;
+    if (!isFormValid()) {
+      setTouched({ identifier: true, password: true });
+      return;
+    }
 
     setLoginLoading(true);
 
@@ -85,14 +141,11 @@ export default function LoginPage() {
         {
           loading: "Signing in...",
           success: "Login successful 🎉",
-          error: (err) =>
-            err?.response?.data?.message || "Login failed",
+          error: (err) => err?.response?.data?.message || "Login failed",
         }
       );
 
-      // ✅ use service (BEST PRACTICE)
       authService.setToken(res.access_token);
-
       router.push("/dashboard");
     } catch (err) {
       // already handled by toast
@@ -116,117 +169,161 @@ export default function LoginPage() {
 
   // ================= UI =================
   return (
-    <div className={styles.loginContainer}>
-      <Paper elevation={3} className={styles.paperCard}>
-        <Box sx={{ p: 4 }}>
-          {/* ===== TITLE ===== */}
-          {loading ? (
-            <Skeleton
-              variant="text"
-              width="60%"
-              height={40}
-              sx={{ mx: "auto" }}
-            />
-          ) : (
-            <Typography variant="h4" align="center">
-              Sign In to SkillVerse
-            </Typography>
+    <div className={styles.authWrapper}>
+      <div className={styles.bgCircle1}></div>
+      <div className={styles.bgCircle2}></div>
+
+      <div className={`${styles.authCard} ${styles.fadeIn}`}>
+        <div className={styles.logoSection}>
+          <div className={styles.logo}>
+            <span className={styles.logoText}>Skill</span>
+            <span className={styles.logoHighlight}>Verse</span>
+          </div>
+        </div>
+
+        <div className={styles.headerSection}>
+          <h2 className={styles.title}>
+            {loading ? <Skeleton width="60%" height={40} /> : "Welcome Back"}
+          </h2>
+          {!loading && (
+            <p className={styles.subtitle}>Sign in to continue learning</p>
           )}
+        </div>
 
-          {/* ===== FORM ===== */}
-          <Box component="form" noValidate>
-            {loading ? (
-              <>
-                <Skeleton variant="rectangular" height={56} sx={{ my: 1 }} />
-                <Skeleton variant="rectangular" height={56} sx={{ my: 1 }} />
-                <Skeleton variant="rectangular" height={40} sx={{ mt: 2 }} />
-              </>
-            ) : (
-              <>
+        <form onSubmit={(e) => e.preventDefault()} className={styles.formElement}>
+          {loading ? (
+            <>
+              <Skeleton variant="rectangular" height={56} sx={{ mb: 2, borderRadius: 1 }} />
+              <Skeleton variant="rectangular" height={56} sx={{ mb: 2, borderRadius: 1 }} />
+              <Skeleton variant="rectangular" height={48} sx={{ mt: 2, borderRadius: 1 }} />
+            </>
+          ) : (   
+            <>
+              {/* Email / Username Field */}
+              <div className={styles.formGroup}>
+                <label className={styles.label}>
+                  <Mail size={16} className={styles.labelIcon} />
+                  User ID
+                </label>
                 <TextField
                   fullWidth
-                  label="Email or Username"
-                  margin="normal"
+                  name="identifier"
                   value={form.identifier}
-                  error={!!errors.identifier}
-                  helperText={errors.identifier}
-                  onChange={(e) =>
-                    setForm({ ...form, identifier: e.target.value })
+                  onChange={handleChange}
+                  onBlur={() => handleBlur("identifier")}
+                  placeholder="Enter your email or username"
+                  variant="outlined"
+                  error={touched.identifier && !validateIdentifier(form.identifier)}
+                  helperText={
+                    touched.identifier && !validateIdentifier(form.identifier)
+                      ? "Email or username is required"
+                      : ""
                   }
-                />
-
-                <TextField
-                  fullWidth
-                  label="Password"
-                  type="password"
-                  margin="normal"
-                  value={form.password}
-                  error={!!errors.password}
-                  helperText={errors.password}
-                  onChange={(e) =>
-                    setForm({ ...form, password: e.target.value })
-                  }
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") handleLogin();
+                  sx={muiThemeStyles}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Mail size={18} color="#64748B" />
+                      </InputAdornment>
+                    ),
                   }}
                 />
+              </div>
 
-                <Button
+              {/* Password Field */}
+              <div className={styles.formGroup}>
+                <label className={styles.label}>
+                  <Lock size={16} className={styles.labelIcon} />
+                 Password
+                </label>
+                <TextField
                   fullWidth
-                  variant="contained"
-                  sx={{ mt: 2 }}
-                  onClick={handleLogin}
-                  disabled={loginLoading}
-                >
-                  {loginLoading ? "Signing in..." : "Sign In"}
-                </Button>
-              </>
-            )}
-          </Box>
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  value={form.password}
+                  onChange={handleChange}
+                  onBlur={() => handleBlur("password")}
+                  placeholder="Enter your password"
+                  variant="outlined"
+                  error={touched.password && !validatePassword(form.password)}
+                  helperText={
+                    touched.password && !validatePassword(form.password)
+                      ? "Minimum 6 characters required"
+                      : ""
+                  }
+                  sx={muiThemeStyles}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Lock size={18} color="#64748B" />
+                      </InputAdornment>
+                    ),
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowPassword(!showPassword)}
+                          edge="end"
+                          sx={{ color: "#64748B" }}
+                        >
+                          {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </div>
 
-          {/* ===== SOCIAL LOGIN ===== */}
-          {!loading && authSettings?.social_login && (
-            <Box mt={3} textAlign="center">
-              <Typography>Or sign in with</Typography>
-
-              <Box mt={2} display="flex" flexDirection="column" gap={1}>
-                {authSettings.social_login.google && (
-                  <Button variant="outlined" onClick={handleGoogleLogin}>
-                    Continue with Google
-                  </Button>
-                )}
-
-                {authSettings.social_login.facebook && (
-                  <Button variant="outlined" onClick={handleFacebookLogin}>
-                    Continue with Facebook
-                  </Button>
-                )}
-
-                {authSettings.social_login.microsoft && (
-                  <Button variant="outlined" onClick={handleMicrosoftLogin}>
-                    Continue with Microsoft
-                  </Button>
-                )}
-              </Box>
-            </Box>
+              <button
+                type="submit"
+                className={`${styles.loginBtn} ${loginLoading ? styles.loading : ""}`}
+                onClick={handleLogin}
+                disabled={loginLoading}
+              >
+                {loginLoading ? "Signing in..." : "Sign In"}
+              </button>
+            </>
           )}
+        </form>
 
-          {/* ===== SIGNUP ===== */}
-          {!loading && authSettings?.student_signup_enabled && (
-            <Box mt={2} textAlign="center">
-              <Typography variant="body2">
-                Don’t have an account?{" "}
-                <span
-                  style={{ color: "blue", cursor: "pointer" }}
-                  onClick={() => router.push("/signup")}
-                >
-                  Sign Up
-                </span>
-              </Typography>
-            </Box>
-          )}
-        </Box>
-      </Paper>
+        {/* Social Login Section */}
+        {!loading && authSettings?.social_login && (
+          <div className={styles.socialSection}>
+            <div className={styles.socialDivider}>
+              <span>Or continue with</span>
+            </div>
+            <div className={styles.socialButtons}>
+              {authSettings.social_login.google && (
+                <button onClick={handleGoogleLogin} className={styles.socialButton}>
+                  <Chrome size={20} />
+                  Continue with Google
+                </button>
+              )}
+              {authSettings.social_login.facebook && (
+                <button onClick={handleFacebookLogin} className={styles.socialButton}>
+                  <Facebook size={20} />
+                  Continue with Facebook
+                </button>
+              )}
+              {authSettings.social_login.microsoft && (
+                <button onClick={handleMicrosoftLogin} className={styles.socialButton}>
+                  <Mic2 size={20} />
+                  Continue with Microsoft
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Signup Link */}
+        {!loading && authSettings?.student_signup_enabled && (
+          <p className={styles.footerText}>
+            Don’t have an account?{" "}
+            <Link href="/auth/student_signup" className={styles.signupLink}>
+              Sign Up
+            </Link>
+          </p>
+        )}
+      </div>
     </div>
   );
 }

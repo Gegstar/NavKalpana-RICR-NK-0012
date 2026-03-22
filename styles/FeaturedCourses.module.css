@@ -1,94 +1,207 @@
+/* ===== SECTION ===== */
 .section {
-  background-color: var(--color-surface);
+  padding: var(--spacing-3xl) 0;
+  background: var(--color-background);
 }
 
-.courseGrid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--spacing-lg);
-  margin-bottom: var(--spacing-xl);
+/* ===== TITLE ===== */
+.sectionTitle {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl) !important;
+  font-weight: var(--font-weight-bold) !important;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-4xl) !important;
 }
 
+.sectionTitle span {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ===== CARD ===== */
 .card {
-  background-color: var(--color-surface);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow-md);
-  transition: transform var(--transition-base), box-shadow var(--transition-base);
   height: 100%;
   display: flex;
   flex-direction: column;
+
+  border: 1px solid var(--color-border) !important;
+  border-radius: var(--radius-lg) !important;
+  background: var(--color-surface);
+
+  overflow: hidden;
+  position: relative;
+
+  transition: var(--transition-base);
 }
 
+/* Glow effect */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(99, 102, 241, 0.15),
+    transparent
+  );
+  opacity: 0;
+  transition: var(--transition-base);
+}
+
+/* Hover */
 .card:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-xl);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-primary) !important;
 }
 
+.card:hover::before {
+  opacity: 1;
+}
+
+/* ===== IMAGE ===== */
 .cardMedia {
-  height: 200px;
-  background-size: cover;
-  background-position: center;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  transition: var(--transition-base);
 }
 
+/* subtle zoom */
+.card:hover .cardMedia {
+  transform: scale(1.05);
+}
+
+/* ===== CONTENT ===== */
 .cardContent {
-  padding: var(--spacing-lg);
-  flex: 1;
+  flex-grow: 1;
+  padding: var(--spacing-lg) !important;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
 }
 
+/* ===== TITLE ===== */
 .cardTitle {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
-  margin-bottom: var(--spacing-xs);
+  font-weight: var(--font-weight-bold) !important;
+  font-size: var(--font-size-md) !important;
+  color: var(--color-text-primary);
+
+  line-height: 1.4;
+  margin-bottom: var(--spacing-xs) !important;
+
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
+/* ===== INSTRUCTOR ===== */
 .instructor {
+  font-size: var(--font-size-sm) !important;
   color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
-  margin-bottom: var(--spacing-xs);
+  margin-bottom: var(--spacing-sm) !important;
 }
 
+/* ===== RATING ===== */
 .rating {
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs);
-  margin-bottom: var(--spacing-xs);
+  gap: 6px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-accent);
 }
 
-.starIcon {
-  color: #fbbf24;
+/* ===== STUDENTS ===== */
+.students {
+  font-size: var(--font-size-xs) !important;
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-md) !important;
 }
 
-.price {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-primary);
-}
-
-.cardFooter {
+/* ===== BOTTOM ROW ===== */
+.bottomRow {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: var(--spacing-md);
+  margin-top: auto;
 }
 
-.viewAllBtn {
-  text-align: center;
+/* ===== PRICE ===== */
+.price {
+  font-weight: var(--font-weight-bold) !important;
+  font-size: var(--font-size-lg) !important;
+  color: var(--color-text-primary);
 }
 
-/* Responsive */
+/* ===== BUTTON ===== */
+.bottomRow button {
+  border-radius: var(--radius-full) !important;
+  text-transform: none !important;
+  font-size: var(--font-size-xs) !important;
+  transition: var(--transition-fast) !important;
+}
+
+.bottomRow button:hover {
+  background: var(--gradient-primary) !important;
+  color: #fff !important;
+}
+
+/* ===== BOTTOM CTA ===== */
+.bottomButton {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--spacing-3xl);
+}
+
+.bottomButton button {
+  background: var(--gradient-primary) !important;
+  padding: 12px 42px !important;
+  border-radius: var(--radius-full) !important;
+  text-transform: none !important;
+  font-weight: var(--font-weight-bold) !important;
+  font-size: var(--font-size-md) !important;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition-base);
+}
+
+.bottomButton button:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
-  .courseGrid {
-    grid-template-columns: repeat(2, 1fr);
+  .sectionTitle {
+    font-size: var(--font-size-3xl) !important;
   }
 }
 
-@media (max-width: 600px) {
-  .courseGrid {
-    grid-template-columns: 1fr;
+@media (max-width: 768px) {
+  .section {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .cardContent {
+    padding: var(--spacing-md) !important;
+  }
+
+  .price {
+    font-size: var(--font-size-md) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .sectionTitle {
+    font-size: var(--font-size-2xl) !important;
+  }
+
+  .cardTitle {
+    font-size: var(--font-size-sm) !important;
   }
 }

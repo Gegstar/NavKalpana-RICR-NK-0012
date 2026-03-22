@@ -7,43 +7,71 @@ import {
   Card,
   CardContent,
   Box,
-  Rating
+  Rating,
+  Avatar
 } from '@mui/material';
-import { testimonials } from '@/data/testimonials';
 import styles from '@/styles/Testimonials.module.css';
+
+/* ✅ Dummy Data */
+const testimonials = [
+  {
+    id: 1,
+    name: 'Rahul Sharma',
+    role: 'Frontend Developer',
+    content: 'SkillVerse completely changed my career. The courses are top-notch and easy to follow.',
+    rating: 4.8,
+    avatar: 'https://i.pravatar.cc/150?img=11',
+  },
+  {
+    id: 2,
+    name: 'Anjali Verma',
+    role: 'UI/UX Designer',
+    content: 'Amazing platform! The instructors explain everything clearly with real-world examples.',
+    rating: 4.7,
+    avatar: 'https://i.pravatar.cc/150?img=5',
+  },
+  {
+    id: 3,
+    name: 'Mohit Patel',
+    role: 'Full Stack Developer',
+    content: 'Best investment I made. I landed a job after completing just 2 courses!',
+    rating: 5,
+    avatar: 'https://i.pravatar.cc/150?img=8',
+  },
+];
 
 export default function Testimonials() {
   return (
-    <section className={styles.section}>
+    <section className={styles.section} id="iestimonials">
       <Container maxWidth="lg">
 
-        <Typography variant="h2" className={styles.sectionTitle}>
-          What Our Students Say
+        <Typography className={styles.sectionTitle}>
+          What Our <span>Students </span>Say
         </Typography>
 
         <Grid container spacing={3}>
           {testimonials.map((testimonial) => (
-            
-            <Grid key={testimonial.id} size={{ xs: 12, md: 4 }}>
-              
-              <Card className={styles.testimonialCard}>
-                <CardContent>
+
+            <Grid item xs={12} md={4} key={testimonial.id}>
+
+              <Card className={styles.card} elevation={0}>
+                <CardContent className={styles.cardContent}>
 
                   {/* Header */}
                   <Box className={styles.header}>
                     
-                    <img
+                    <Avatar
                       src={testimonial.avatar}
                       alt={testimonial.name}
                       className={styles.avatar}
                     />
 
                     <Box>
-                      <Typography variant="subtitle1" className={styles.name}>
+                      <Typography className={styles.name}>
                         {testimonial.name}
                       </Typography>
 
-                      <Typography variant="body2" className={styles.role}>
+                      <Typography className={styles.role}>
                         {testimonial.role}
                       </Typography>
                     </Box>
@@ -51,8 +79,8 @@ export default function Testimonials() {
                   </Box>
 
                   {/* Quote */}
-                  <Typography variant="body1" className={styles.quote}>
-                    "{testimonial.content}"
+                  <Typography className={styles.quote}>
+                    “{testimonial.content}”
                   </Typography>
 
                   {/* Rating */}
@@ -60,6 +88,7 @@ export default function Testimonials() {
                     value={testimonial.rating}
                     precision={0.5}
                     readOnly
+                    size="small"
                   />
 
                 </CardContent>
