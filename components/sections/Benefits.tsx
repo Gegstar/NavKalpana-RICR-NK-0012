@@ -1,4 +1,5 @@
 'use client';
+
 import { Container, Typography, Grid, Card, CardContent } from '@mui/material';
 import SchoolIcon from '@mui/icons-material/School';
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
@@ -33,26 +34,37 @@ export default function Benefits() {
   return (
     <section className={styles.section} id="features">
       <Container maxWidth="lg">
+
         <Typography variant="h2" className={styles.sectionTitle}>
           Why Choose SkillVerse?
         </Typography>
+
         <Grid container spacing={4}>
           {benefits.map((benefit, index) => (
-            <Grid item xs={12} sm={6} md={3} key={index}>
+            <Grid key={index} size={{ xs: 12, sm: 6, md: 3 }}>
+              
               <Card className={styles.benefitCard} elevation={0}>
                 <CardContent>
-                  <div className={styles.iconWrapper}>{benefit.icon}</div>
+                  
+                  <div className={styles.iconWrapper}>
+                    {benefit.icon}
+                  </div>
+
                   <Typography variant="h6" className={styles.benefitTitle}>
                     {benefit.title}
                   </Typography>
+
                   <Typography variant="body2" className={styles.benefitDescription}>
                     {benefit.description}
                   </Typography>
+
                 </CardContent>
               </Card>
+
             </Grid>
           ))}
         </Grid>
+
       </Container>
     </section>
   );
