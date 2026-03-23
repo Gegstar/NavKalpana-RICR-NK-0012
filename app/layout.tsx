@@ -21,6 +21,7 @@ async function getSubdomain() {
 
   if (!host) return null;
 
+  console.log("🌐 Host header:", host); // ✅
   if (host.includes("localhost")) return "test.rajexpress.com";
 
   return host.split(".")[0];
@@ -31,6 +32,7 @@ async function getSubdomain() {
 // ==========================
 async function getSettings(subdomain: string) {
   try {
+    console.log("🔍 Fetching settings for subdomain:", subdomain); // ✅
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/default/settings/${subdomain}`,
       {
