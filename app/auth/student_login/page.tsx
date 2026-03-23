@@ -15,6 +15,7 @@ import styles from "@/styles/StudentLogin.module.css";
 import { defaultService } from "@/services/default.service";
 import { authService } from "@/services/auth.service";
 import { toastService } from "@/services/toast.service";
+import { useAppSelector } from "@/redux/store";
 
 // Shared styles for TextFields (matches signup page)
 const muiThemeStyles = {
@@ -55,9 +56,6 @@ const muiThemeStyles = {
 export default function LoginPage() {
   const router = useRouter();
 
-  // ================= STATE =================
-  const [authSettings, setAuthSettings] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
 
   const [form, setForm] = useState({
     identifier: "",
@@ -70,35 +68,14 @@ export default function LoginPage() {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loginLoading, setLoginLoading] = useState(false);
+//  REDUX DATA
+const settings = useAppSelector((state) => state.global.settings);
+const authSettings = settings?.auth_settings;
 
-  // ================= FETCH SETTINGS =================
-const fetchSettings = async () => {
-  try {
-    setLoading(true);
-    const response = await defaultService.getSettings({
-      subdomain: "test.rajexpress.com",
-    });
-    setAuthSettings(response.data?.auth_settings);
-  } catch (error) {
-    console.error("Settings API failed, using fallback:", error);
-    // 👇 Fallback settings – enables social login & signup
-    setAuthSettings({
-      social_login: {
-        google: true,
-        facebook: true,
-        microsoft: true,
-      },
-      student_signup_enabled: true,
-    });
-    // Optionally, you can remove or keep the toast
-    // toastService.error("Using demo settings – backend not ready");
-  } finally {
-    setLoading(false);
-  }
-};
-
+// LOADING STATE
+const loading = !settings;
   useEffect(() => {
-    fetchSettings();
+   // fetchSettings();
   }, []);
 
   // ================= VALIDATION =================
