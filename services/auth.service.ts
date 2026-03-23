@@ -1,7 +1,11 @@
+// src/services/auth.service.ts
 import api from "@/lib/api";
 import {
   LocalLoginRequest,
+  LocalSignupRequest,
   LoginResponse,
+  VerifyAccountRequest,
+  VerifyAccountResponse,
 } from "@/models/auth.model";
 
 class AuthService {
@@ -9,55 +13,44 @@ class AuthService {
 
   // ================= LOGIN =================
   async login(data: LocalLoginRequest): Promise<LoginResponse> {
-    const response = await api.post<LoginResponse>(
-      `${this.baseUrl}/login`,
-      data
-    );
-
+    const response = await api.post<LoginResponse>(`${this.baseUrl}/login`, data);
     return response.data;
   }
 
   // ================= SIGNUP =================
-  async signup(data: {
-    email: string;
-    username: string;
-    password: string;
-    fullName: string;
-  }): Promise<LoginResponse> {
-    const response = await api.post<LoginResponse>(
-      `${this.baseUrl}/signup`,
-      data
-    );
-
+  async signup(data: LocalSignupRequest): Promise<LoginResponse> {
+    const response = await api.post<LoginResponse>(`${this.baseUrl}/signup`, data);
     return response.data;
   }
 
-  // ================= GOOGLE LOGIN =================
+  // ================= VERIFY ACCOUNT (OTP) =================
+  async verifyAccount(data: VerifyAccountRequest): Promise<VerifyAccountResponse> {
+    const response = await api.post<VerifyAccountResponse>(`${this.baseUrl}/verify-otp`, data);
+    return response.data;
+  }
+
+  // ================= SOCIAL LOGIN =================
   loginWithGoogle() {
     window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google`;
   }
 
-  // ================= FACEBOOK LOGIN =================
   loginWithFacebook() {
     window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/facebook`;
   }
 
-  // ================= MICROSOFT LOGIN =================
   loginWithMicrosoft() {
     window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/microsoft`;
   }
 
-  // ================= SAVE TOKEN =================
+  // ================= TOKEN MANAGEMENT =================
   setToken(token: string) {
     localStorage.setItem("token", token);
   }
 
-  // ================= GET TOKEN =================
   getToken(): string | null {
     return localStorage.getItem("token");
   }
 
-  // ================= REMOVE TOKEN =================
   logout() {
     localStorage.removeItem("token");
     window.location.href = "/login";

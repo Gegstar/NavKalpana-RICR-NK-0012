@@ -114,6 +114,7 @@ const loading = !settings;
         authService.login({
           identifier: form.identifier,
           password: form.password,
+          role:"STUDENT"
         }),
         {
           loading: "Signing in...",

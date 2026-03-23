@@ -2,203 +2,142 @@
 
 import { useState, useEffect } from 'react';
 import styles from '@/styles/StudentSignup.module.css';
-import {authService} from "@/services/auth.service";
+import { authService } from "@/services/auth.service";
 import { TextField, IconButton, InputAdornment, CircularProgress } from '@mui/material';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation'; 
+import { useRouter } from 'next/navigation';
 import toast from "react-hot-toast";
+import { useAppSelector } from "@/redux/store";
 import { Eye, EyeOff, Mail, Lock, User, CheckCircle, AlertCircle } from 'lucide-react';
+import { LocalSignupRequest, VerifyAccountRequest } from '@/models/auth.model';
 
 export default function StudentSignup() {
-  const router = useRouter(); 
+  const router = useRouter();
 
-  const [form, setForm] = useState({
-    name: '',
+  const [form, setForm] = useState<LocalSignupRequest>({
+    fullName: '',
+    username: '',
     email: '',
     password: '',
   });
-  
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [touched, setTouched] = useState({
-    name: false,
-    email: false,
-    password: false,
-  });
+  const [touched, setTouched] = useState({ fullName: false, username: false, email: false, password: false });
   const [timer, setTimer] = useState(60);
   const [canResend, setCanResend] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
 
-  // Timer for OTP resend
+  const settings = useAppSelector(state => state.global?.settings);
+  const studentSignupEnabled = settings?.auth_settings?.student_signup_enabled;
+
+  // ------------------ Effects ------------------
+  useEffect(() => {
+    if (settings && studentSignupEnabled === false) {
+      router.replace("/404");
+    }
+  }, [settings, studentSignupEnabled, router]);
+
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    
     if (isOtpSent && timer > 0) {
-      interval = setInterval(() => {
-        setTimer((prev) => prev - 1);
-      }, 1000);
-    } else if (timer === 0) {
-      setCanResend(true);
-    }
-
+      interval = setInterval(() => setTimer(prev => prev - 1), 1000);
+    } else if (timer === 0) setCanResend(true);
     return () => clearInterval(interval);
   }, [isOtpSent, timer]);
 
-  // Calculate password strength
   useEffect(() => {
     let strength = 0;
     const password = form.password;
-    
     if (password.length >= 8) strength++;
     if (/[a-z]/.test(password)) strength++;
     if (/[A-Z]/.test(password)) strength++;
     if (/[0-9]/.test(password)) strength++;
     if (/[^a-zA-Z0-9]/.test(password)) strength++;
-    
     setPasswordStrength(strength);
   }, [form.password]);
 
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
+  // ------------------ Validation ------------------
+  const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const validatePassword = (password: string) => password.length >= 6;
+  const validateName = (name: string) => name.trim().length >= 2;
+  const validateUsername = (username: string) => /^[a-zA-Z0-9_.]{3,100}$/.test(username);
+  const isFormValid = () => validateName(form.fullName) && validateEmail(form.email) && validatePassword(form.password) && validateUsername(form.username);
 
-  const validatePassword = (password: string) => {
-    return password.length >= 6;
-  };
+  // ------------------ Handlers ------------------
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
 
-  const validateName = (name: string) => {
-    return name.trim().length >= 2;
-  };
-
-  const isFormValid = () => {
-    return (
-      validateName(form.name) &&
-      validateEmail(form.email) &&
-      validatePassword(form.password)
-    );
-  };
-
-  
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleBlur = (field: string) => {
+  const handleBlur = (field: string) =>
     setTouched(prev => ({ ...prev, [field]: true }));
-  };
 
   const handleOtpChange = (value: string, index: number) => {
     if (!/^[0-9]?$/.test(value)) return;
-
-    const newOtp = [...otp];
-    newOtp[index] = value;
-    setOtp(newOtp);
-
-    // Auto-focus next input
-    if (value && index < 5) {
-      const nextInput = document.getElementById(`otp-${index + 1}`);
-      nextInput?.focus();
-    }
+    const newOtp = [...otp]; newOtp[index] = value; setOtp(newOtp);
+    if (value && index < 5) document.getElementById(`otp-${index + 1}`)?.focus();
   };
 
   const handleOtpKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
-    if (e.key === 'Backspace' && !otp[index] && index > 0) {
-      const prevInput = document.getElementById(`otp-${index - 1}`);
-      prevInput?.focus();
-    }
+    if (e.key === 'Backspace' && !otp[index] && index > 0) document.getElementById(`otp-${index - 1}`)?.focus();
   };
 
   const handlePaste = (e: React.ClipboardEvent) => {
     e.preventDefault();
     const pastedData = e.clipboardData.getData('text/plain').slice(0, 6);
-    
     if (/^\d+$/.test(pastedData)) {
-      const newOtp = [...otp];
-      pastedData.split('').forEach((char, index) => {
-        if (index < 6) newOtp[index] = char;
-      });
+      const newOtp = [...otp]; pastedData.split('').forEach((char, i) => { if (i < 6) newOtp[i] = char; });
       setOtp(newOtp);
-      
-      // Focus appropriate input
-      const focusIndex = Math.min(pastedData.length, 5);
-      document.getElementById(`otp-${focusIndex}`)?.focus();
+      document.getElementById(`otp-${Math.min(pastedData.length, 5)}`)?.focus();
     }
   };
 
   const handleResendOtp = async () => {
-    setLoading(true);
+    setLoading(true); 
     const toastId = toast.loading("Resending OTP...");
-    
     try {
-      // await authService.resendOtp({ email: form.email });
-      // toast.success("OTP resent successfully!", { id: toastId });
-      // setTimer(60);
-      // setCanResend(false);
+      await authService.signup(form); // resend OTP
+      toast.success("OTP resent successfully!", { id: toastId });
+      setTimer(60); setCanResend(false);
     } catch (err: any) {
       toast.error(err?.response?.data?.message || "Failed to resend OTP", { id: toastId });
-    } finally {
-      setLoading(false);
-    }
+    } finally { setLoading(false); }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (!isOtpSent) {
-    setTouched({ name: true, email: true, password: true });
-    if (!isFormValid()) {
-      toast.error("Please fix the errors in the form");
-      return;
-    }
+    if (!isOtpSent) {
+      setTouched({ fullName: true, username: true, email: true, password: true });
+      if (!isFormValid()) return toast.error("Please fix the errors in the form");
 
-    setLoading(true);
-    const toastId = toast.loading("Sending OTP to your email...");
-    try {
-      // await authService.signup({
-      //   name: form.name,
-      //   email: form.email,
-      //   password: form.password,
-      // });
-      toast.success("OTP sent successfully! 📧", { id: toastId });
-      setIsOtpSent(true);
-      setTimer(60);
-    } catch (err: any) {
-      const errorMsg = err?.response?.data?.message || "Failed to send OTP";
-      toast.error(errorMsg, { id: toastId });
-    } finally {
-      setLoading(false);
+      setLoading(true);
+      const toastId = toast.loading("Sending OTP to your email...");
+      try {
+        await authService.signup(form);
+        toast.success("OTP sent successfully! 📧", { id: toastId });
+        setIsOtpSent(true); setTimer(60);
+      } catch (err: any) {
+        toast.error(err?.response?.data?.message || "Failed to send OTP", { id: toastId });
+      } finally { setLoading(false); }
+    } else {
+      setLoading(true);
+      const toastId = toast.loading("Verifying OTP...");
+      try {
+        const otpValue = otp.join('');
+        if (otpValue.length !== 6) throw new Error("Please enter complete OTP");
+        const verifyData: VerifyAccountRequest = { userId: form.email, otp: otpValue }; // assuming email as userId
+        await authService.verifyAccount(verifyData);
+        toast.success("Account verified successfully!", { id: toastId });
+        setTimeout(() => router.push("/auth/student_login"), 2000);
+      } catch (err: any) {
+        toast.error(err?.response?.data?.message || err?.message || "Invalid OTP", { id: toastId });
+        const otpContainer = document.querySelector(`.${styles.otpContainer}`);
+        otpContainer?.classList.add(styles.shake);
+        setTimeout(() => otpContainer?.classList.remove(styles.shake), 500);
+      } finally { setLoading(false); }
     }
-  } else {
-    setLoading(true);
-    const toastId = toast.loading("Verifying OTP...");
-    try {
-      const otpValue = otp.join('');
-      if (otpValue.length !== 6) {
-        throw new Error("Please enter complete OTP");
-      }
-      // await authService.verifyOtp({ email: form.email, otp: otpValue });
-      // toast.success("Account verified! Redirecting to login...", {
-      //   id: toastId,
-      //   icon: '🎉',
-      //   duration: 3000,
-      // });
-      setTimeout(() => router.push("/auth/student_login"), 2000);
-    } catch (err: any) {
-      const msg = err?.response?.data?.message || err?.message || "Invalid OTP";
-      toast.error(msg, { id: toastId });
-      const otpContainer = document.querySelector(`.${styles.otpContainer}`);
-      otpContainer?.classList.add(styles.shake);
-      setTimeout(() => otpContainer?.classList.remove(styles.shake), 500);
-    } finally {
-      setLoading(false);
-    }
-  }
-};
+  };
 
   const getPasswordStrengthColor = () => {
     if (passwordStrength <= 2) return '#EF4444';
@@ -214,11 +153,31 @@ export default function StudentSignup() {
     return 'Strong';
   };
 
+  // ------------------ Render ------------------
+  if (!settings) {
+    return (
+      <div className={styles.authWrapper}>
+        <div className={styles.loaderContainer}>
+          <CircularProgress size={40} color="inherit" />
+          <p>Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!studentSignupEnabled) {
+    return (
+      <div className={styles.authWrapper}>
+        <p className={styles.disabledText}>Student signup is currently disabled.</p>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.authWrapper}>
       <div className={styles.bgCircle1}></div>
       <div className={styles.bgCircle2}></div>
-      
+
       <div className={styles.authCard}>
         <div className={styles.logoSection}>
           <div className={styles.logo}>
@@ -232,250 +191,130 @@ export default function StudentSignup() {
             {isOtpSent ? 'Verify Email' : 'Create Account'}
           </h2>
           <p className={styles.subtitle}>
-            {isOtpSent 
-              ? `Enter the 6-digit code sent to ${form.email}`
-              : 'Fill in your details to get started'
-            }
+            {isOtpSent ? `Enter the 6-digit code sent to ${form.email}` : 'Fill in your details to get started'}
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className={styles.formElement}>
           {!isOtpSent ? (
             <>
-              {/* Full Name Field */}
+              {/* Full Name */}
               <div className={styles.formGroup}>
-                <label className={styles.label}>
-                  <User size={16} className={styles.labelIcon} />
-                  Full Name
-                </label>
                 <TextField
-                  name="name"
-                  value={form.name}
+                  name="fullName"
+                  value={form.fullName}
                   onChange={handleChange}
-                  onBlur={() => handleBlur('name')}
-                  required
-                  fullWidth
-                  placeholder="Enter your full name"
+                  onBlur={() => handleBlur('fullName')}
+                  required fullWidth
+                  placeholder="Full Name"
                   variant="outlined"
-                  error={touched.name && !validateName(form.name)}
-                  helperText={touched.name && !validateName(form.name) ? "Name must be at least 2 characters" : ""}
+                  error={touched.fullName && !validateName(form.fullName)}
+                  helperText={touched.fullName && !validateName(form.fullName) ? "Name must be at least 2 characters" : ""}
                   sx={muiThemeStyles}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <User size={18} color="#64748B" />
-                      </InputAdornment>
-                    ),
-                  }}
+                  InputProps={{ startAdornment: <InputAdornment position="start"><User size={18} color="#64748B" /></InputAdornment> }}
                 />
-                {touched.name && validateName(form.name) && form.name && (
-                  <span className={styles.validIndicator}>
-                    <CheckCircle size={16} color="#10B981" />
-                  </span>
-                )}
               </div>
 
-              {/* Email Field */}
+              {/* Username */}
               <div className={styles.formGroup}>
-                <label className={styles.label}>
-                  <Mail size={16} className={styles.labelIcon} />
-                  Email Address
-                </label>
+                <TextField
+                  name="username"
+                  value={form.username}
+                  onChange={handleChange}
+                  onBlur={() => handleBlur('username')}
+                  required fullWidth
+                  placeholder="Username"
+                  variant="outlined"
+                  error={touched.username && !validateUsername(form.username)}
+                  helperText={touched.username && !validateUsername(form.username) ? "Invalid username" : ""}
+                  sx={muiThemeStyles}
+                  InputProps={{ startAdornment: <InputAdornment position="start"><User size={18} color="#64748B" /></InputAdornment> }}
+                />
+              </div>
+
+              {/* Email */}
+              <div className={styles.formGroup}>
                 <TextField
                   name="email"
                   value={form.email}
                   onChange={handleChange}
                   onBlur={() => handleBlur('email')}
-                  required
-                  fullWidth
-                  type="email"
-                  placeholder="Enter your email"
+                  required fullWidth type="email"
+                  placeholder="Email"
                   variant="outlined"
                   error={touched.email && !validateEmail(form.email)}
-                  helperText={touched.email && !validateEmail(form.email) ? "Please enter a valid email" : ""}
+                  helperText={touched.email && !validateEmail(form.email) ? "Invalid email" : ""}
                   sx={muiThemeStyles}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <Mail size={18} color="#64748B" />
-                      </InputAdornment>
-                    ),
-                  }}
+                  InputProps={{ startAdornment: <InputAdornment position="start"><Mail size={18} color="#64748B" /></InputAdornment> }}
                 />
-                {touched.email && validateEmail(form.email) && form.email && (
-                  <span className={styles.validIndicator}>
-                    <CheckCircle size={16} color="#10B981" />
-                  </span>
-                )}
               </div>
 
-              {/* Password Field */}
+              {/* Password */}
               <div className={styles.formGroup}>
-                <label className={styles.label}>
-                  <Lock size={16} className={styles.labelIcon} />
-                  Password
-                </label>
                 <TextField
                   name="password"
                   value={form.password}
                   onChange={handleChange}
                   onBlur={() => handleBlur('password')}
-                  fullWidth
-                  required
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Create a password"
-                  variant="outlined"
+                  fullWidth required type={showPassword ? "text" : "password"}
+                  placeholder="Password" variant="outlined"
                   error={touched.password && !validatePassword(form.password)}
                   helperText={touched.password && !validatePassword(form.password) ? "Password must be at least 6 characters" : ""}
                   sx={muiThemeStyles}
                   InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <Lock size={18} color="#64748B" />
-                      </InputAdornment>
-                    ),
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={() => setShowPassword(!showPassword)}
-                          edge="end"
-                          className={styles.eyeButton}
-                        >
-                          {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
+                    startAdornment: <InputAdornment position="start"><Lock size={18} color="#64748B" /></InputAdornment>,
+                    endAdornment: <InputAdornment position="end"><IconButton onClick={() => setShowPassword(!showPassword)} edge="end">{showPassword ? <EyeOff size={20} /> : <Eye size={20} />}</IconButton></InputAdornment>
                   }}
                 />
-                
-                {/* Password Strength Indicator */}
-                {form.password && (
-                  <div className={styles.passwordStrength}>
-                    <div className={styles.strengthBars}>
-                      {[1, 2, 3, 4, 5].map((level) => (
-                        <div
-                          key={level}
-                          className={`${styles.strengthBar} ${passwordStrength >= level ? styles.active : ''}`}
-                          style={{
-                            backgroundColor: passwordStrength >= level ? getPasswordStrengthColor() : '#E2E8F0'
-                          }}
-                        />
-                      ))}
-                    </div>
-                    <span className={styles.strengthText} style={{ color: getPasswordStrengthColor() }}>
-                      {getPasswordStrengthText()} password
-                    </span>
-                  </div>
-                )}
               </div>
             </>
           ) : (
-            /* OTP Verification Section */
             <div className={styles.otpSection}>
               <label className={styles.label}>6-Digit Verification Code</label>
               <div className={styles.otpContainer}>
                 {otp.map((digit, index) => (
                   <input
-                    key={index}
-                    id={`otp-${index}`}
-                    type="text"
-                    inputMode="numeric"
-                    maxLength={1}
-                    value={digit}
-                    onChange={(e) => handleOtpChange(e.target.value, index)}
-                    onKeyDown={(e) => handleOtpKeyDown(e, index)}
-                    onPaste={index === 0 ? handlePaste : undefined}
-                    className={styles.otpInput}
-                    disabled={loading}
+                    key={index} id={`otp-${index}`} type="text" inputMode="numeric" maxLength={1}
+                    value={digit} onChange={e => handleOtpChange(e.target.value, index)}
+                    onKeyDown={e => handleOtpKeyDown(e, index)} onPaste={index === 0 ? handlePaste : undefined}
+                    className={styles.otpInput} disabled={loading}
                   />
                 ))}
               </div>
-
-              {/* Timer and Resend */}
               <div className={styles.timerSection}>
-                {!canResend ? (
-                  <p className={styles.timer}>
-                    Resend code in <span>{timer}s</span>
-                  </p>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={handleResendOtp}
-                    className={styles.resendButton}
-                    disabled={loading}
-                  >
-                    Resend OTP
-                  </button>
-                )}
+                {!canResend ? <p className={styles.timer}>Resend code in <span>{timer}s</span></p>
+                  : <button type="button" onClick={handleResendOtp} className={styles.resendButton} disabled={loading}>Resend OTP</button>}
               </div>
-
-              {/* Edit Email Link */}
-              <button
-                type="button"
-                onClick={() => setIsOtpSent(false)}
-                className={styles.editEmailButton}
-              >
-                <AlertCircle size={14} />
-                Wrong email? Edit details
-              </button>
             </div>
           )}
 
-          <button 
-            type="submit" 
-            className={`${styles.loginBtn} ${loading ? styles.loading : ''}`}
-            disabled={loading || (!isOtpSent && !isFormValid())}
-          >
-            {loading ? (
-              <>
-                <CircularProgress size={20} color="inherit" />
-                <span>Processing...</span>
-              </>
-            ) : (
-              isOtpSent ? 'Verify & Create Account' : 'Get OTP'
-            )}
+          <button type="submit" className={`${styles.loginBtn} ${loading ? styles.loading : ''}`} disabled={loading || (!isOtpSent && !isFormValid())}>
+            {loading ? <><CircularProgress size={20} color="inherit" /><span>Processing...</span></> : (isOtpSent ? 'Verify & Create Account' : 'Get OTP')}
           </button>
         </form>
 
-        {/* Footer */}
-        <p className={styles.footerText}>
-          Already have an account?{' '}
-          <Link href="/auth/student_login" className={styles.loginLink}>
-            Sign in
-          </Link>
-        </p>
+        <p className={styles.footerText}>Already have an account? <Link href="/auth/student_login" className={styles.loginLink}>Sign in</Link></p>
       </div>
     </div>
   );
 }
 
+
+// MUI TextField Styles
 const muiThemeStyles = {
   "& .MuiOutlinedInput-root": {
     color: "var(--text-primary)",
     borderRadius: "12px",
     backgroundColor: "#F8FAFC",
     transition: "all 0.3s ease",
-    "& fieldset": { 
-      borderColor: "var(--border-light)",
-      borderWidth: "2px",
-    },
-    "&:hover fieldset": { 
-      borderColor: "var(--primary-yellow)" 
-    },
-    "&.Mui-focused fieldset": { 
-      borderColor: "var(--primary-yellow)",
-      borderWidth: "2px",
-    },
-    "&.Mui-error fieldset": {
-      borderColor: "#EF4444",
-    },
+    "& fieldset": { borderColor: "var(--border-light)", borderWidth: "2px" },
+    "&:hover fieldset": { borderColor: "var(--primary-yellow)" },
+    "&.Mui-focused fieldset": { borderColor: "var(--primary-yellow)", borderWidth: "2px" },
+    "&.Mui-error fieldset": { borderColor: "#EF4444" },
   },
   "& .MuiInputBase-input": {
     padding: "14px 14px 14px 0",
-    "&::placeholder": {
-      color: "var(--text-secondary)",
-      opacity: 0.7,
-    },
+    "&::placeholder": { color: "var(--text-secondary)", opacity: 0.7 },
   },
   "& .MuiFormHelperText-root": {
     marginLeft: "0",
