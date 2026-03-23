@@ -1,20 +1,64 @@
-"use client";
-
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
-import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-import { lightTheme } from '@/styles/theme'; // Defaulting to the primary project theme
+
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { Toaster } from "react-hot-toast";
 
+import ReduxProvider from "@/redux/provider";
+import InitRedux from "@/redux/store/InitRedux";
+import ThemeRegistry from "@/app/ThemeRegistry";
+
+import { headers } from "next/headers";
+
 import "./globals.css";
 
-export default function RootLayout({
+// ==========================
+//  GET SUBDOMAIN
+// ==========================
+async function getSubdomain() {
+  const headersList = await headers();
+  const host = headersList.get("host");
+
+  if (!host) return null;
+
+  if (host.includes("localhost")) return "test.rajexpress.com";
+
+  return host.split(".")[0];
+}
+
+// ==========================
+//  FETCH SETTINGS (SSR)
+// ==========================
+async function getSettings(subdomain: string) {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/default/settings/${subdomain}`,
+      {
+        cache: "no-store",
+      }
+    );
+
+    if (!res.ok) return null;
+
+    const data = await res.json();
+    return data.data;
+  } catch (err) {
+    console.error("❌ SSR fetch error:", err);
+    return null;
+  }
+}
+
+// ==========================
+// 🚀 ROOT LAYOUT (SERVER)
+// ==========================
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const subdomain = await getSubdomain();
+  const settings = subdomain ? await getSettings(subdomain) : null;
+
   return (
     <html lang="en">
       <head>
@@ -23,21 +67,21 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
+
       <body>
         <AppRouterCacheProvider>
-          <MuiThemeProvider theme={lightTheme}>
-            <CssBaseline />
-            <Navbar />
-            <main>{children}</main>
-            <Footer />
-            <Toaster
-              position="top-center"
-              reverseOrder={false}
-              toastOptions={{
-                duration: 3000,
-              }}
-            />
-          </MuiThemeProvider>
+          <ReduxProvider>
+            {/*  HYDRATE REDUX */}
+            <InitRedux settings={settings} />
+
+            {/*  CLIENT SIDE THEME */}
+            <ThemeRegistry>
+              <Navbar />
+              <main>{children}</main>
+              <Footer />
+              <Toaster position="top-center" />
+            </ThemeRegistry>
+          </ReduxProvider>
         </AppRouterCacheProvider>
       </body>
     </html>
