@@ -23,6 +23,14 @@ class AuthService {
     return response.data;
   }
 
+  // ================= RESEND OTP =================
+async resendOtp(identifier: string): Promise<{ message: string; otpSent: boolean }> {
+  const response = await api.post(`${this.baseUrl}/resend-otp`, {
+    identifier,
+  });
+  return response.data;
+}
+
   // ================= VERIFY ACCOUNT (OTP) =================
   async verifyAccount(data: VerifyAccountRequest): Promise<VerifyAccountResponse> {
     const response = await api.post<VerifyAccountResponse>(`${this.baseUrl}/verify-otp`, data);

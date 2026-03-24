@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import toast from "react-hot-toast";
 import { useAppSelector } from "@/redux/store";
-import { Eye, EyeOff, Mail, Lock, User, CheckCircle, AlertCircle } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, User } from 'lucide-react';
 import { LocalSignupRequest, VerifyAccountRequest } from '@/models/auth.model';
 
 export default function StudentSignup() {
@@ -28,6 +28,7 @@ export default function StudentSignup() {
   const [timer, setTimer] = useState(60);
   const [canResend, setCanResend] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
+  const [usernameEdited, setUsernameEdited] = useState(false); // tracks if user manually changed username
 
   const settings = useAppSelector(state => state.global?.settings);
   const studentSignupEnabled = settings?.auth_settings?.student_signup_enabled;
@@ -65,9 +66,35 @@ export default function StudentSignup() {
   const validateUsername = (username: string) => /^[a-zA-Z0-9_.]{3,100}$/.test(username);
   const isFormValid = () => validateName(form.fullName) && validateEmail(form.email) && validatePassword(form.password) && validateUsername(form.username);
 
-  // ------------------ Handlers ------------------
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+ 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const { name, value } = e.target;
+
+  setForm(prev => {
+    const updated = { ...prev, [name]: value };
+
+    // Auto-fill username ONLY from fullName if not manually edited
+    if (!usernameEdited && name === 'fullName') {
+      let suggestedUsername = value
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]/g, ''); // remove invalid chars
+
+      // Optionally add a small random number for uniqueness
+      const randomNumber = Math.floor(Math.random() * 100);
+      suggestedUsername = suggestedUsername + randomNumber;
+
+      updated.username = suggestedUsername;
+    }
+
+    return updated;
+  });
+};
+
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm(prev => ({ ...prev, username: e.target.value }));
+    setUsernameEdited(true);
+  };
 
   const handleBlur = (field: string) =>
     setTouched(prev => ({ ...prev, [field]: true }));
@@ -92,17 +119,28 @@ export default function StudentSignup() {
     }
   };
 
-  const handleResendOtp = async () => {
-    setLoading(true); 
-    const toastId = toast.loading("Resending OTP...");
-    try {
-      await authService.signup(form); // resend OTP
-      toast.success("OTP resent successfully!", { id: toastId });
-      setTimer(60); setCanResend(false);
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message || "Failed to resend OTP", { id: toastId });
-    } finally { setLoading(false); }
-  };
+const handleResendOtp = async () => {
+  if (!canResend) return; // ✅ prevent spam click
+
+  setLoading(true);
+  const toastId = toast.loading("Resending OTP...");
+
+  try {
+    await authService.resendOtp(form.email); // ✅ FIXED
+
+    toast.success("OTP resent successfully! 📧", { id: toastId });
+
+    setTimer(60);
+    setCanResend(false);
+  } catch (err: any) {
+    toast.error(
+      err?.response?.data?.message || "Failed to resend OTP",
+      { id: toastId }
+    );
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -220,7 +258,7 @@ export default function StudentSignup() {
                 <TextField
                   name="username"
                   value={form.username}
-                  onChange={handleChange}
+                  onChange={handleUsernameChange}
                   onBlur={() => handleBlur('username')}
                   required fullWidth
                   placeholder="Username"
@@ -298,7 +336,6 @@ export default function StudentSignup() {
     </div>
   );
 }
-
 
 // MUI TextField Styles
 const muiThemeStyles = {

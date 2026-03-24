@@ -44,12 +44,9 @@ export default function Benefits() {
         <Grid container spacing={4}>
           {benefits.map((benefit) => (
             <Grid
-              item
-              xs={12}
-              sm={6}
-              md={3}
-              key={benefit.title} // ✅ FIXED
-              display="flex" // ✅ equal height
+              key={benefit.title}
+              size={{ xs: 12, sm: 6, md: 3 }} // ✅ FIXED
+              display="flex"
             >
               <Card className={styles.card} elevation={0} sx={{ width: '100%' }}>
                 <CardContent className={styles.cardContent}>
