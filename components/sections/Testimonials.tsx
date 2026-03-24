@@ -42,7 +42,7 @@ const testimonials = [
 
 export default function Testimonials() {
   return (
-    <section className={styles.section} id="iestimonials">
+    <section className={styles.section} id="testimonials"> {/* ✅ fixed typo */}
       <Container maxWidth="lg">
 
         <Typography className={styles.sectionTitle}>
@@ -52,9 +52,13 @@ export default function Testimonials() {
         <Grid container spacing={3}>
           {testimonials.map((testimonial) => (
 
-            <Grid item xs={12} md={4} key={testimonial.id}>
-
-              <Card className={styles.card} elevation={0}>
+            <Grid key={testimonial.id} size={{ xs: 12, md: 4 }}>
+              
+              <Card
+                className={styles.card}
+                elevation={0}
+                sx={{ height: '100%' }} // ✅ equal height cards
+              >
                 <CardContent className={styles.cardContent}>
 
                   {/* Header */}

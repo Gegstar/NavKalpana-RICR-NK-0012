@@ -66,7 +66,7 @@ export default function FeaturedCourses() {
         <Grid container spacing={3}>
           {courses.map((course) => (
             
-            <Grid item xs={12} sm={6} md={3} key={course.id}>
+            <Grid key={course.id} size={{ xs: 12, sm: 6, md: 3 }}>
               
               <Card className={styles.card}>
                 

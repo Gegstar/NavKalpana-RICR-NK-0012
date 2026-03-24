@@ -64,9 +64,13 @@ export default function PopularInstructors() {
         <Grid container spacing={3}>
           {instructors.map((instructor) => (
             
-            <Grid item xs={12} sm={6} md={3} key={instructor.id}>
+            <Grid key={instructor.id} size={{ xs: 12, sm: 6, md: 3 }}>
               
-              <Card className={styles.card} elevation={0}>
+              <Card
+                className={styles.card}
+                elevation={0}
+                sx={{ height: '100%' }} // ✅ better alignment
+              >
                 <CardContent className={styles.cardContent}>
 
                   {/* Avatar */}
