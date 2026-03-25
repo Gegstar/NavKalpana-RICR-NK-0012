@@ -1,12 +1,13 @@
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 
-import Navbar from "@/components/layout/Navbar";
+// import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { Toaster } from "react-hot-toast";
 
 import ReduxProvider from "@/redux/provider";
 import InitRedux from "@/redux/store/InitRedux";
 import ThemeRegistry from "@/app/ThemeRegistry";
+import AppProviderWrapper from "@/components/AppProviderWrapper"; // ✅ import the wrapper
 
 import { headers } from "next/headers";
 
@@ -21,8 +22,8 @@ async function getSubdomain() {
 
   if (!host) return null;
 
-  console.log("🌐 Host header:", host); // ✅
-  if (host.includes("localhost")) return "lms-frontend-1-6mx4";
+  console.log("🌐 Host header:", host);
+  if (host.includes("localhost")) return "lms-frontend-p2yr";
 
   return host.split(".")[0];
 }
@@ -32,7 +33,7 @@ async function getSubdomain() {
 // ==========================
 async function getSettings(subdomain: string) {
   try {
-    console.log("🔍 Fetching settings for subdomain:", subdomain); // ✅
+    console.log("🔍 Fetching settings for subdomain:", subdomain);
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/default/settings/${subdomain}`,
       {
@@ -73,16 +74,18 @@ export default async function RootLayout({
       <body>
         <AppRouterCacheProvider>
           <ReduxProvider>
-            {/*  HYDRATE REDUX */}
+            {/*  HYDRATE REDUX WITH SSR SETTINGS */}
             <InitRedux settings={settings} />
 
-            {/*  CLIENT SIDE THEME */}
-            <ThemeRegistry>
-              <Navbar />
-              <main>{children}</main>
-              <Footer />
-              <Toaster position="top-center" />
-            </ThemeRegistry>
+            {/*  CLIENT‑SIDE CONTEXT PROVIDER */}
+            <AppProviderWrapper>
+              <ThemeRegistry>
+                {/* <Navbar /> */}
+                <main>{children}</main>
+                <Footer />
+                <Toaster position="top-center" />
+              </ThemeRegistry>
+            </AppProviderWrapper>
           </ReduxProvider>
         </AppRouterCacheProvider>
       </body>

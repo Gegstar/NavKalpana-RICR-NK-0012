@@ -1,0 +1,33 @@
+/* StudentLayout.module.css */
+
+.container {
+  display: flex;
+  min-height: 100vh;
+  background: var(--color-background);
+  transition: all var(--transition-base);
+}
+
+.sidebarWrapper {
+  flex-shrink: 0;
+  transition: width var(--transition-base);
+}
+
+.mainContent {
+  flex: 1;
+  overflow-x: auto;
+  transition: margin-left var(--transition-base), width var(--transition-base);
+  padding: var(--spacing-lg);
+  background: var(--color-background);
+}
+
+.fullWidth {
+  width: 100% !important;
+  margin-left: 0 !important;
+}
+
+/* Optional: adjust padding on smaller screens */
+@media (max-width: 768px) {
+  .mainContent {
+    padding: var(--spacing-md);
+  }
+}
