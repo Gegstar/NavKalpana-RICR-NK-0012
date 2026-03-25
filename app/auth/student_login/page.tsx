@@ -179,10 +179,6 @@ const loading = !settings;
             <>
               {/* Email / Username Field */}
               <div className={styles.formGroup}>
-                <label className={styles.label}>
-                  <Mail size={16} className={styles.labelIcon} />
-                  User ID
-                </label>
                 <TextField
                   fullWidth
                   name="identifier"
@@ -210,10 +206,6 @@ const loading = !settings;
 
               {/* Password Field */}
               <div className={styles.formGroup}>
-                <label className={styles.label}>
-                  <Lock size={16} className={styles.labelIcon} />
-                 Password
-                </label>
                 <TextField
                   fullWidth
                   name="password"
