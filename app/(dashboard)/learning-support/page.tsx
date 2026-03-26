@@ -65,7 +65,7 @@ export default function LearningSupportPage() {
         Learning Support
       </Typography>
       <Grid container spacing={4}>
-        <Grid item xs={12} md={6}>
+        <Grid size={{xs:12,md:6}}>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>Submit a Doubt</Typography>
@@ -113,7 +113,7 @@ export default function LearningSupportPage() {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid size={{xs:12,md:6}}>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>Request Backup Class</Typography>

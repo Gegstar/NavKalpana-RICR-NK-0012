@@ -214,7 +214,7 @@ export default function StudentDashboard() {
         {/* Bento Stats */}
         <Grid container spacing={3} alignItems="stretch" className={styles.bentoGrid}>
           {/* Academic Score Card */}
-          <Grid item xs={12} md={4} sx={{ display: 'flex' }}>
+          <Grid size={{xs:12,md:4}}  sx={{ display: 'flex' }}>
             <Paper
               className={`${styles.bentoCard} ${styles.scoreCard}`}
               sx={{ 
@@ -242,7 +242,7 @@ export default function StudentDashboard() {
           </Grid>
 
           {/* Learning Streak Card */}
-          <Grid item xs={12} md={4} sx={{ display: 'flex' }}>
+          <Grid size={{xs:12,md:4}} sx={{ display: 'flex' }}>
             <Paper
               className={`${styles.bentoCard} ${styles.streakCard}`}
               sx={{ 
@@ -267,7 +267,7 @@ export default function StudentDashboard() {
           </Grid>
 
           {/* Assignments Completed Card */}
-          <Grid item xs={12} md={4} sx={{ display: 'flex' }}>
+          <Grid  size={{xs:12,md:4}} sx={{ display: 'flex' }}>
             <Paper
               className={`${styles.bentoCard} ${styles.assignmentCard}`}
               sx={{ 
@@ -352,7 +352,7 @@ export default function StudentDashboard() {
 
         {/* Middle Row: Recent Submissions & Weekly Activity Chart */}
         <Grid container spacing={3} className={styles.middleRow}>
-          <Grid item xs={12} md={6}>
+          <Grid size={{xs:12,md:4}}>
             <Paper className={styles.activitySection}>
               <Typography variant="h6">
                 <Clock size={18} /> Recent Submissions
@@ -376,7 +376,7 @@ export default function StudentDashboard() {
               </div>
             </Paper>
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid size={{xs:12,md:4}}>
             <Paper className={styles.activitySection}>
               <Typography variant="h6">Weekly Activity</Typography>
               <div className={styles.barChart}>
@@ -495,8 +495,8 @@ export default function StudentDashboard() {
       {/* Right Sidebar */}
       <Container maxWidth="xl" className={styles.sidebarContainer}>
         <Grid container spacing={3}>
-          <Grid item xs={12} md={8}></Grid>
-          <Grid item xs={12} md={4}>
+          <Grid size={{xs:12,md:8}}></Grid>
+          <Grid size={{xs:12,md:4}}>
             {/* Event Calendar */}
             <Paper className={styles.eventCalendarCard}>
               <div className={styles.calendarHeader}>

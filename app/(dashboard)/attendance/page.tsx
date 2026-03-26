@@ -38,7 +38,7 @@ export default function AttendancePage() {
         {courses.map((course) => {
           const stats = getCourseAttendance(course.id);
           return (
-            <Grid item xs={12} md={6} key={course.id}>
+            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={course.id}>
               <Card>
                 <CardContent>
                   <Typography variant="h6">{course.title}</Typography>
