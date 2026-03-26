@@ -32,7 +32,7 @@ export default function MyCourses() {
       </Typography>
       <Grid container spacing={3}>
         {courses.map((course) => (
-          <Grid item xs={12} md={6} lg={4} key={course.id}>
+          <Grid size={{xs:12,md:4,lg:4}} key={course.id}>
             <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
               {course.thumbnail && (
                 <CardMedia

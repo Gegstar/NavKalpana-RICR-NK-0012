@@ -1,13 +1,25 @@
 'use client'
 
-import React, { createContext, useContext, useReducer, useMemo } from 'react'
+import React, { createContext, useContext, useReducer, useMemo, use } from 'react'
 import toast from 'react-hot-toast'
 import { initialCourses, initialAssignments, initialQuizzes, initialAttendance, leaderboardData, eventsData } from '@/lib/data'
 import { calculateStreak, updateWeeklyActivity, getSkillsData, calculateOverallPerformance } from '@/lib/helpers'
 import { User, Course, Assignment, Quiz, CourseAttendance, LeaderboardEntry, Event, QuizAttempt, AssignmentSubmission } from '@/lib/types'
+// ✅ Helper to get cookie
+const getCookie = (name: string) => {
+  if (typeof document === 'undefined') return null;
+
+  const match = document.cookie.match(
+    new RegExp('(^| )' + name + '=([^;]+)')
+  );
+  return match ? match[2] : null;
+};
+
+const userRole = getCookie('user_role');
 
 interface AppState {
-  user: User
+  user: User,
+  role: string,
   courses: Course[]
   assignments: Assignment[]
   quizAttempts: Record<string, QuizAttempt>
@@ -26,6 +38,7 @@ type Action =
 
 const initialState: AppState = {
   user: { name: 'Alex Johnson', studentId: 'S12345' },
+  role:"",
   courses: initialCourses,
   assignments: initialAssignments,
   quizAttempts: {},
@@ -35,6 +48,8 @@ const initialState: AppState = {
   lastActivityDate: null,
   skillsAcquired: [],
 }
+
+initialState.role = userRole || 'STUDENT'
 
 const appReducer = (state: AppState, action: Action): AppState => {
   switch (action.type) {
@@ -132,7 +147,7 @@ const appReducer = (state: AppState, action: Action): AppState => {
       const { streak: newStreak, lastActivityDate } = calculateStreak(state.streak, state.lastActivityDate)
       const newWeeklyActivity = updateWeeklyActivity(state.weeklyActivity)
       toast.success('Assignment submitted and evaluated!')
-      return { ...state, assignments, streak: newStreak, lastActivityDate, weeklyActivity: newWeeklyActivity }
+      return { ...state, streak: newStreak, lastActivityDate, weeklyActivity: newWeeklyActivity }
     }
     case 'SUBMIT_QUIZ': {
       const { quizId, score, totalQuestions } = action.payload

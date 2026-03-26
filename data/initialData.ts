@@ -1,4 +1,4 @@
-import { Course, Assignment, Quiz, CourseAttendance, LeaderboardEntry, Event } from '../types'
+import { Course, Assignment, Quiz, CourseAttendance, LeaderboardEntry, Event } from ''
 
 export const initialCourses: Course[] = [
   {

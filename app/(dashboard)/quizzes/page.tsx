@@ -78,7 +78,7 @@ export default function QuizzesPage() {
       </Typography>
       <Grid container spacing={3}>
         {quizzes.map((quiz) => (
-          <Grid item xs={12} md={6} key={quiz.id}>
+          <Grid size={{xs:12,md:6}} key={quiz.id}>
             <Card>
               <CardContent>
                 <Typography variant="h6">{quiz.title}</Typography>
@@ -131,7 +131,7 @@ export default function QuizzesPage() {
                 </RadioGroup>
               ) : (
                 <Box>
-                  {q.options.map((opt: string, optIdx: number) => (
+                  {/* {q.options.map((opt: string, optIdx: number) => (
                     <FormControlLabel
                       key={optIdx}
                       control={
@@ -148,7 +148,7 @@ export default function QuizzesPage() {
                       }
                       label={opt}
                     />
-                  ))}
+                  ))} */}
                 </Box>
               )}
             </Box>
