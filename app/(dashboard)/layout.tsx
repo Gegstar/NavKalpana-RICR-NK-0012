@@ -1,79 +1,44 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import StudentSidebar from '@/components/Sidebar/StudentSidebar';
-import SuperAdminSidebar from '@/components/Sidebar/SuperAdminSidebar';
-import { useRouter } from 'next/navigation';
-
-// ✅ Helper to get cookie
-const getCookie = (name: string) => {
-  if (typeof document === 'undefined') return null;
-
-  const match = document.cookie.match(
-    new RegExp('(^| )' + name + '=([^;]+)')
-  );
-  return match ? match[2] : null;
-};
+import Sidebar from '@/components/Sidebar/Sidebar';
+import { useAppDispatch } from '@/redux/store';
+import { setUser } from '@/store/userSlice';
+import { usersService } from '@/services/users.service';
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [role, setRole] = useState<string | null>(null);
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const router = useRouter();
+  const dispatch = useAppDispatch();
 
-  // ✅ Read role from cookie
+  // 🔥 Fetch logged-in user
   useEffect(() => {
-    const userRole = getCookie('user_role');
+    const fetchUser = async () => {
+      try {
+        const user = await usersService.getCurrentUser();
+        dispatch(setUser(user)); // ✅ store in Redux
+      } catch (error) {
+        console.error('Failed to fetch user', error);
+        // optional: redirect to login
+        // window.location.href = '/login';
+      }
+    };
 
-    if (!userRole) {
-      router.push('/auth/login');
-    } else {
-      setRole(userRole);
-    }
-  }, []);
-
-  // ⏳ Loading until role is fetched
-  if (!role) {
-    return <div style={{ padding: '2rem' }}>Loading...</div>;
-  }
-
-  // ✅ ROLE-BASED SIDEBAR
-  const renderSidebar = () => {
-    switch (role) {
-      case 'SUPER_ADMIN':
-        return (
-          <SuperAdminSidebar
-            isCollapsed={isCollapsed}
-            setIsCollapsed={setIsCollapsed}
-          />
-        );
-
-      case 'STUDENT':
-      default:
-        return (
-          <StudentSidebar
-            isCollapsed={isCollapsed}
-            setIsCollapsed={setIsCollapsed}
-          />
-        );
-    }
-  };
+    fetchUser();
+  }, [dispatch]);
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        minHeight: '100vh',
-        backgroundColor: 'var(--color-background)',
-      }}
-    >
+    <div style={{ display: 'flex', minHeight: '100vh' }}>
       {/* ✅ Sidebar */}
-      {renderSidebar()}
+      <Sidebar
+        isCollapsed={isCollapsed}
+        setIsCollapsed={setIsCollapsed}
+      />
 
-      {/* ✅ Main */}
+      {/* ✅ Main Content */}
       <main
         style={{
           flex: 1,
