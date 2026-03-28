@@ -9,14 +9,16 @@ import {
   BookOpen,
   GraduationCap,
   BookUser,
-  Settings,
   LogOut,
   ChevronLeft,
   ChevronRight,
   Calendar,
   Flame,
+  Settings,
+  Users,
 } from "lucide-react";
 import { Button } from "@mui/material";
+import { useAppSelector } from "@/redux/store"; // ✅ IMPORT
 
 interface SidebarProps {
   isCollapsed: boolean;
@@ -27,6 +29,9 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
   const pathname = usePathname();
   const router = useRouter();
 
+  // ✅ GET USER ROLE FROM REDUX
+  const role = useAppSelector((state) => state.user.role);
+
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
   };
@@ -36,7 +41,6 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
     localStorage.clear();
     sessionStorage.clear();
 
-    // Clear cookies
     document.cookie.split(";").forEach((cookie) => {
       const cookieName = cookie.split("=")[0].trim();
       document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
@@ -44,22 +48,50 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
 
     router.push("/auth/student-login");
 
-    // Optional hard refresh
     setTimeout(() => {
       window.location.reload();
     }, 100);
   };
 
-  const menuItems = [
-    { name: "Dashboard", icon: <LayoutDashboard size={20} />, path: "/student/dashboard" },
-    { name: "Courses", icon: <BookOpen size={20} />, path: "/student/my-courses" },
-    { name: "Assignments", icon: <Flame size={20} />, path: "/student/assignments" },
-    { name: "Quizzes", icon: <GraduationCap size={20} />, path: "/student/quizzes" },
-    { name: "Attendance", icon: <Calendar size={20} />, path: "/student/attendance" },
-    { name: "Learning Support", icon: <BookUser size={20} />, path: "/student/learning-support" },
-    { name: "Alumni", icon: <GraduationCap size={20} />, path: "/student/alumni" },
-    { name: "Job & Internships", icon: <LogOut size={20} />, path: "/student/jobs" },
+  // ================= ROLE-BASED MENUS =================
+
+  const studentMenu = [
+    { name: "Dashboard", icon: <LayoutDashboard size={20} />, path: "/dashboard" },
+    { name: "Courses", icon: <BookOpen size={20} />, path: "/my-courses" },
+    { name: "Assignments", icon: <Flame size={20} />, path: "/assignments" },
+    { name: "Quizzes", icon: <GraduationCap size={20} />, path: "/quizzes" },
+    { name: "Attendance", icon: <Calendar size={20} />, path: "/attendance" },
+    { name: "Learning Support", icon: <BookUser size={20} />, path: "/learning-support" },
   ];
+
+  const adminMenu = [
+    { name: "Dashboard", icon: <LayoutDashboard size={20} />, path: "/dashboard" },
+    { name: "Users", icon: <Users size={20} />, path: "/users" },
+    { name: "Courses", icon: <BookOpen size={20} />, path: "/courses" },
+    { name: "Settings", icon: <Settings size={20} />, path: "/settings" },
+  ];
+
+  const superAdminMenu = [
+    { name: "Dashboard", icon: <LayoutDashboard size={20} />, path: "/dashboard" },
+    { name: "Business Units", icon: <Users size={20} />, path: "/business-units" },
+    { name: "Users", icon: <Users size={20} />, path: "/users" },
+    { name: "Settings", icon: <Settings size={20} />, path: "/settings" },
+  ];
+
+  // ✅ SELECT MENU BASED ON ROLE
+  const getMenu = () => {
+    switch (role) {
+      case "SUPER_ADMIN":
+        return superAdminMenu;
+      case "ADMIN":
+        return adminMenu;
+      case "STUDENT":
+      default:
+        return studentMenu;
+    }
+  };
+
+  const menuItems = getMenu();
 
   return (
     <aside className={`${styles.sidebar} ${isCollapsed ? styles.collapsed : ""}`}>
@@ -97,10 +129,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
 
       {/* Logout */}
       <div className={styles.logoutWrapper}>
-        <Button
-          onClick={handleLogout}
-          className={styles.logoutBtn}
-        >
+        <Button onClick={handleLogout} className={styles.logoutBtn}>
           <LogOut size={20} />
           {!isCollapsed && <span>Logout</span>}
         </Button>

@@ -37,7 +37,7 @@ const globalSlice = createSlice({
     logout: (state) => {
       state.accessToken = null;
       state.refreshToken = null;
-      state.settings = null; // 🔥 CLEAR SETTINGS ALSO
+      state.settings = null; 
     },
   },
 });

@@ -1,6 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+
 import globalReducer from './globalSlice';
+import userReducer from '@/store/userSlice'; // ✅ ADD THIS
 import studentReducer from '@/store/studentSlice';
 import coursesReducer from '@/store/coursesSlice';
 import assignmentsReducer from '@/store/assignmentsSlice';
@@ -10,7 +12,8 @@ import learningSupportReducer from '@/store/learningSupportSlice';
 
 export const store = configureStore({
   reducer: {
-    global: globalReducer, // ← added
+    global: globalReducer,
+    user: userReducer, // REGISTER HERE
     student: studentReducer,
     courses: coursesReducer,
     assignments: assignmentsReducer,
