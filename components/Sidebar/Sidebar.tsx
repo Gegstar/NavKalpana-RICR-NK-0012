@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import styles from "@/styles/StudentSidebar.module.css";
+import { authService } from "@/services/auth.service";
 import { Dispatch, SetStateAction } from "react";
 import {
   LayoutDashboard,
@@ -37,17 +38,9 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
   };
 
   // ✅ LOGOUT FUNCTION
-  const handleLogout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-
-    document.cookie.split(";").forEach((cookie) => {
-      const cookieName = cookie.split("=")[0].trim();
-      document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-    });
-
-    router.push("/auth/student-login");
-
+  const handleLogout = async () => {
+    await authService.logout();
+    router.push("/");
     setTimeout(() => {
       window.location.reload();
     }, 100);
@@ -66,6 +59,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
 
   const adminMenu = [
     { name: "Dashboard", icon: <LayoutDashboard size={20} />, path: "/dashboard" },
+    { name: "Business Units", icon: <Users size={20} />, path: "/business-units" },
     { name: "Users", icon: <Users size={20} />, path: "/users" },
     { name: "Courses", icon: <BookOpen size={20} />, path: "/courses" },
     { name: "Settings", icon: <Settings size={20} />, path: "/settings" },
@@ -78,7 +72,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
     { name: "Settings", icon: <Settings size={20} />, path: "/settings" },
   ];
 
-  // ✅ SELECT MENU BASED ON ROLE
+  //  SELECT MENU BASED ON ROLE
   const getMenu = () => {
     switch (role) {
       case "SUPER_ADMIN":

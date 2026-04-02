@@ -89,7 +89,7 @@ export default function StaffLoginPage() {
       );
 
       authService.setToken(res.access_token);
-      router.push("/admin/dashboard");
+      router.push("/dashboard");
     } catch (err) {
       // handled by toast
     } finally {
