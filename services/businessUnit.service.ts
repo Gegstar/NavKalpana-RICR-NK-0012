@@ -25,6 +25,24 @@ class BusinessUnitService {
     const response = await api.get(`${this.baseUrl}/${id}`);
     return response.data;
   }
+
+  // ================= CREATE =================
+  async create(payload: Partial<BusinessUnit>): Promise<BusinessUnit> {
+    const response = await api.post(this.baseUrl, payload);
+    return response.data;
+  }
+
+  // ================= UPDATE =================
+  async update(id: string, payload: Partial<BusinessUnit>): Promise<BusinessUnit> {
+    const response = await api.patch(`${this.baseUrl}/${id}`, payload);
+    return response.data;
+  }
+
+  // ================= DELETE =================
+  async delete(id: string) {
+    const response = await api.delete(`${this.baseUrl}/${id}`);
+    return response.data;
+  }
 }
 
 export const businessUnitService = new BusinessUnitService();

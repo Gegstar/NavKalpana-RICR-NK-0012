@@ -79,7 +79,7 @@ export default function SuperAdminLoginPage() {
       const res = await toastService.promise(
         authService.login({
           ...form,
-          role: "SUPER_ADMIN", // 🔥 FORCE ROLE
+          role: "SUPER_ADMIN", //  FORCE ROLE
         }),
         {
           loading: "Signing in...",
@@ -92,7 +92,7 @@ export default function SuperAdminLoginPage() {
       authService.setToken(res.access_token);
 
       //  Redirect to Super Admin Dashboard
-      router.push("/super-admin/dashboard");
+      router.push("/dashboard");
     } catch (err) {
       // handled by toast
     } finally {

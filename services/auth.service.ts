@@ -37,6 +37,25 @@ async resendOtp(identifier: string): Promise<{ message: string; otpSent: boolean
     return response.data;
   }
 
+
+  // ================= LOGOUT =================
+async logout() {
+  try {
+    console.log("Logging out user...");
+    // 🔹 Call backend logout (if API exists)
+    await api.post(`${this.baseUrl}/logout`);
+  } catch (error) {
+    console.warn("Logout API failed (continuing cleanup):", error);
+  } finally {
+    // 🔹 Clear local storage
+    localStorage.removeItem("token");
+     localStorage.clear();
+
+    // 🔹 Redirect to login
+
+    window.location.href = "/";
+  }
+}
   // ================= SOCIAL LOGIN =================
   loginWithGoogle() {
     window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google`;
@@ -59,10 +78,6 @@ async resendOtp(identifier: string): Promise<{ message: string; otpSent: boolean
     return localStorage.getItem("token");
   }
 
-  logout() {
-    localStorage.removeItem("token");
-    window.location.href = "/login";
-  }
 
   // ================= GET PROFILE =================
   async getProfile() {
