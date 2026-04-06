@@ -1,0 +1,123 @@
+/* AddCourse.module.css – Uses global root variables */
+
+.container {
+  background: var(--color-background);
+  min-height: 100vh;
+  padding: var(--spacing-lg);
+}
+
+.paper {
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  animation: fadeInUp 0.5s ease;
+}
+
+.title {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.subtitle {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-lg);
+}
+
+.divider {
+  margin: var(--spacing-lg) 0;
+}
+
+.modulesHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.moduleCard {
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.moduleHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.lessonsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.lessonCard {
+  background: var(--color-background);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-sm);
+}
+
+.noLessons {
+  color: var(--color-text-secondary);
+  font-style: italic;
+  padding: var(--spacing-md);
+  text-align: center;
+}
+
+.thumbnailPreview {
+  max-width: 200px;
+  max-height: 120px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.alert {
+  margin-bottom: var(--spacing-md);
+}
+
+.infoAlert {
+  margin: var(--spacing-md) 0;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-xl);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: var(--spacing-sm);
+  }
+  .paper {
+    padding: var(--spacing-md);
+  }
+  .moduleHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .actions {
+    flex-direction: column;
+  }
+}

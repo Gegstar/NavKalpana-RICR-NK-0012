@@ -9,6 +9,7 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import Link from 'next/link';
 import styles from '@/styles/Footer.module.css';
+import Logo from '@/components/ui/Logo';
 
 export default function Footer() {
   return (
@@ -19,9 +20,7 @@ export default function Footer() {
 
           {/* LEFT */}
           <Grid size={{ xs: 12, md: 4 }}>
-            <Typography variant="h6" color="primary" gutterBottom>
-              SkillVerse
-            </Typography>
+            <Logo variant="text" size="large" />
 
             <Typography variant="body2" color="text.secondary">
               Empowering learners worldwide with cutting-edge courses.

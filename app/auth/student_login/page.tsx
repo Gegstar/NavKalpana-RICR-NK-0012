@@ -16,6 +16,7 @@ import { defaultService } from "@/services/default.service";
 import { authService } from "@/services/auth.service";
 import { toastService } from "@/services/toast.service";
 import { useAppSelector } from "@/redux/store";
+import Logo from "@/components/ui/Logo";
 
 // Shared styles for TextFields (matches signup page)
 const muiThemeStyles = {
@@ -154,8 +155,7 @@ const loading = !settings;
       <div className={`${styles.authCard} ${styles.fadeIn}`}>
         <div className={styles.logoSection}>
           <div className={styles.logo}>
-            <span className={styles.logoText}>Skill</span>
-            <span className={styles.logoHighlight}>Verse</span>
+            <Logo />
           </div>
         </div>
 

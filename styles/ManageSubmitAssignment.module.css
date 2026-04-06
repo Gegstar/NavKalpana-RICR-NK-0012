@@ -1,0 +1,69 @@
+.container {
+  padding: var(--spacing-lg);
+  background: var(--color-background);
+  min-height: 100vh;
+}
+
+.paper {
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: var(--spacing-md);
+}
+
+.infoSection {
+  background: var(--color-background);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  margin: var(--spacing-md) 0;
+}
+
+.submissionTypeSelector {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+}
+
+.submissionInput {
+  margin-bottom: var(--spacing-lg);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-xl);
+}
+
+.successIcon {
+  font-size: 4rem;
+  color: var(--color-success);
+  margin-bottom: var(--spacing-md);
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: var(--spacing-sm);
+  }
+  .paper {
+    padding: var(--spacing-md);
+  }
+  .submissionTypeSelector {
+    flex-direction: column;
+  }
+  .actions {
+    flex-direction: column;
+  }
+  .actions button {
+    width: 100%;
+  }
+}

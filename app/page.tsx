@@ -1,10 +1,14 @@
 'use client';
+
+// import InstructorDashboard from "@/components/Dashboard/InstructorDashboard";
+
 import Hero from '@/components/sections/Hero';
 import FeaturedCourses from '@/components/sections/FeaturedCourses';
 import PopularInstructors from '@/components/sections/PopularInstructors';
 import Benefits from '@/components/sections/Benefits';
 import Testimonials from '@/components/sections/Testimonials';
 import CTA from '@/components/sections/CTA';
+// import SuperAdminDashboard from '@/components/dashboard/SuperAdminDashboard';
 
 export default function HomePage() {
   return (
@@ -14,7 +18,9 @@ export default function HomePage() {
       <FeaturedCourses />
       <PopularInstructors />
       <Testimonials />
-      <CTA />
+      <CTA /> 
+      {/*  <InstructorDashboard /> */}
+      {/* <SuperAdminDashboard /> */}
     </>
   );
 }

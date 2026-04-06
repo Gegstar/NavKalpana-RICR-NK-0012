@@ -1,0 +1,194 @@
+/* SuperAdminDashboard.module.css – Uses global root variables */
+
+.dashboardWrapper {
+  background: var(--color-background);
+  min-height: 100vh;
+  padding: var(--spacing-lg);
+  animation: fadeIn 0.5s ease;
+}
+
+.header {
+  margin-bottom: var(--spacing-2xl);
+  animation: fadeInDown 0.5s ease;
+}
+
+.header h4 {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.header p {
+  color: var(--color-text-secondary);
+}
+
+/* Bento Card */
+.bentoCard {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  transition: all var(--transition-base);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--spacing-sm);
+  animation: scaleIn 0.5s ease;
+  animation-fill-mode: both;
+}
+
+.bentoCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.bentoCard svg {
+  color: var(--color-primary);
+  opacity: 0.8;
+}
+
+.bentoCard h4 {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.bentoCard p {
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* Continue Card (Growth) */
+.continueCard {
+  background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-background) 100%);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  transition: all var(--transition-base);
+  text-align: center;
+  animation: fadeInUp 0.5s ease;
+}
+
+.continueCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.continueCard h5 {
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.continueCard h3 {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-bold);
+  margin: var(--spacing-sm) 0;
+}
+
+/* Activity Section (User Distribution, Recent Users) */
+.activitySection {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  animation: fadeInUp 0.5s ease;
+}
+
+.activitySection h6 {
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-md);
+  font-weight: var(--font-weight-semibold);
+}
+
+.activitySection p {
+  color: var(--color-text-secondary);
+  margin: var(--spacing-xs) 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Courses Section (Business Units) */
+.coursesSection {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  animation: fadeInUp 0.5s ease;
+}
+
+.coursesSection h6 {
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-md);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Buttons (already using MUI, but we can add custom class if needed) */
+/* No extra styles needed for buttons, they use MUI theme */
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .dashboardWrapper {
+    padding: var(--spacing-md);
+  }
+  .bentoCard {
+    padding: var(--spacing-md);
+  }
+  .bentoCard h4 {
+    font-size: var(--font-size-2xl);
+  }
+}
+
+@media (max-width: 600px) {
+  .dashboardWrapper {
+    padding: var(--spacing-sm);
+  }
+  .header h4 {
+    font-size: var(--font-size-xl);
+  }
+  .bentoCard h4 {
+    font-size: var(--font-size-xl);
+  }
+  .continueCard h3 {
+    font-size: var(--font-size-2xl);
+  }
+}

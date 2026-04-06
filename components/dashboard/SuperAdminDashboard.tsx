@@ -16,8 +16,8 @@ import {
   BookOpen,
   DollarSign,
   TrendingUp,
-} from "lucide-react";
-import styles from "@/styles/StudentDashboard.module.css"; // reuse styles
+} from "lucide-react"; // reuse styles
+import styles from '@/styles/SuperAdminDashboard.module.css';
 
 // ✅ Dummy Admin Data
 const adminData = {

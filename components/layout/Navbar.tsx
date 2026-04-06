@@ -17,6 +17,7 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import Link from 'next/link';
 import styles from '@/styles/Navbar.module.css';
+import Logo from '@/components/ui/Logo'; 
 
 const navItems = [
   { label: 'Home', href: '/' },
@@ -93,9 +94,7 @@ export default function Navbar() {
       <Container maxWidth="lg">
         <Toolbar disableGutters>
           {/* Logo */}
-          <Link href="/" className={styles.logo} style={{ textDecoration: 'none', fontWeight: 'bold', fontSize: '1.5rem', color: 'inherit' }}>
-            SkillVerse
-          </Link>
+          <Logo variant="full" size="medium" />
 
           {/* Desktop Navigation */}
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'center' }}>
@@ -110,10 +109,20 @@ export default function Navbar() {
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             {!isMobile && (
               <>
-                <Button variant="outlined" color="primary" LinkComponent={Link} href="/auth/student_login">
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  LinkComponent={Link}
+                  href="/auth/student_login"
+                >
                   Sign In
                 </Button>
-                <Button variant="contained" color="primary" LinkComponent={Link} href="/auth/student_signup">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  LinkComponent={Link}
+                  href="/auth/student_signup"
+                >
                   Get Started
                 </Button>
               </>
