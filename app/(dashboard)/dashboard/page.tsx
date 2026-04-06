@@ -8,10 +8,10 @@ import { useApp } from "@/contexts/AppContext";
 import StudentDashboard from "@/components/dashboard/StudentDashboard";
 import SuperAdminDashboard from "@/components/dashboard/SuperAdminDashboard";
 // import AdminDashboard from "@/components/Dashboard/AdminDashboard";
-// import InstructorDashboard from "@/components/Dashboard/InstructorDashboard";
+import InstructorDashboard from "@/components/Dashboard/InstructorDashboard";
 
 export default function DashboardPage() {
-  const { user,role } = useApp();
+  const { user, role } = useApp();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 
@@ -43,8 +43,8 @@ export default function DashboardPage() {
     // case "ADMIN":
     //   return <AdminDashboard />;
 
-    // case "INSTRUCTOR":
-    //   return <InstructorDashboard />;
+    case "INSTRUCTOR":
+      return <InstructorDashboard />;
 
     case "STUDENT":
     default:

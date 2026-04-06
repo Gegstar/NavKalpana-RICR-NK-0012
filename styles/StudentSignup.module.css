@@ -309,3 +309,13 @@
     font-size: var(--font-size-xl);
   }
 }
+/* Center the logo */
+.logoSection {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+/* If the logo component itself needs adjustment, ensure it's an inline or block element */
+.logoSection .logo {
+  display: inline-block;
+}

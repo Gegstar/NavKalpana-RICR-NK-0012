@@ -9,10 +9,10 @@ import {
   CardContent,
   Box,
   Rating,
-  Button
 } from '@mui/material';
 import Link from 'next/link';
 import styles from '@/styles/FeaturedCourses.module.css';
+import Button from '@/components/ui/Button';
 
 /* ✅ Dummy Course Data */
 const courses = [
@@ -109,7 +109,7 @@ export default function FeaturedCourses() {
                     </Typography>
 
                     <Link href={`/courses/${course.id}`}>
-                      <Button size="small" variant="outlined">
+                      <Button variant="outlined" size="small">
                         View
                       </Button>
                     </Link>

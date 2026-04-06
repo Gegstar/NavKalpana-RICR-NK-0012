@@ -1,0 +1,100 @@
+.container {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  animation: fadeInUp 0.5s ease;
+}
+
+.title {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid var(--color-border);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.list {
+  padding: 0;
+}
+
+.listItem {
+  padding: var(--spacing-md) var(--spacing-lg);
+  transition: background var(--transition-fast);
+  cursor: pointer;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.listItem:hover {
+  background: var(--color-background);
+}
+
+.completed {
+  opacity: 0.7;
+}
+
+.itemPrimary {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-xs);
+}
+
+.itemTitle {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.statusChip {
+  font-size: var(--font-size-xs);
+}
+
+.itemSecondary {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.iconAssignment {
+  color: var(--color-primary);
+}
+
+.iconQuiz {
+  color: var(--color-secondary);
+}
+
+.iconLesson {
+  color: var(--color-accent);
+}
+
+.completeBtn {
+  color: var(--color-success);
+}
+
+.completeBtn:hover {
+  background: rgba(16, 185, 129, 0.1);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 600px) {
+  .title {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+  .listItem {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+  .itemSecondary {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+}

@@ -1,0 +1,60 @@
+.container {
+  overflow: hidden;
+  background: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm);
+  background: var(--color-background);
+}
+
+.editorWrapper {
+  padding: var(--spacing-md);
+}
+
+.editorContent {
+  outline: none;
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  color: var(--color-text-primary);
+  line-height: 1.6;
+}
+
+.editorContent :global(ul),
+.editorContent :global(ol) {
+  padding-left: var(--spacing-xl);
+}
+
+.editorContent :global(blockquote) {
+  border-left: 3px solid var(--color-primary);
+  margin: var(--spacing-md) 0;
+  padding-left: var(--spacing-md);
+  color: var(--color-text-secondary);
+}
+
+.editorContent :global(img) {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  margin: var(--spacing-sm) 0;
+}
+
+.editorContent :global(p) {
+  margin-bottom: var(--spacing-md);
+}
+
+.editorContent :global(h1) {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-md);
+}
+
+.editorContent :global(h2) {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-sm);
+}

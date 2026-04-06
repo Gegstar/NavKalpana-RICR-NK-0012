@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import { useAppSelector } from "@/redux/store";
 import { Eye, EyeOff, Mail, Lock, User } from 'lucide-react';
 import { LocalSignupRequest, VerifyAccountRequest } from '@/models/auth.model';
+import Logo from '@/components/ui/Logo';
 
 export default function StudentSignup() {
   const router = useRouter();
@@ -219,8 +220,7 @@ const handleResendOtp = async () => {
       <div className={styles.authCard}>
         <div className={styles.logoSection}>
           <div className={styles.logo}>
-            <span className={styles.logoText}>Skill</span>
-            <span className={styles.logoHighlight}>Verse</span>
+            <Logo />
           </div>
         </div>
 
