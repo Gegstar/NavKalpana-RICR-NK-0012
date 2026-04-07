@@ -28,7 +28,6 @@ import {
   GitHub,
   Email,
   School,
-  BookOpen,
   People,
   Star,
 } from '@mui/icons-material';
@@ -160,30 +159,29 @@ export default function InstructorProfile() {
 
           <Divider />
 
-          {/* Stats Cards */}
+          {/* Stats Cards – updated to MUI v6 Grid syntax */}
           <Grid container spacing={3} className={styles.statsGrid}>
-            <Grid item xs={6} sm={3}>
+            <Grid size={{ xs: 6, sm: 3 }}>
               <Paper className={styles.statCard}>
                 <People className={styles.statIcon} />
                 <Typography variant="h4">{profile.stats.totalStudents.toLocaleString()}</Typography>
                 <Typography variant="body2">Students</Typography>
               </Paper>
             </Grid>
-            <Grid item xs={6} sm={3}>
+            <Grid size={{ xs: 6, sm: 3 }}>
               <Paper className={styles.statCard}>
-                <BookOpen className={styles.statIcon} />
                 <Typography variant="h4">{profile.stats.totalCourses}</Typography>
                 <Typography variant="body2">Courses</Typography>
               </Paper>
             </Grid>
-            <Grid item xs={6} sm={3}>
+            <Grid size={{ xs: 6, sm: 3 }}>
               <Paper className={styles.statCard}>
                 <Star className={styles.statIcon} />
                 <Typography variant="h4">{profile.stats.averageRating}</Typography>
                 <Typography variant="body2">Rating</Typography>
               </Paper>
             </Grid>
-            <Grid item xs={6} sm={3}>
+            <Grid size={{ xs: 6, sm: 3 }}>
               <Paper className={styles.statCard}>
                 <School className={styles.statIcon} />
                 <Typography variant="h4">${profile.stats.totalEarnings.toLocaleString()}</Typography>
@@ -192,9 +190,9 @@ export default function InstructorProfile() {
             </Grid>
           </Grid>
 
-          {/* Bio and Contact Info */}
+          {/* Bio and Contact Info – updated to MUI v6 Grid syntax */}
           <Grid container spacing={4}>
-            <Grid item xs={12} md={8}>
+            <Grid size={{ xs: 12, md: 8 }}>
               <Typography variant="h6" gutterBottom>
                 About
               </Typography>
@@ -214,7 +212,7 @@ export default function InstructorProfile() {
                 </Typography>
               )}
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <Typography variant="h6" gutterBottom>
                 Contact
               </Typography>
@@ -292,7 +290,7 @@ export default function InstructorProfile() {
             {tabValue === 0 && (
               <Grid container spacing={2}>
                 {profile.courses.map((course) => (
-                  <Grid item xs={12} sm={6} md={4} key={course.id}>
+                  <Grid size={{ xs: 12, sm: 6, md: 4 }} key={course.id}>
                     <Paper className={styles.courseCard}>
                       <Typography variant="subtitle1" fontWeight="bold">
                         {course.title}

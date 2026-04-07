@@ -14,7 +14,7 @@ export default function DashboardLayout({
 }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.user.user);
+  const user = useAppSelector((state) => state.user); 
   const [loading, setLoading] = useState(true);
 
   // Fetch logged-in user
@@ -26,7 +26,6 @@ export default function DashboardLayout({
       } catch (error) {
         console.error('Failed to fetch user', error);
         // Optionally redirect to login
-        // window.location.href = '/login';
       } finally {
         setLoading(false);
       }
@@ -35,7 +34,6 @@ export default function DashboardLayout({
     fetchUser();
   }, [dispatch]);
 
-  // Show loading or placeholder while fetching user
   if (loading) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -44,20 +42,16 @@ export default function DashboardLayout({
     );
   }
 
-  // Determine which sidebar to render based on user role
   const renderSidebar = () => {
-    if (user?.role === 'instructor') {
+    if (user?.role === 'INSTRUCTOR') {
       return <InstructorSidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />;
     }
-    // Default to student sidebar (or admin, if needed)
     return <StudentSidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />;
   };
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
       {renderSidebar()}
-
-      {/* Main Content */}
       <main
         style={{
           flex: 1,

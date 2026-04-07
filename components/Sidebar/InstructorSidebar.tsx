@@ -47,7 +47,6 @@ export default function InstructorSidebar({ isCollapsed, setIsCollapsed }: Sideb
   const toggleSidebar = () => setIsCollapsed(!isCollapsed);
 
   const handleLogout = () => {
-    // Clear auth tokens, redirect to login
     localStorage.clear();
     sessionStorage.clear();
     router.push('/auth/instructor-login');
@@ -63,10 +62,9 @@ export default function InstructorSidebar({ isCollapsed, setIsCollapsed }: Sideb
         flexDirection: 'column',
         transition: 'width 0.3s ease',
         overflowX: 'hidden',
-        position: 'relative',
-        height: '100vh',
-        position: 'sticky',
+        position: 'sticky', // ✅ only one position
         top: 0,
+        height: '100vh',
       }}
     >
       {/* Collapse Toggle Button */}
