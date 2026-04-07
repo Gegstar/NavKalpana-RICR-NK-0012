@@ -213,7 +213,7 @@ export default function ManageAssignments() {
               ...s,
               marks: gradeForm.marks,
               feedback: gradeForm.feedback,
-              status: 'graded',
+              status: 'graded' as const,
             } : s),
           };
         }
@@ -313,7 +313,7 @@ export default function ManageAssignments() {
           <DialogTitle>{editingAssignment ? 'Edit Assignment' : 'Create Assignment'}</DialogTitle>
           <DialogContent dividers>
             <Grid container spacing={2}>
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <TextField
                   label="Title"
                   fullWidth
@@ -322,7 +322,7 @@ export default function ManageAssignments() {
                   required
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <TextField
                   label="Description"
                   fullWidth
@@ -332,7 +332,7 @@ export default function ManageAssignments() {
                   onChange={(e) => setAssignmentForm({ ...assignmentForm, description: e.target.value })}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid size={{ xs: 6 }}>
                 <FormControl fullWidth>
                   <InputLabel>Course</InputLabel>
                   <Select
@@ -346,7 +346,7 @@ export default function ManageAssignments() {
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={6}>
+              <Grid size={{ xs: 6 }}>
                 <TextField
                   label="Due Date"
                   type="datetime-local"
@@ -356,7 +356,7 @@ export default function ManageAssignments() {
                   InputLabelProps={{ shrink: true }}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid size={{ xs: 6 }}>
                 <TextField
                   label="Total Marks"
                   type="number"
@@ -426,7 +426,7 @@ export default function ManageAssignments() {
           <DialogTitle>Grade Submission</DialogTitle>
           <DialogContent dividers>
             <Grid container spacing={2}>
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <TextField
                   label="Marks"
                   type="number"
@@ -436,7 +436,7 @@ export default function ManageAssignments() {
                   InputProps={{ inputProps: { min: 0, max: selectedAssignment?.totalMarks } }}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <TextField
                   label="Feedback"
                   fullWidth

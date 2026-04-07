@@ -25,7 +25,6 @@ import {
   Save,
   Cancel,
   School,
-  BookOpen,
   EmojiEvents,
   Timeline,
   CheckCircle,
@@ -146,30 +145,29 @@ export default function StudentProfile() {
 
           <Divider />
 
-          {/* Stats Cards */}
+          {/* Stats Cards – updated to MUI v6 Grid syntax */}
           <Grid container spacing={3} className={styles.statsGrid}>
-            <Grid item xs={6} sm={3}>
+            <Grid size={{ xs: 6, sm: 3 }}>
               <Paper className={styles.statCard}>
-                <BookOpen className={styles.statIcon} />
                 <Typography variant="h4">{profile.stats.totalCourses}</Typography>
                 <Typography variant="body2">Enrolled</Typography>
               </Paper>
             </Grid>
-            <Grid item xs={6} sm={3}>
+            <Grid size={{ xs: 6, sm: 3 }}>
               <Paper className={styles.statCard}>
                 <CheckCircle className={styles.statIcon} />
                 <Typography variant="h4">{profile.stats.completedCourses}</Typography>
                 <Typography variant="body2">Completed</Typography>
               </Paper>
             </Grid>
-            <Grid item xs={6} sm={3}>
+            <Grid size={{ xs: 6, sm: 3 }}>
               <Paper className={styles.statCard}>
                 <Timeline className={styles.statIcon} />
                 <Typography variant="h4">{profile.stats.totalHours}</Typography>
                 <Typography variant="body2">Hours Learned</Typography>
               </Paper>
             </Grid>
-            <Grid item xs={6} sm={3}>
+            <Grid size={{ xs: 6, sm: 3 }}>
               <Paper className={styles.statCard}>
                 <EmojiEvents className={styles.statIcon} />
                 <Typography variant="h4">{profile.stats.certificates}</Typography>
@@ -212,7 +210,7 @@ export default function StudentProfile() {
             {tabValue === 0 && (
               <Grid container spacing={2}>
                 {profile.enrolledCourses.map((course) => (
-                  <Grid item xs={12} key={course.id}>
+                  <Grid size={{ xs: 12 }} key={course.id}>
                     <Paper className={styles.courseCard}>
                       <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap">
                         <Box>
@@ -243,7 +241,7 @@ export default function StudentProfile() {
             {tabValue === 1 && (
               <Grid container spacing={2}>
                 {profile.achievements.map((achievement) => (
-                  <Grid item xs={12} sm={6} md={4} key={achievement.id}>
+                  <Grid size={{ xs: 12, sm: 6, md: 4 }} key={achievement.id}>
                     <Paper className={styles.achievementCard}>
                       <Typography variant="h2" className={styles.achievementIcon}>
                         {achievement.icon}

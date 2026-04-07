@@ -129,7 +129,6 @@ export default function ManageQuizzes() {
 
   const handleSaveQuiz = () => {
     if (editingQuiz) {
-      // Update existing quiz
       setQuizzes(quizzes.map(q => q.id === editingQuiz.id ? {
         ...editingQuiz,
         ...quizForm,
@@ -137,7 +136,6 @@ export default function ManageQuizzes() {
         questions,
       } : q));
     } else {
-      // Create new quiz
       const newQuiz: Quiz = {
         id: Date.now(),
         ...quizForm,
@@ -286,7 +284,7 @@ export default function ManageQuizzes() {
           <DialogTitle>{editingQuiz ? 'Edit Quiz' : 'Create Quiz'}</DialogTitle>
           <DialogContent dividers>
             <Grid container spacing={2}>
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <TextField
                   label="Title"
                   fullWidth
@@ -295,7 +293,7 @@ export default function ManageQuizzes() {
                   required
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <TextField
                   label="Description"
                   fullWidth
@@ -305,7 +303,7 @@ export default function ManageQuizzes() {
                   onChange={(e) => setQuizForm({ ...quizForm, description: e.target.value })}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid size={{ xs: 6 }}>
                 <TextField
                   label="Duration (minutes)"
                   type="number"
@@ -314,7 +312,7 @@ export default function ManageQuizzes() {
                   onChange={(e) => setQuizForm({ ...quizForm, duration: parseInt(e.target.value) })}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid size={{ xs: 6 }}>
                 <FormControlLabel
                   control={<Switch checked={quizForm.status === 'published'} />}
                   label="Published"
@@ -368,7 +366,7 @@ export default function ManageQuizzes() {
           <DialogTitle>{editingQuestion ? 'Edit Question' : 'Add Question'}</DialogTitle>
           <DialogContent dividers>
             <Grid container spacing={2}>
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <TextField
                   label="Question Text"
                   fullWidth
@@ -378,7 +376,7 @@ export default function ManageQuizzes() {
                   onChange={(e) => setQuestionForm({ ...questionForm, text: e.target.value })}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid size={{ xs: 6 }}>
                 <FormControl fullWidth>
                   <InputLabel>Question Type</InputLabel>
                   <Select
@@ -391,7 +389,7 @@ export default function ManageQuizzes() {
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <Typography variant="subtitle2">Options</Typography>
                 {questionForm.options.map((opt, idx) => (
                   <Box key={idx} className={styles.optionRow}>
@@ -419,7 +417,7 @@ export default function ManageQuizzes() {
                 ))}
                 <Button size="small" onClick={handleAddOption}>+ Add Option</Button>
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <TextField
                   label="Explanation (optional)"
                   fullWidth

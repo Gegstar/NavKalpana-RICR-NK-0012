@@ -202,7 +202,7 @@ export default function AddCourse() {
             Basic Information
           </Typography>
           <Grid container spacing={3}>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 fullWidth
                 label="Course Title"
@@ -214,7 +214,7 @@ export default function AddCourse() {
                 required
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 fullWidth
                 multiline
@@ -228,7 +228,7 @@ export default function AddCourse() {
                 required
               />
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <TextField
                 fullWidth
                 select
@@ -247,7 +247,7 @@ export default function AddCourse() {
                 ))}
               </TextField>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <TextField
                 fullWidth
                 label="Price (USD)"
@@ -260,7 +260,7 @@ export default function AddCourse() {
                 required
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <Button
                 variant="outlined"
                 component="label"
@@ -339,7 +339,7 @@ export default function AddCourse() {
               {module.lessons.map((lesson, lIdx) => (
                 <Box key={lesson.id} className={styles.lessonCard}>
                   <Grid container spacing={2} alignItems="center">
-                    <Grid item xs={12} md={4}>
+                    <Grid size={{ xs: 12, md: 4 }}>
                       <TextField
                         label={`Lesson ${lIdx + 1} Title`}
                         value={lesson.title}
@@ -352,7 +352,7 @@ export default function AddCourse() {
                         size="small"
                       />
                     </Grid>
-                    <Grid item xs={12} md={4}>
+                    <Grid size={{ xs: 12, md: 4 }}>
                       <TextField
                         label="Video URL"
                         value={lesson.videoUrl}
@@ -366,7 +366,7 @@ export default function AddCourse() {
                         }}
                       />
                     </Grid>
-                    <Grid item xs={12} md={3}>
+                    <Grid size={{ xs: 12, md: 3 }}>
                       <TextField
                         label="Content (text/notes)"
                         value={lesson.content}
@@ -380,7 +380,7 @@ export default function AddCourse() {
                         }}
                       />
                     </Grid>
-                    <Grid item xs={12} md={1}>
+                    <Grid size={{ xs: 12, md: 1 }}>
                       <IconButton
                         color="error"
                         onClick={() => removeLesson(module.id, lesson.id)}

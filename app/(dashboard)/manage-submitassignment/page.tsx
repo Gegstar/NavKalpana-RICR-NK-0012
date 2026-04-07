@@ -135,14 +135,14 @@ export default function SubmitAssignment() {
 
         <Box className={styles.infoSection}>
           <Grid container spacing={2}>
-            <Grid item xs={6}>
+            <Grid size={{ xs: 6 }}>
               <Typography variant="body2" color="text.secondary">Due Date</Typography>
               <Typography variant="body1">
                 {new Date(assignment.dueDate).toLocaleString()}
                 {isOverdue && <Chip label="Overdue" color="error" size="small" sx={{ ml: 1 }} />}
               </Typography>
             </Grid>
-            <Grid item xs={6}>
+            <Grid size={{ xs: 6 }}>
               <Typography variant="body2" color="text.secondary">Total Marks</Typography>
               <Typography variant="body1">{assignment.totalMarks}</Typography>
             </Grid>

@@ -1,5 +1,74 @@
-import { Course, Assignment, Quiz, CourseAttendance, LeaderboardEntry, Event } from ''
+// data/initialData.ts
 
+// ==================== LOCAL TYPE DEFINITIONS ====================
+export interface Lesson {
+  id: string;
+  title: string;
+  difficulty: string;
+  completed: boolean;
+  video?: string;
+  notes?: string;
+}
+
+export interface Module {
+  id: string;
+  name: string;
+  lessons: Lesson[];
+  progress: number;
+}
+
+export interface Course {
+  id: string;
+  name: string;
+  instructor: string;
+  thumbnail?: string;
+  modules: Module[];
+  progress: number;
+  attendancePercentage: number;
+}
+
+export interface Assignment {
+  id: string;
+  title: string;
+  description: string;
+  deadline: string;
+  status: string;
+}
+
+export interface QuizQuestion {
+  id: string;
+  text: string;
+  options: string[];
+  correctAnswers: number[];
+  multiple: boolean;
+}
+
+export interface Quiz {
+  id: string;
+  title: string;
+  duration: number;
+  questions: QuizQuestion[];
+}
+
+export interface CourseAttendance {
+  courseId: string;
+  records: { date: string; status: string }[];
+  totalClasses: number;
+}
+
+export interface LeaderboardEntry {
+  studentName: string;
+  score: number;
+}
+
+export interface Event {
+  id: string;
+  title: string;
+  date: string;
+  type: string;
+}
+
+// ==================== DUMMY DATA ====================
 export const initialCourses: Course[] = [
   {
     id: '1',
@@ -47,7 +116,7 @@ export const initialCourses: Course[] = [
     progress: 0,
     attendancePercentage: 92,
   },
-]
+];
 
 export const initialAssignments: Assignment[] = [
   {
@@ -64,7 +133,7 @@ export const initialAssignments: Assignment[] = [
     deadline: '2025-04-15T23:59:59',
     status: 'Not Submitted',
   },
-]
+];
 
 export const initialQuizzes: Quiz[] = [
   {
@@ -102,7 +171,7 @@ export const initialQuizzes: Quiz[] = [
       },
     ],
   },
-]
+];
 
 export const initialAttendance: CourseAttendance[] = [
   {
@@ -124,17 +193,17 @@ export const initialAttendance: CourseAttendance[] = [
     ],
     totalClasses: 3,
   },
-]
+];
 
 export const leaderboardData: LeaderboardEntry[] = [
   { studentName: 'Alex Johnson', score: 95 },
   { studentName: 'Maria Garcia', score: 92 },
   { studentName: 'James Smith', score: 88 },
   { studentName: 'Linda Brown', score: 85 },
-]
+];
 
 export const eventsData: Event[] = [
   { id: 'e1', title: 'React Component Challenge Due', date: '2025-04-10', type: 'assignment' },
   { id: 'e2', title: 'TypeScript Quiz', date: '2025-04-12', type: 'quiz' },
   { id: 'e3', title: 'Platform Webinar', date: '2025-04-15', type: 'platform' },
-]
+];

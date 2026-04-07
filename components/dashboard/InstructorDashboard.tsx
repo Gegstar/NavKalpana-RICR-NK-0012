@@ -84,30 +84,30 @@ export default function InstructorDashboard() {
           </Typography>
         </Box>
 
-        {/* Stats Cards */}
+        {/* Stats Cards – updated to MUI v6 Grid syntax */}
         <Grid container spacing={3} className={styles.statsGrid}>
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <Paper className={styles.statCard}>
               <BookOpen className={styles.statIcon} />
               <Typography variant="h3">{instructorStats.totalCourses}</Typography>
               <Typography variant="body2">Total Courses</Typography>
             </Paper>
           </Grid>
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <Paper className={styles.statCard}>
               <Users className={styles.statIcon} />
               <Typography variant="h3">{instructorStats.totalStudents}</Typography>
               <Typography variant="body2">Enrolled Students</Typography>
             </Paper>
           </Grid>
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <Paper className={styles.statCard}>
               <Star className={styles.statIcon} />
               <Typography variant="h3">{instructorStats.averageRating}</Typography>
               <Typography variant="body2">Avg. Rating</Typography>
             </Paper>
           </Grid>
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <Paper className={styles.statCard}>
               <DollarSign className={styles.statIcon} />
               <Typography variant="h3">${instructorStats.totalEarnings}</Typography>
@@ -132,7 +132,7 @@ export default function InstructorDashboard() {
 
         {/* Recent Courses & Performance Chart */}
         <Grid container spacing={3} className={styles.middleRow}>
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Paper className={styles.sectionCard}>
               <Typography variant="h6" gutterBottom>
                 Recent Courses
@@ -179,7 +179,7 @@ export default function InstructorDashboard() {
             </Paper>
           </Grid>
 
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Paper className={styles.sectionCard}>
               <Typography variant="h6" gutterBottom>
                 Enrollment Trend
@@ -248,9 +248,9 @@ export default function InstructorDashboard() {
           </TableContainer>
         </Paper>
 
-        {/* Quick Actions */}
+        {/* Quick Actions – updated to MUI v6 Grid syntax */}
         <Grid container spacing={2} className={styles.actionsGrid}>
-          <Grid item xs={12} sm={4}>
+          <Grid size={{ xs: 12, sm: 4 }}>
             <Button
               fullWidth
               variant="contained"
@@ -260,7 +260,7 @@ export default function InstructorDashboard() {
               Create New Course
             </Button>
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid size={{ xs: 12, sm: 4 }}>
             <Button
               fullWidth
               variant="outlined"
@@ -270,7 +270,7 @@ export default function InstructorDashboard() {
               View Analytics
             </Button>
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid size={{ xs: 12, sm: 4 }}>
             <Button
               fullWidth
               variant="outlined"

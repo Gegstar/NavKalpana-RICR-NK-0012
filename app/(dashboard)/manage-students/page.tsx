@@ -190,23 +190,23 @@ export default function ManageStudents() {
           <DialogContent dividers>
             {selectedStudent && (
               <Grid container spacing={2}>
-                <Grid item xs={12}>
+                <Grid size={{ xs: 12 }}>
                   <Typography variant="subtitle2">Name</Typography>
                   <Typography variant="body1">{selectedStudent.name}</Typography>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={{ xs: 12 }}>
                   <Typography variant="subtitle2">Email</Typography>
                   <Typography variant="body1">{selectedStudent.email}</Typography>
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={{ xs: 6 }}>
                   <Typography variant="subtitle2">Enrolled Courses</Typography>
                   <Typography variant="body1">{selectedStudent.enrolledCourses}</Typography>
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={{ xs: 6 }}>
                   <Typography variant="subtitle2">Status</Typography>
                   {getStatusChip(selectedStudent.status)}
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={{ xs: 12 }}>
                   <Typography variant="subtitle2">Join Date</Typography>
                   <Typography variant="body1">{new Date(selectedStudent.joinDate).toLocaleDateString()}</Typography>
                 </Grid>
