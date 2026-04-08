@@ -1,13 +1,13 @@
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 
-import Navbar from "@/components/layout/Navbar";
+import NavbarWrapper from "@/components/layout/NavbarWrapper";
 import Footer from "@/components/layout/Footer";
 import { Toaster } from "react-hot-toast";
 
 import ReduxProvider from "@/redux/provider";
 import InitRedux from "@/redux/store/InitRedux";
 import ThemeRegistry from "@/app/ThemeRegistry";
-import AppProviderWrapper from "@/components/AppProviderWrapper"; // ✅ import the wrapper
+import AppProviderWrapper from "@/components/AppProviderWrapper"; // import the wrapper
 
 import { headers } from "next/headers";
 
@@ -81,7 +81,7 @@ export default async function RootLayout({
             {/*  CLIENT‑SIDE CONTEXT PROVIDER */}
             <AppProviderWrapper>
               <ThemeRegistry>
-                <Navbar />
+               <NavbarWrapper />
                 <main>{children}</main>
                 <Footer />
                 <Toaster position="top-center" />
