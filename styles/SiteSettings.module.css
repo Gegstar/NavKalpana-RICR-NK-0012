@@ -1,0 +1,74 @@
+.container {
+  background: var(--color-background);
+  min-height: 100vh;
+  padding: var(--spacing-lg);
+  animation: fadeIn 0.5s ease;
+}
+
+.paper {
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.title {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.subtitle {
+  color: var(--color-text-secondary);
+}
+
+.uploadSection {
+  margin-bottom: var(--spacing-xl);
+}
+
+.previewContainer {
+  margin: var(--spacing-sm) 0;
+}
+
+.logoPreview {
+  max-width: 150px;
+  max-height: 60px;
+  object-fit: contain;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-xs);
+}
+
+.faviconPreview {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-xs);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: var(--spacing-sm);
+  }
+  .paper {
+    padding: var(--spacing-md);
+  }
+  .actions {
+    justify-content: stretch;
+  }
+  .actions button {
+    width: 100%;
+  }
+}

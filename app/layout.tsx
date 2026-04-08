@@ -23,8 +23,8 @@ async function getSubdomain() {
   if (!host) return null;
 
   console.log("🌐 Host header:", host);
-  //  if (host.includes("localhost")) return "lms-frontend-1-6mx4";
-  if (host.includes("localhost")) return "lms-frontend-p2yr";
+   if (host.includes("localhost")) return "lms-frontend-1-6mx4";
+  // if (host.includes("localhost")) return "lms-frontend-p2yr";
 
   return host.split(".")[0];
 }
@@ -66,6 +66,8 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <head>
+        <title>Skillverse | Premium Learning Platform</title>
+        <meta name="description" content="Master your skills with EduLeaf's premium courses" />
         <link
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
           rel="stylesheet"

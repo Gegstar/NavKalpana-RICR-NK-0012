@@ -47,7 +47,7 @@ export default function DashboardPage() {
       return <InstructorDashboard />;
 
     case "STUDENT":
-    default:
+    // default:
       return <StudentDashboard />;
   }
 }
