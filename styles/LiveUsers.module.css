@@ -1,0 +1,142 @@
+.container {
+  background: var(--color-background);
+  min-height: 100vh;
+  padding: var(--spacing-lg);
+  animation: fadeIn 0.5s ease;
+}
+
+.header {
+  margin-bottom: var(--spacing-2xl);
+  animation: fadeInDown 0.5s ease;
+}
+
+.title {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.subtitle {
+  color: var(--color-text-secondary);
+}
+
+.statsGrid {
+  margin-bottom: var(--spacing-lg);
+}
+
+.statCard {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  text-align: center;
+  transition: all var(--transition-base);
+  border: 1px solid var(--color-border);
+  animation: scaleIn 0.5s ease;
+  animation-fill-mode: both;
+}
+
+.statCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.statIcon {
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-sm);
+  width: 40px;
+  height: 40px;
+}
+
+.timestampChip {
+  margin-top: var(--spacing-md);
+}
+
+.chartCard {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  margin-bottom: var(--spacing-lg);
+  animation: fadeInUp 0.5s ease;
+}
+
+.usersCard {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  animation: fadeInUp 0.5s ease;
+}
+
+.userList {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.userItem {
+  transition: background var(--transition-fast);
+  border-radius: var(--radius-md);
+}
+
+.userItem:hover {
+  background: var(--color-background);
+}
+
+.userMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+  margin-top: var(--spacing-xs);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: var(--spacing-sm);
+  }
+  .statCard {
+    padding: var(--spacing-md);
+  }
+  .userMeta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

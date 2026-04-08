@@ -5,7 +5,8 @@ import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { setUser } from '@/store/userSlice';
 import { usersService } from '@/services/users.service';
 import StudentSidebar from '@/components/Sidebar/Sidebar';
-import InstructorSidebar from '@/components/Sidebar/InstructorSidebar';
+import InstructorSidebar from '@/components/Sidebar/InstructorSidebar'; // ✅ add
+import AdminSidebar from '@/components/Sidebar/AdminSidebar'; // ✅ add
 
 export default function DashboardLayout({
   children,
@@ -14,7 +15,7 @@ export default function DashboardLayout({
 }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.user); 
+  const user = useAppSelector((state) => state.user);
   const [loading, setLoading] = useState(true);
 
   // Fetch logged-in user
@@ -43,9 +44,14 @@ export default function DashboardLayout({
   }
 
   const renderSidebar = () => {
-    if (user?.role === 'INSTRUCTOR') {
+    const role = user?.role;
+    if (role === 'INSTRUCTOR') {
       return <InstructorSidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />;
     }
+    if (role === 'ADMIN' || role === 'SUPER_ADMIN') {
+      return <AdminSidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />;
+    }
+    // Default to student sidebar
     return <StudentSidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />;
   };
 

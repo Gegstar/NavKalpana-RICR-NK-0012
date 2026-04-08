@@ -50,11 +50,14 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
 
   const studentMenu = [
     { name: "Dashboard", icon: <LayoutDashboard size={20} />, path: "/dashboard" },
-    { name: "Courses", icon: <BookOpen size={20} />, path: "/my-courses" },
+    { name: "My Courses", icon: <BookOpen size={20} />, path: "/my-courses" },
+    { name: "All Courses", icon: <BookUser size={20} />, path: "/courses" },
+    { name: "Learning List", icon: <Flame size={20} />, path: "/learning-list"},
     { name: "Assignments", icon: <Flame size={20} />, path: "/assignments" },
     { name: "Quizzes", icon: <GraduationCap size={20} />, path: "/quizzes" },
     { name: "Attendance", icon: <Calendar size={20} />, path: "/attendance" },
     { name: "Learning Support", icon: <BookUser size={20} />, path: "/learning-support" },
+    { name: "Profile", icon: <Users /> , path: "/student-profile"}
   ];
 
   const adminMenu = [
@@ -72,6 +75,17 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
     { name: "Settings", icon: <Settings size={20} />, path: "/settings" },
   ];
 
+  const instructorMenu = [
+  { name: "Dashboard", icon: <LayoutDashboard size={20} />, path: "/dashboard" },
+  { name: "My Courses", icon: <BookOpen size={20} />, path: "/courses" },
+  { name: "Assignments", icon: <Flame size={20} />, path: "/assignments" },
+  { name: "Quizzes", icon: <GraduationCap size={20} />, path: "/quizzes" },
+  { name: "Students", icon: <Users size={20} />, path: "/students" },
+  { name: "Analytics", icon: <GraduationCap size={20} />, path: "/analytics" },
+  { name: "Settings", icon: <Settings size={20} />, path: "/settings" },
+];
+ 
+
   //  SELECT MENU BASED ON ROLE
   const getMenu = () => {
     switch (role) {
@@ -79,6 +93,8 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
         return superAdminMenu;
       case "ADMIN":
         return adminMenu;
+        case "INSTRUCTOR":
+      return instructorMenu;
       case "STUDENT":
       default:
         return studentMenu;

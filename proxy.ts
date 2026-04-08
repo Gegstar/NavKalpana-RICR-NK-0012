@@ -1,6 +1,26 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { publicRoutes, accessControl } from "@/lib/routes";
+
+// ==========================
+// 🎯 ROLE PATH CONFIG
+// ==========================
+const accessControl: Record<string, string[]> = {
+  SUPER_ADMIN: ["/dashboard", "/users", "/settings","/my-courses","/business-units"],
+  ADMIN: ["/dashboard", "/courses", "/students","/business-units"],
+  TEACHER: ["/courses", "/lessons", "/profile"],
+  STUDENT: ["/courses", "/profile","/dashboard","/student/dashboard","/super_admin","/my-courses"],
+};
+
+// ==========================
+// 🌐 PUBLIC ROUTES
+// ==========================
+const publicRoutes = [
+  "/",
+  "/auth/student_login",
+  "/auth/student_signup",
+  "/auth/superadmin_login",
+  "/auth/staff_login"
+];
 
 // ==========================
 // 🚀 PROXY (replaces middleware)
