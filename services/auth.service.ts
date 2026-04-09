@@ -24,12 +24,12 @@ class AuthService {
   }
 
   // ================= RESEND OTP =================
-async resendOtp(identifier: string): Promise<{ message: string; otpSent: boolean }> {
-  const response = await api.post(`${this.baseUrl}/resend-otp`, {
-    identifier,
-  });
-  return response.data;
-}
+  async resendOtp(identifier: string): Promise<{ message: string; otpSent: boolean }> {
+    const response = await api.post(`${this.baseUrl}/resend-otp`, {
+      identifier,
+    });
+    return response.data;
+  }
 
   // ================= VERIFY ACCOUNT (OTP) =================
   async verifyAccount(data: VerifyAccountRequest): Promise<VerifyAccountResponse> {
@@ -37,25 +37,38 @@ async resendOtp(identifier: string): Promise<{ message: string; otpSent: boolean
     return response.data;
   }
 
+  // ================= FORGOT PASSWORD (send OTP) =================
+  async forgotPassword(data: { email: string }): Promise<{ message: string; otpSent: boolean }> {
+    const response = await api.post(`${this.baseUrl}/forgot-password`, data);
+    return response.data;
+  }
+
+  // ================= VERIFY OTP FOR PASSWORD RESET =================
+  async verifyResetOtp(data: { email: string; otp: string }): Promise<{ verified: boolean }> {
+    const response = await api.post(`${this.baseUrl}/verify-reset-otp`, data);
+    return response.data;
+  }
+
+  // ================= RESET PASSWORD =================
+  async resetPassword(data: { email: string; otp: string; newPassword: string }): Promise<{ message: string }> {
+    const response = await api.post(`${this.baseUrl}/reset-password`, data);
+    return response.data;
+  }
 
   // ================= LOGOUT =================
-async logout() {
-  try {
-    console.log("Logging out user...");
-    // 🔹 Call backend logout (if API exists)
-    await api.post(`${this.baseUrl}/logout`);
-  } catch (error) {
-    console.warn("Logout API failed (continuing cleanup):", error);
-  } finally {
-    // 🔹 Clear local storage
-    localStorage.removeItem("token");
-     localStorage.clear();
-
-    // 🔹 Redirect to login
-
-    window.location.href = "/";
+  async logout() {
+    try {
+      console.log("Logging out user...");
+      await api.post(`${this.baseUrl}/logout`);
+    } catch (error) {
+      console.warn("Logout API failed (continuing cleanup):", error);
+    } finally {
+      localStorage.removeItem("token");
+      localStorage.clear();
+      window.location.href = "/";
+    }
   }
-}
+
   // ================= SOCIAL LOGIN =================
   loginWithGoogle() {
     window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google`;
@@ -77,7 +90,6 @@ async logout() {
   getToken(): string | null {
     return localStorage.getItem("token");
   }
-
 
   // ================= GET PROFILE =================
   async getProfile() {

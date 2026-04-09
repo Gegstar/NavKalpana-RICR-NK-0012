@@ -1,4 +1,6 @@
-/* ===== StudentSignup.module.css ===== */
+/* ============================================
+   Student Signup – Premium UI with GSAP
+   ============================================ */
 
 .authWrapper {
   min-height: 100vh;
@@ -11,27 +13,16 @@
   overflow: hidden;
 }
 
-.bgCircle1,
-.bgCircle2 {
+.bgCircle1, .bgCircle2 {
   position: absolute;
   border-radius: 50%;
   background: radial-gradient(circle, var(--color-primary) 0%, transparent 70%);
   opacity: 0.05;
   z-index: 0;
 }
-
-.bgCircle1 {
-  width: 400px;
-  height: 400px;
-  top: -150px;
-  right: -150px;
-}
-
+.bgCircle1 { width: 400px; height: 400px; top: -150px; right: -150px; }
 .bgCircle2 {
-  width: 500px;
-  height: 500px;
-  bottom: -200px;
-  left: -200px;
+  width: 500px; height: 500px; bottom: -200px; left: -200px;
   background: radial-gradient(circle, var(--color-secondary) 0%, transparent 70%);
 }
 
@@ -45,115 +36,44 @@
   position: relative;
   z-index: 1;
   transition: transform var(--transition-base), box-shadow var(--transition-base);
-  backdrop-filter: blur(0px);
 }
-
 .authCard:hover {
   transform: translateY(-5px);
   box-shadow: var(--shadow-2xl);
 }
 
 .logoSection {
-  text-align: center;
+  display: flex;
+  justify-content: center;
   margin-bottom: var(--spacing-xl);
-}
-
-.logo {
-  font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-bold);
-}
-
-.logoText {
-  color: var(--color-text-primary);
-}
-
-.logoHighlight {
-  color: var(--color-primary);
 }
 
 .headerSection {
   text-align: center;
   margin-bottom: var(--spacing-xl);
 }
-
 .title {
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
   margin-bottom: var(--spacing-xs);
 }
-
 .subtitle {
   font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
 }
 
-.formElement {
-  margin-top: var(--spacing-lg);
-}
-
-.formGroup {
-  position: relative;
-  margin-bottom: var(--spacing-lg);
-}
-
-.label {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-primary);
-  margin-bottom: var(--spacing-xs);
-}
-
-.labelIcon {
-  color: var(--color-text-secondary);
-}
-
-.validIndicator {
-  position: absolute;
-  right: var(--spacing-md);
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-
-.passwordStrength {
-  margin-top: var(--spacing-xs);
-}
-
-.strengthBars {
-  display: flex;
-  gap: var(--spacing-xs);
-  margin-bottom: var(--spacing-xs);
-}
-
-.strengthBar {
-  flex: 1;
-  height: 4px;
-  border-radius: var(--radius-full);
-  transition: background-color var(--transition-base);
-}
-
-.strengthText {
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-medium);
-}
+.formElement { margin-top: var(--spacing-lg); }
+.formGroup { margin-bottom: var(--spacing-lg); position: relative; }
 
 /* OTP Section */
-.otpSection {
-  text-align: center;
-}
-
+.otpSection { text-align: center; }
 .otpContainer {
   display: flex;
   gap: var(--spacing-sm);
   justify-content: center;
-  margin-top: var(--spacing-md);
-  margin-bottom: var(--spacing-md);
+  margin: var(--spacing-md) 0;
 }
-
 .otpInput {
   width: 50px;
   height: 50px;
@@ -166,36 +86,22 @@
   color: var(--color-text-primary);
   transition: all var(--transition-fast);
 }
-
 .otpInput:focus {
   outline: none;
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
-
-.otpInput:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.shake {
-  animation: shake 0.5s ease-in-out;
-}
-
-.timerSection {
-  margin: var(--spacing-md) 0;
-}
-
+.otpInput:disabled { opacity: 0.6; cursor: not-allowed; }
+.shake { animation: shake 0.5s ease-in-out; }
+.timerSection { margin: var(--spacing-md) 0; }
 .timer {
   font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
 }
-
 .timer span {
   font-weight: var(--font-weight-semibold);
   color: var(--color-primary);
 }
-
 .resendButton {
   background: none;
   border: none;
@@ -205,32 +111,13 @@
   cursor: pointer;
   transition: color var(--transition-fast);
 }
-
 .resendButton:hover {
   color: var(--color-primary-dark);
   text-decoration: underline;
 }
-
 .resendButton:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-}
-
-.editEmailButton {
-  background: none;
-  border: none;
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  font-size: var(--font-size-xs);
-  color: var(--color-text-secondary);
-  cursor: pointer;
-  transition: color var(--transition-fast);
-  margin-top: var(--spacing-sm);
-}
-
-.editEmailButton:hover {
-  color: var(--color-primary);
 }
 
 /* Button */
@@ -251,22 +138,16 @@
   gap: var(--spacing-sm);
   margin-top: var(--spacing-lg);
 }
-
 .loginBtn:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
 }
-
 .loginBtn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
   transform: none;
 }
-
-.loginBtn.loading {
-  background: var(--color-primary);
-  cursor: wait;
-}
+.loginBtn.loading { background: var(--color-primary); cursor: wait; }
 
 /* Footer */
 .footerText {
@@ -275,14 +156,12 @@
   font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
 }
-
 .loginLink {
   color: var(--color-primary);
   font-weight: var(--font-weight-medium);
   text-decoration: none;
   transition: color var(--transition-fast);
 }
-
 .loginLink:hover {
   color: var(--color-primary-dark);
   text-decoration: underline;
@@ -297,25 +176,26 @@
 
 /* Responsive */
 @media (max-width: 600px) {
-  .authCard {
-    padding: var(--spacing-xl);
-  }
-  .otpInput {
-    width: 40px;
-    height: 40px;
-    font-size: var(--font-size-lg);
-  }
-  .title {
-    font-size: var(--font-size-xl);
-  }
+  .authCard { padding: var(--spacing-xl); }
+  .otpInput { width: 40px; height: 40px; font-size: var(--font-size-lg); }
+  .title { font-size: var(--font-size-xl); }
 }
-/* Center the logo */
-.logoSection {
-  text-align: center;
-  margin-bottom: var(--spacing-xl);
+.canvasContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
 }
 
-/* If the logo component itself needs adjustment, ensure it's an inline or block element */
-.logoSection .logo {
-  display: inline-block;
+.authWrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.authCard {
+  position: relative;
+  z-index: 1;
 }

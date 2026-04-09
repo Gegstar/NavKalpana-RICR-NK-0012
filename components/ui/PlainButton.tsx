@@ -8,10 +8,12 @@ interface PlainButtonProps {
   variant?: 'primary' | 'secondary' | 'danger' | 'success' | 'ghost';
   size?: 'small' | 'medium' | 'large';
   loading?: boolean;
+  disabled?: boolean; // ✅ add this
   fullWidth?: boolean;
   href?: string;
   onClick?: () => void;
   className?: string;
+  type?: 'button' | 'submit' | 'reset';
 }
 
 export default function PlainButton({
@@ -19,6 +21,7 @@ export default function PlainButton({
   variant = 'primary',
   size = 'medium',
   loading = false,
+  disabled = false, // ✅ add default
   fullWidth = false,
   href,
   onClick,
@@ -37,14 +40,14 @@ export default function PlainButton({
 
   if (href) {
     return (
-      <Link href={href} className={classes}>
+      <Link href={href} className={classes} aria-disabled={disabled || loading}>
         {content}
       </Link>
     );
   }
 
   return (
-    <button onClick={onClick} className={classes} disabled={loading}>
+    <button onClick={onClick} className={classes} disabled={disabled || loading}>
       {content}
     </button>
   );

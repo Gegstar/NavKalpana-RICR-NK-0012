@@ -1,10 +1,15 @@
-/* ===== NAVBAR BASE ===== */
+/* ============================================
+   Navbar – Premium UI with Background Blur
+   ============================================ */
+
+/* ----- NAVBAR BASE ----- */
 .navbar {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--color-border);
   transition: all var(--transition-base);
   z-index: 999;
+  animation: fadeInDown 0.6s ease forwards;
 }
 
 /* Dark mode */
@@ -13,13 +18,26 @@
   border-color: var(--color-border-dark);
 }
 
-/* Scrolled */
+/* Scrolled state – keep blur but slightly more opaque */
 .scrolled {
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(14px);
   box-shadow: var(--shadow-md);
 }
 
-/* ===== LOGO ===== */
+:global(.dark) .scrolled {
+  background: rgba(2, 6, 23, 0.85);
+}
+
+/* Optional: if you want solid background when scrolled (remove blur), comment above and use this:
+.scrolled {
+  background: var(--color-surface);
+  box-shadow: var(--shadow-md);
+  backdrop-filter: none;
+}
+*/
+
+/* ----- LOGO ----- */
 .logo {
   font-size: 1.4rem;
   font-weight: var(--font-weight-bold);
@@ -28,19 +46,21 @@
   background: var(--gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  transition: var(--transition-fast);
+  transition: all var(--transition-fast);
+  display: inline-block;
 }
 
 .logo:hover {
   transform: scale(1.05);
+  filter: brightness(1.05);
 }
 
-/* Highlight part */
+/* Highlight part (if needed) */
 .logoHighlight {
   color: var(--color-primary);
 }
 
-/* ===== NAV LINKS ===== */
+/* ----- NAV LINKS (Desktop) ----- */
 .navLinks {
   display: flex;
   gap: 1.5rem;
@@ -52,10 +72,9 @@
   font-weight: var(--font-weight-medium) !important;
   text-transform: none !important;
   position: relative;
-  transition: var(--transition-fast);
+  transition: all var(--transition-fast);
 }
 
-/* Hover */
 .navItem:hover {
   color: var(--color-primary) !important;
   transform: translateY(-2px);
@@ -70,24 +89,32 @@
   width: 0%;
   height: 2px;
   background: var(--gradient-primary);
-  transition: width 0.3s ease;
+  transition: width 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
 }
 
 .navItem:hover::after {
   width: 100%;
 }
 
-/* ===== ACTION BUTTONS ===== */
+/* Active link */
+.navItem.active {
+  color: var(--color-primary) !important;
+}
+.navItem.active::after {
+  width: 100%;
+}
+
+/* ----- ACTION BUTTONS ----- */
 .actions {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-/* Theme toggle */
+/* Theme toggle button */
 .themeToggle {
   color: var(--color-text-secondary) !important;
-  transition: var(--transition-fast);
+  transition: all var(--transition-fast);
 }
 
 .themeToggle:hover {
@@ -95,18 +122,20 @@
   transform: rotate(20deg);
 }
 
-/* Login */
+/* Login button */
 .loginBtn {
   color: var(--color-text-secondary) !important;
   font-size: var(--font-size-sm) !important;
   text-transform: none !important;
+  transition: all var(--transition-fast);
 }
 
 .loginBtn:hover {
   color: var(--color-primary) !important;
+  transform: translateY(-1px);
 }
 
-/* Signup */
+/* Signup button (primary CTA) */
 .signupBtn {
   background: var(--gradient-primary) !important;
   color: #fff !important;
@@ -115,6 +144,7 @@
   font-size: var(--font-size-sm) !important;
   text-transform: none !important;
   box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
 }
 
 .signupBtn:hover {
@@ -122,44 +152,74 @@
   box-shadow: var(--shadow-md);
 }
 
-/* ===== MOBILE MENU BUTTON ===== */
+/* ----- MOBILE MENU BUTTON ----- */
 .menuButton {
   color: var(--color-text-primary) !important;
+  transition: all var(--transition-fast);
 }
 
-/* ===== DRAWER ===== */
+.menuButton:hover {
+  color: var(--color-primary) !important;
+  transform: scale(1.05);
+}
+
+/* ----- DRAWER (Mobile Menu) ----- */
 .drawer {
-  width: 260px;
-  padding: 1rem;
+  width: 280px;
+  padding: var(--spacing-md);
   background: var(--color-surface);
   height: 100%;
+  animation: slideInRight 0.3s ease forwards;
 }
 
-/* Drawer items */
+/* Close button in drawer */
+.closeDrawerBtn {
+  color: var(--color-text-secondary) !important;
+  transition: all var(--transition-fast);
+}
+
+.closeDrawerBtn:hover {
+  color: var(--color-primary) !important;
+  transform: rotate(90deg);
+  background: rgba(99, 102, 241, 0.1) !important;
+}
+
 .drawerItem {
   justify-content: flex-start !important;
   color: var(--color-text-primary) !important;
-  padding: 12px 10px !important;
+  padding: 12px 16px !important;
   text-transform: none !important;
   font-size: var(--font-size-sm) !important;
   border-radius: var(--radius-md) !important;
-  transition: var(--transition-fast);
+  transition: all var(--transition-fast);
 }
 
 .drawerItem:hover {
   background: rgba(99, 102, 241, 0.1) !important;
   color: var(--color-primary) !important;
+  transform: translateX(4px);
 }
 
-/* ===== ANIMATION ===== */
-.fadeIn {
-  animation: fadeNav 0.6s ease forwards;
+/* Drawer buttons (login/signup) */
+.drawerButtons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-xl);
+  padding: 0 var(--spacing-sm);
 }
 
-@keyframes fadeNav {
+.drawerLogin,
+.drawerSignup {
+  width: 100%;
+  justify-content: center;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInDown {
   from {
     opacity: 0;
-    transform: translateY(-15px);
+    transform: translateY(-20px);
   }
   to {
     opacity: 1;
@@ -167,19 +227,84 @@
   }
 }
 
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Fade‑in class (if you want to add to navbar) */
+.fadeIn {
+  animation: fadeInDown 0.6s ease forwards;
+}
+
 /* ===== RESPONSIVE ===== */
+/* Hide desktop nav links on tablet/mobile */
 @media (max-width: 900px) {
   .navLinks {
     display: none;
   }
 }
 
-@media (max-width: 600px) {
+/* Tablet adjustments */
+@media (max-width: 768px) {
   .logo {
     font-size: 1.2rem;
   }
-
+  .actions {
+    gap: 0.25rem;
+  }
   .signupBtn {
     padding: 5px 12px !important;
+  }
+}
+
+/* Mobile (small) */
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0 var(--spacing-sm);
+  }
+  .logo {
+    font-size: 1rem;
+  }
+  .actions .loginBtn {
+    display: none;
+  }
+  .signupBtn {
+    padding: 4px 10px !important;
+    font-size: var(--font-size-xs) !important;
+  }
+  .drawer {
+    width: 260px;
+    padding: var(--spacing-sm);
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 360px) {
+  .logo {
+    font-size: 0.9rem;
+  }
+  .signupBtn {
+    padding: 4px 8px !important;
+  }
+}
+
+/* ===== ACCESSIBILITY & PERFORMANCE ===== */
+@media (prefers-reduced-motion: reduce) {
+  .navbar,
+  .navItem::after,
+  .logo,
+  .signupBtn,
+  .drawerItem,
+  .menuButton,
+  .closeDrawerBtn {
+    transition: none;
+    animation: none;
   }
 }

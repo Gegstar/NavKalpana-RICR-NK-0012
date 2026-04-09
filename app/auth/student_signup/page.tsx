@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styles from '@/styles/StudentSignup.module.css';
 import { authService } from "@/services/auth.service";
 import { TextField, IconButton, InputAdornment, CircularProgress } from '@mui/material';
@@ -11,9 +11,41 @@ import { useAppSelector } from "@/redux/store";
 import { Eye, EyeOff, Mail, Lock, User } from 'lucide-react';
 import { LocalSignupRequest, VerifyAccountRequest } from '@/models/auth.model';
 import Logo from '@/components/ui/Logo';
+import gsap from 'gsap';
+import * as THREE from 'three';
+import PlainButton from '@/components/ui/PlainButton';
+
+// MUI TextField styles (moved outside to avoid re‑creation)
+const muiThemeStyles = {
+  "& .MuiOutlinedInput-root": {
+    color: "var(--text-primary)",
+    borderRadius: "12px",
+    backgroundColor: "#F8FAFC",
+    transition: "all 0.3s ease",
+    "& fieldset": { borderColor: "var(--border-light)", borderWidth: "2px" },
+    "&:hover fieldset": { borderColor: "var(--primary-yellow)" },
+    "&.Mui-focused fieldset": { borderColor: "var(--primary-yellow)", borderWidth: "2px" },
+    "&.Mui-error fieldset": { borderColor: "#EF4444" },
+  },
+  "& .MuiInputBase-input": {
+    padding: "14px 14px 14px 0",
+    "&::placeholder": { color: "var(--text-secondary)", opacity: 0.7 },
+  },
+  "& .MuiFormHelperText-root": {
+    marginLeft: "0",
+    color: "#EF4444",
+    fontSize: "0.75rem",
+  },
+};
 
 export default function StudentSignup() {
   const router = useRouter();
+  const cardRef = useRef<HTMLDivElement>(null);
+  const logoRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const formRef = useRef<HTMLDivElement>(null);
+  const footerRef = useRef<HTMLParagraphElement>(null);
+  const canvasContainerRef = useRef<HTMLDivElement>(null);
 
   const [form, setForm] = useState<LocalSignupRequest>({
     fullName: '',
@@ -29,12 +61,85 @@ export default function StudentSignup() {
   const [timer, setTimer] = useState(60);
   const [canResend, setCanResend] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
-  const [usernameEdited, setUsernameEdited] = useState(false); // tracks if user manually changed username
+  const [usernameEdited, setUsernameEdited] = useState(false);
 
   const settings = useAppSelector(state => state.global?.settings);
   const studentSignupEnabled = settings?.auth_settings?.student_signup_enabled;
 
-  // ------------------ Effects ------------------
+  // Three.js particle background
+  useEffect(() => {
+    if (!canvasContainerRef.current) return;
+
+    const container = canvasContainerRef.current;
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ alpha: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setClearColor(0x000000, 0);
+    container.appendChild(renderer.domElement);
+
+    // Particles
+    const particlesGeometry = new THREE.BufferGeometry();
+    const particlesCount = 1000;
+    const posArray = new Float32Array(particlesCount * 3);
+    for (let i = 0; i < particlesCount; i++) {
+      posArray[i*3] = (Math.random() - 0.5) * 20;
+      posArray[i*3+1] = (Math.random() - 0.5) * 15;
+      posArray[i*3+2] = (Math.random() - 0.5) * 10 - 5;
+    }
+    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+    const particlesMaterial = new THREE.PointsMaterial({
+      size: 0.05,
+      color: 0x3B82F6,
+      transparent: true,
+      opacity: 0.4,
+    });
+    const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+    scene.add(particlesMesh);
+
+    camera.position.z = 8;
+    camera.position.y = 1;
+    camera.lookAt(0, 0, 0);
+
+    let time = 0;
+    const animate = () => {
+      requestAnimationFrame(animate);
+      time += 0.002;
+      particlesMesh.rotation.y = time * 0.2;
+      particlesMesh.rotation.x = Math.sin(time * 0.1) * 0.2;
+      renderer.render(scene, camera);
+    };
+    animate();
+
+    const handleResize = () => {
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+      renderer.setSize(width, height);
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+    };
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      renderer.dispose();
+      if (container.contains(renderer.domElement)) {
+        container.removeChild(renderer.domElement);
+      }
+    };
+  }, []);
+
+  // GSAP entrance animation
+  useEffect(() => {
+    if (!settings) return;
+    const tl = gsap.timeline({ defaults: { duration: 0.6, ease: "power3.out" } });
+    tl.fromTo(cardRef.current, { opacity: 0, y: 30 }, { opacity: 1, y: 0 })
+      .fromTo(logoRef.current, { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1 }, "-=0.3")
+      .fromTo(titleRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0 }, "-=0.2")
+      .fromTo(formRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0 }, "-=0.2")
+      .fromTo(footerRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0 }, "-=0.1");
+  }, [settings]);
+
   useEffect(() => {
     if (settings && studentSignupEnabled === false) {
       router.replace("/404");
@@ -60,45 +165,32 @@ export default function StudentSignup() {
     setPasswordStrength(strength);
   }, [form.password]);
 
-  // ------------------ Validation ------------------
   const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const validatePassword = (password: string) => password.length >= 6;
   const validateName = (name: string) => name.trim().length >= 2;
   const validateUsername = (username: string) => /^[a-zA-Z0-9_.]{3,100}$/.test(username);
   const isFormValid = () => validateName(form.fullName) && validateEmail(form.email) && validatePassword(form.password) && validateUsername(form.username);
 
- 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const { name, value } = e.target;
-
-  setForm(prev => {
-    const updated = { ...prev, [name]: value };
-
-    // Auto-fill username ONLY from fullName if not manually edited
-    if (!usernameEdited && name === 'fullName') {
-      let suggestedUsername = value
-        .toLowerCase()
-        .trim()
-        .replace(/[^a-z0-9]/g, ''); // remove invalid chars
-
-      // Optionally add a small random number for uniqueness
-      const randomNumber = Math.floor(Math.random() * 100);
-      suggestedUsername = suggestedUsername + randomNumber;
-
-      updated.username = suggestedUsername;
-    }
-
-    return updated;
-  });
-};
+    const { name, value } = e.target;
+    setForm(prev => {
+      const updated = { ...prev, [name]: value };
+      if (!usernameEdited && name === 'fullName') {
+        let suggestedUsername = value.toLowerCase().trim().replace(/[^a-z0-9]/g, '');
+        const randomNumber = Math.floor(Math.random() * 100);
+        suggestedUsername = suggestedUsername + randomNumber;
+        updated.username = suggestedUsername;
+      }
+      return updated;
+    });
+  };
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm(prev => ({ ...prev, username: e.target.value }));
     setUsernameEdited(true);
   };
 
-  const handleBlur = (field: string) =>
-    setTouched(prev => ({ ...prev, [field]: true }));
+  const handleBlur = (field: string) => setTouched(prev => ({ ...prev, [field]: true }));
 
   const handleOtpChange = (value: string, index: number) => {
     if (!/^[0-9]?$/.test(value)) return;
@@ -120,36 +212,27 @@ export default function StudentSignup() {
     }
   };
 
-const handleResendOtp = async () => {
-  if (!canResend) return; // ✅ prevent spam click
-
-  setLoading(true);
-  const toastId = toast.loading("Resending OTP...");
-
-  try {
-    await authService.resendOtp(form.email); // ✅ FIXED
-
-    toast.success("OTP resent successfully! 📧", { id: toastId });
-
-    setTimer(60);
-    setCanResend(false);
-  } catch (err: any) {
-    toast.error(
-      err?.response?.data?.message || "Failed to resend OTP",
-      { id: toastId }
-    );
-  } finally {
-    setLoading(false);
-  }
-};
+  const handleResendOtp = async () => {
+    if (!canResend) return;
+    setLoading(true);
+    const toastId = toast.loading("Resending OTP...");
+    try {
+      await authService.resendOtp(form.email);
+      toast.success("OTP resent successfully! 📧", { id: toastId });
+      setTimer(60);
+      setCanResend(false);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Failed to resend OTP", { id: toastId });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     if (!isOtpSent) {
       setTouched({ fullName: true, username: true, email: true, password: true });
       if (!isFormValid()) return toast.error("Please fix the errors in the form");
-
       setLoading(true);
       const toastId = toast.loading("Sending OTP to your email...");
       try {
@@ -165,7 +248,7 @@ const handleResendOtp = async () => {
       try {
         const otpValue = otp.join('');
         if (otpValue.length !== 6) throw new Error("Please enter complete OTP");
-        const verifyData: VerifyAccountRequest = { userId: form.email, otp: otpValue }; // assuming email as userId
+        const verifyData: VerifyAccountRequest = { userId: form.email, otp: otpValue };
         await authService.verifyAccount(verifyData);
         toast.success("Account verified successfully!", { id: toastId });
         setTimeout(() => router.push("/auth/student_login"), 2000);
@@ -192,7 +275,6 @@ const handleResendOtp = async () => {
     return 'Strong';
   };
 
-  // ------------------ Render ------------------
   if (!settings) {
     return (
       <div className={styles.authWrapper}>
@@ -214,18 +296,19 @@ const handleResendOtp = async () => {
 
   return (
     <div className={styles.authWrapper}>
+      {/* Three.js canvas container */}
+      <div ref={canvasContainerRef} className={styles.canvasContainer} />
+
       <div className={styles.bgCircle1}></div>
       <div className={styles.bgCircle2}></div>
 
-      <div className={styles.authCard}>
-        <div className={styles.logoSection}>
-          <div className={styles.logo}>
-            <Logo />
-          </div>
+      <div ref={cardRef} className={styles.authCard}>
+        <div ref={logoRef} className={styles.logoSection}>
+          <Logo />
         </div>
 
         <div className={styles.headerSection}>
-          <h2 className={styles.title}>
+          <h2 ref={titleRef} className={styles.title}>
             {isOtpSent ? 'Verify Email' : 'Create Account'}
           </h2>
           <p className={styles.subtitle}>
@@ -235,7 +318,7 @@ const handleResendOtp = async () => {
 
         <form onSubmit={handleSubmit} className={styles.formElement}>
           {!isOtpSent ? (
-            <>
+            <div ref={formRef}>
               {/* Full Name */}
               <div className={styles.formGroup}>
                 <TextField
@@ -305,9 +388,9 @@ const handleResendOtp = async () => {
                   }}
                 />
               </div>
-            </>
+            </div>
           ) : (
-            <div className={styles.otpSection}>
+            <div ref={formRef} className={styles.otpSection}>
               <label className={styles.label}>6-Digit Verification Code</label>
               <div className={styles.otpContainer}>
                 {otp.map((digit, index) => (
@@ -326,36 +409,21 @@ const handleResendOtp = async () => {
             </div>
           )}
 
-          <button type="submit" className={`${styles.loginBtn} ${loading ? styles.loading : ''}`} disabled={loading || (!isOtpSent && !isFormValid())}>
-            {loading ? <><CircularProgress size={20} color="inherit" /><span>Processing...</span></> : (isOtpSent ? 'Verify & Create Account' : 'Get OTP')}
-          </button>
+          {/* Submit Button – using PlainButton */}
+          <PlainButton
+            type="submit"
+            variant="primary"
+            size="large"
+            fullWidth
+            loading={loading}
+            disabled={loading || (!isOtpSent && !isFormValid())}
+          >
+            {isOtpSent ? 'Verify & Create Account' : 'Get OTP'}
+          </PlainButton>
         </form>
 
-        <p className={styles.footerText}>Already have an account? <Link href="/auth/student_login" className={styles.loginLink}>Sign in</Link></p>
+        <p ref={footerRef} className={styles.footerText}>Already have an account? <Link href="/auth/student_login" className={styles.loginLink}>Sign in</Link></p>
       </div>
     </div>
   );
 }
-
-// MUI TextField Styles
-const muiThemeStyles = {
-  "& .MuiOutlinedInput-root": {
-    color: "var(--text-primary)",
-    borderRadius: "12px",
-    backgroundColor: "#F8FAFC",
-    transition: "all 0.3s ease",
-    "& fieldset": { borderColor: "var(--border-light)", borderWidth: "2px" },
-    "&:hover fieldset": { borderColor: "var(--primary-yellow)" },
-    "&.Mui-focused fieldset": { borderColor: "var(--primary-yellow)", borderWidth: "2px" },
-    "&.Mui-error fieldset": { borderColor: "#EF4444" },
-  },
-  "& .MuiInputBase-input": {
-    padding: "14px 14px 14px 0",
-    "&::placeholder": { color: "var(--text-secondary)", opacity: 0.7 },
-  },
-  "& .MuiFormHelperText-root": {
-    marginLeft: "0",
-    color: "#EF4444",
-    fontSize: "0.75rem",
-  },
-};

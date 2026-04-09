@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -10,15 +10,15 @@ import {
   IconButton,
 } from "@mui/material";
 import { Chrome, Facebook, Mic2, Mail, Lock, Eye, EyeOff } from "lucide-react";
-
+import gsap from "gsap";
+import * as THREE from "three";
 import styles from "@/styles/StudentLogin.module.css";
-import { defaultService } from "@/services/default.service";
 import { authService } from "@/services/auth.service";
 import { toastService } from "@/services/toast.service";
 import { useAppSelector } from "@/redux/store";
 import Logo from "@/components/ui/Logo";
+import PlainButton from "@/components/ui/PlainButton";
 
-// Shared styles for TextFields (matches signup page)
 const muiThemeStyles = {
   "& .MuiOutlinedInput-root": {
     color: "var(--text-primary)",
@@ -56,41 +56,99 @@ const muiThemeStyles = {
 
 export default function LoginPage() {
   const router = useRouter();
+  const cardRef = useRef<HTMLDivElement>(null);
+  const logoRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const formRef = useRef<HTMLDivElement>(null);
+  const socialRef = useRef<HTMLDivElement>(null);
+  const canvasContainerRef = useRef<HTMLDivElement>(null);
 
-
-  const [form, setForm] = useState({
-    identifier: "",
-    password: "",
-  });
-
-  const [touched, setTouched] = useState({
-    identifier: false,
-    password: false,
-  });
+  const [form, setForm] = useState({ identifier: "", password: "" });
+  const [touched, setTouched] = useState({ identifier: false, password: false });
   const [showPassword, setShowPassword] = useState(false);
   const [loginLoading, setLoginLoading] = useState(false);
-//  REDUX DATA
-const settings = useAppSelector((state) => state.global.settings);
-const authSettings = settings?.auth_settings;
 
-// LOADING STATE
-const loading = !settings;
+  const settings = useAppSelector((state) => state.global.settings);
+  const authSettings = settings?.auth_settings;
+  const loading = !settings;
+
+  // Three.js particle background
   useEffect(() => {
-   // fetchSettings();
+    if (!canvasContainerRef.current) return;
+
+    const container = canvasContainerRef.current;
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ alpha: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setClearColor(0x000000, 0);
+    container.appendChild(renderer.domElement);
+
+    // Particles
+    const particlesGeometry = new THREE.BufferGeometry();
+    const particlesCount = 1000;
+    const posArray = new Float32Array(particlesCount * 3);
+    for (let i = 0; i < particlesCount; i++) {
+      posArray[i*3] = (Math.random() - 0.5) * 20;
+      posArray[i*3+1] = (Math.random() - 0.5) * 15;
+      posArray[i*3+2] = (Math.random() - 0.5) * 10 - 5;
+    }
+    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+    const particlesMaterial = new THREE.PointsMaterial({
+      size: 0.05,
+      color: 0x3B82F6,
+      transparent: true,
+      opacity: 0.4,
+    });
+    const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+    scene.add(particlesMesh);
+
+    camera.position.z = 8;
+    camera.position.y = 1;
+    camera.lookAt(0, 0, 0);
+
+    let time = 0;
+    const animate = () => {
+      requestAnimationFrame(animate);
+      time += 0.002;
+      particlesMesh.rotation.y = time * 0.2;
+      particlesMesh.rotation.x = Math.sin(time * 0.1) * 0.2;
+      renderer.render(scene, camera);
+    };
+    animate();
+
+    const handleResize = () => {
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+      renderer.setSize(width, height);
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+    };
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      renderer.dispose();
+      if (container.contains(renderer.domElement)) {
+        container.removeChild(renderer.domElement);
+      }
+    };
   }, []);
 
-  // ================= VALIDATION =================
-  const validateIdentifier = (value: string) => {
-    return value.trim() !== "";
-  };
+  // GSAP entrance animation
+  useEffect(() => {
+    if (loading) return;
+    const tl = gsap.timeline({ defaults: { duration: 0.6, ease: "power3.out" } });
+    tl.fromTo(cardRef.current, { opacity: 0, y: 30 }, { opacity: 1, y: 0 })
+      .fromTo(logoRef.current, { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1 }, "-=0.3")
+      .fromTo(titleRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0 }, "-=0.2")
+      .fromTo(formRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0 }, "-=0.2")
+      .fromTo(socialRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0 }, "-=0.1");
+  }, [loading]);
 
-  const validatePassword = (value: string) => {
-    return value.length >= 6;
-  };
-
-  const isFormValid = () => {
-    return validateIdentifier(form.identifier) && validatePassword(form.password);
-  };
+  const validateIdentifier = (value: string) => value.trim() !== "";
+  const validatePassword = (value: string) => value.length >= 6;
+  const isFormValid = () => validateIdentifier(form.identifier) && validatePassword(form.password);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -101,71 +159,46 @@ const loading = !settings;
     setTouched((prev) => ({ ...prev, [field]: true }));
   };
 
-  // ================= LOGIN HANDLER =================
   const handleLogin = async () => {
     if (!isFormValid()) {
       setTouched({ identifier: true, password: true });
       return;
     }
-
     setLoginLoading(true);
-
     try {
       const res = await toastService.promise(
-        authService.login({
-          identifier: form.identifier,
-          password: form.password,
-          role:"STUDENT"
-        }),
-        {
-          loading: "Signing in...",
-          success: "Login successful 🎉",
-          error: (err) => err?.response?.data?.message || "Login failed",
-        }
+        authService.login({ identifier: form.identifier, password: form.password, role: "STUDENT" }),
+        { loading: "Signing in...", success: "Login successful 🎉", error: (err) => err?.response?.data?.message || "Login failed" }
       );
-
       authService.setToken(res.access_token);
       router.push("/dashboard");
-    } catch (err) {
-      // already handled by toast
     } finally {
       setLoginLoading(false);
     }
   };
 
-  // ================= SOCIAL LOGIN =================
-  const handleGoogleLogin = () => {
-    authService.loginWithGoogle();
-  };
+  const handleGoogleLogin = () => authService.loginWithGoogle();
+  const handleFacebookLogin = () => authService.loginWithFacebook();
+  const handleMicrosoftLogin = () => authService.loginWithMicrosoft();
 
-  const handleFacebookLogin = () => {
-    authService.loginWithFacebook();
-  };
-
-  const handleMicrosoftLogin = () => {
-    authService.loginWithMicrosoft();
-  };
-
-  // ================= UI =================
   return (
     <div className={styles.authWrapper}>
+      {/* Three.js canvas container */}
+      <div ref={canvasContainerRef} className={styles.canvasContainer} />
+
       <div className={styles.bgCircle1}></div>
       <div className={styles.bgCircle2}></div>
 
-      <div className={`${styles.authCard} ${styles.fadeIn}`}>
-        <div className={styles.logoSection}>
-          <div className={styles.logo}>
-            <Logo />
-          </div>
+      <div ref={cardRef} className={`${styles.authCard} ${styles.fadeIn}`}>
+        <div ref={logoRef} className={styles.logoSection}>
+          <Logo />
         </div>
 
         <div className={styles.headerSection}>
-          <h2 className={styles.title}>
+          <h2 ref={titleRef} className={styles.title}>
             {loading ? <Skeleton width="60%" height={40} /> : "Welcome Back"}
           </h2>
-          {!loading && (
-            <p className={styles.subtitle}>Sign in to continue learning</p>
-          )}
+          {!loading && <p className={styles.subtitle}>Sign in to continue learning</p>}
         </div>
 
         <form onSubmit={(e) => e.preventDefault()} className={styles.formElement}>
@@ -175,9 +208,8 @@ const loading = !settings;
               <Skeleton variant="rectangular" height={56} sx={{ mb: 2, borderRadius: 1 }} />
               <Skeleton variant="rectangular" height={48} sx={{ mt: 2, borderRadius: 1 }} />
             </>
-          ) : (   
-            <>
-              {/* Email / Username Field */}
+          ) : (
+            <div ref={formRef}>
               <div className={styles.formGroup}>
                 <TextField
                   fullWidth
@@ -188,11 +220,7 @@ const loading = !settings;
                   placeholder="Enter your email or username"
                   variant="outlined"
                   error={touched.identifier && !validateIdentifier(form.identifier)}
-                  helperText={
-                    touched.identifier && !validateIdentifier(form.identifier)
-                      ? "Email or username is required"
-                      : ""
-                  }
+                  helperText={touched.identifier && !validateIdentifier(form.identifier) ? "Email or username is required" : ""}
                   sx={muiThemeStyles}
                   InputProps={{
                     startAdornment: (
@@ -204,7 +232,6 @@ const loading = !settings;
                 />
               </div>
 
-              {/* Password Field */}
               <div className={styles.formGroup}>
                 <TextField
                   fullWidth
@@ -216,25 +243,13 @@ const loading = !settings;
                   placeholder="Enter your password"
                   variant="outlined"
                   error={touched.password && !validatePassword(form.password)}
-                  helperText={
-                    touched.password && !validatePassword(form.password)
-                      ? "Minimum 6 characters required"
-                      : ""
-                  }
+                  helperText={touched.password && !validatePassword(form.password) ? "Minimum 6 characters required" : ""}
                   sx={muiThemeStyles}
                   InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <Lock size={18} color="#64748B" />
-                      </InputAdornment>
-                    ),
+                    startAdornment: <InputAdornment position="start"><Lock size={18} color="#64748B" /></InputAdornment>,
                     endAdornment: (
                       <InputAdornment position="end">
-                        <IconButton
-                          onClick={() => setShowPassword(!showPassword)}
-                          edge="end"
-                          sx={{ color: "#64748B" }}
-                        >
+                        <IconButton onClick={() => setShowPassword(!showPassword)} edge="end" sx={{ color: "#64748B" }}>
                           {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                         </IconButton>
                       </InputAdornment>
@@ -243,54 +258,50 @@ const loading = !settings;
                 />
               </div>
 
-              <button
-                type="submit"
-                className={`${styles.loginBtn} ${loginLoading ? styles.loading : ""}`}
+              <div style={{ textAlign: "right", marginTop: "8px" }}>
+                <Link href="/auth/forgot_password" className={styles.forgotLink}>Forgot Password?</Link>
+              </div>
+
+              <PlainButton
+                variant="primary"
+                size="large"
+                fullWidth
+                loading={loginLoading}
                 onClick={handleLogin}
                 disabled={loginLoading}
               >
-                {loginLoading ? "Signing in..." : "Sign In"}
-              </button>
-            </>
+                Sign In
+              </PlainButton>
+            </div>
           )}
         </form>
 
-        {/* Social Login Section */}
         {!loading && authSettings?.social_login && (
-          <div className={styles.socialSection}>
-            <div className={styles.socialDivider}>
-              <span>Or continue with</span>
-            </div>
+          <div ref={socialRef} className={styles.socialSection}>
+            <div className={styles.socialDivider}><span>Or continue with</span></div>
             <div className={styles.socialButtons}>
               {authSettings.social_login.google && (
                 <button onClick={handleGoogleLogin} className={styles.socialButton}>
-                  <Chrome size={20} />
-                  Continue with Google
+                  <Chrome size={20} /> Continue with Google
                 </button>
               )}
               {authSettings.social_login.facebook && (
                 <button onClick={handleFacebookLogin} className={styles.socialButton}>
-                  <Facebook size={20} />
-                  Continue with Facebook
+                  <Facebook size={20} /> Continue with Facebook
                 </button>
               )}
               {authSettings.social_login.microsoft && (
                 <button onClick={handleMicrosoftLogin} className={styles.socialButton}>
-                  <Mic2 size={20} />
-                  Continue with Microsoft
+                  <Mic2 size={20} /> Continue with Microsoft
                 </button>
               )}
             </div>
           </div>
         )}
 
-        {/* Signup Link */}
         {!loading && authSettings?.student_signup_enabled && (
           <p className={styles.footerText}>
-            Don’t have an account?{" "}
-            <Link href="/auth/student_signup" className={styles.signupLink}>
-              Sign Up
-            </Link>
+            Don’t have an account? <Link href="/auth/student_signup" className={styles.signupLink}>Sign Up</Link>
           </p>
         )}
       </div>
