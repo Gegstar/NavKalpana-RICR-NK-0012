@@ -12,9 +12,9 @@ export default function Logo({ variant = 'full', size = 'medium', showText = tru
   const theme = useTheme();
 
   const sizeMap = {
-    small: { icon: 24, text: '1rem' },
-    medium: { icon: 32, text: '1.5rem' },
-    large: { icon: 48, text: '2rem' },
+    small: { icon: 24, text: '1rem', gap: 0.5 },
+    medium: { icon: 32, text: '1.5rem', gap: 1 },
+    large: { icon: 48, text: '2rem', gap: 1.5 },
   };
 
   const sizes = sizeMap[size];
@@ -22,7 +22,7 @@ export default function Logo({ variant = 'full', size = 'medium', showText = tru
   const logoSx = {
     display: 'flex',
     alignItems: 'center',
-    gap: 1,
+    gap: sizes.gap,
     textDecoration: 'none',
     color: 'inherit',
   };
@@ -38,42 +38,49 @@ export default function Logo({ variant = 'full', size = 'medium', showText = tru
     fontWeight: 'bold',
     fontSize: sizes.icon * 0.6,
     color: '#fff',
+    transition: 'transform 0.2s ease',
   };
 
   const textSx = {
     fontWeight: 'bold',
     fontSize: sizes.text,
     lineHeight: 1,
+    letterSpacing: '-0.02em',
   };
 
-  const renderLogo = () => {
-    if (variant === 'icon') {
-      return <Box sx={iconSx}>S</Box>;
-    }
+  // Hover effect on the whole logo
+  const hoverSx = {
+    '&:hover .logo-icon': {
+      transform: 'scale(1.05)',
+    },
+  };
 
-    if (variant === 'text') {
-      return (
+  if (variant === 'icon') {
+    return (
+      <Link href="/" style={logoSx}>
+        <Box sx={iconSx} className="logo-icon">S</Box>
+      </Link>
+    );
+  }
+
+  if (variant === 'text') {
+    return (
+      <Link href="/" style={logoSx}>
         <Typography sx={textSx}>
           Skill<span style={{ color: theme.palette.primary.main }}>Verse</span>
         </Typography>
-      );
-    }
-
-    // full variant
-    return (
-      <>
-        {showText && (
-          <Typography sx={textSx}>
-            Skill<span style={{ color: theme.palette.primary.main }}>Verse</span>
-          </Typography>
-        )}
-      </>
+      </Link>
     );
-  };
+  }
 
+  // Full variant: icon + text
   return (
-    <Link href="/" style={logoSx}>
-      {renderLogo()}
+    <Link href="/" style={{ ...logoSx, ...hoverSx }}>
+      {showText && (
+        <Typography sx={textSx}>
+          Skill<span style={{ color: theme.palette.primary.main }}>Verse</span>
+        </Typography>
+      )}
     </Link>
   );
 }

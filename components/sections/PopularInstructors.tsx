@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import {
   Container,
   Typography,
@@ -10,9 +11,16 @@ import {
   Rating,
   Avatar
 } from '@mui/material';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import styles from '@/styles/PopularInstructors.module.css';
+import Title from '@/components/ui/Title'
 
-/* ✅ Dummy Data */
+// Register ScrollTrigger only on client
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
 const instructors = [
   {
     id: 1,
@@ -53,72 +61,87 @@ const instructors = [
 ];
 
 export default function PopularInstructors() {
-  return (
-    <section className={styles.section} id="instructors">
-      <Container maxWidth="lg">
+  const sectionRef = useRef<HTMLElement>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
-        <Typography variant="h2" className={styles.sectionTitle}>
-          Popular <span>Instructors</span>
-        </Typography>
+  useEffect(() => {
+    if (!sectionRef.current) return;
+
+    // Set initial state – hidden and shifted down
+    cardsRef.current.forEach((card) => {
+      if (card) {
+        gsap.set(card, { opacity: 0, y: 40 });
+      }
+    });
+
+    // Create ScrollTrigger
+   let trigger: ScrollTrigger | null = null;
+trigger = ScrollTrigger.create({
+  trigger: sectionRef.current,
+  start: 'top 80%',
+  onEnter: () => {
+    cardsRef.current.forEach((card, index) => {
+      if (card) {
+        gsap.to(card, {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: 'power2.out',
+          delay: index * 0.1,
+        });
+      }
+    });
+    if (trigger) trigger.kill();
+  },
+});
+
+    // Cleanup
+    return () => {
+      if (trigger) trigger.kill();
+    };
+  }, []);
+
+  return (
+    <section ref={sectionRef} className={styles.section} id="instructors">
+      <Container maxWidth="lg">
+        <Title title="Popular Instructors" highlight="Instructors" />
 
         <Grid container spacing={3}>
-          {instructors.map((instructor) => (
-            
-            <Grid key={instructor.id} size={{ xs: 12, sm: 6, md: 3 }}>
-              
-              <Card
-                className={styles.card}
-                elevation={0}
-                sx={{ height: '100%' }} // ✅ better alignment
-              >
+          {instructors.map((instructor, index) => (
+            <Grid
+              key={instructor.id}
+              size={{ xs: 12, sm: 6, md: 3 }}
+              ref={(el) => {
+                if (el) cardsRef.current[index] = el;
+              }}
+            >
+              <Card className={styles.card} elevation={0} sx={{ height: '100%' }}>
                 <CardContent className={styles.cardContent}>
-
-                  {/* Avatar */}
                   <Avatar
                     src={instructor.avatar}
                     alt={instructor.name}
                     className={styles.avatar}
                   />
-
-                  {/* Name */}
-                  <Typography className={styles.name}>
-                    {instructor.name}
-                  </Typography>
-
-                  {/* Title */}
-                  <Typography className={styles.title}>
-                    {instructor.title}
-                  </Typography>
-
-                  {/* Rating */}
+                  <Typography className={styles.name}>{instructor.name}</Typography>
+                  <Typography className={styles.title}>{instructor.title}</Typography>
                   <Rating value={instructor.rating} readOnly size="small" />
-
-                  {/* Stats */}
                   <Box className={styles.stats}>
-                    
                     <div className={styles.statItem}>
                       <span className={styles.statValue}>
                         {instructor.students.toLocaleString()}
                       </span>
                       <span className={styles.statLabel}>Students</span>
                     </div>
-
                     <div className={styles.statItem}>
-                      <span className={styles.statValue}>
-                        {instructor.courses}
-                      </span>
+                      <span className={styles.statValue}>{instructor.courses}</span>
                       <span className={styles.statLabel}>Courses</span>
                     </div>
-
                   </Box>
-
                 </CardContent>
               </Card>
-
             </Grid>
           ))}
         </Grid>
-
       </Container>
     </section>
   );

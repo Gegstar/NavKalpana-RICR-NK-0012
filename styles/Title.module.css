@@ -1,0 +1,88 @@
+/* Title.module.css */
+
+.sectionTitle {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl) !important;
+  font-weight: var(--font-weight-bold) !important;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-4xl) !important;
+  letter-spacing: -0.02em;
+  position: relative;
+  width: 100%;
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+/* Underline accent */
+.sectionTitle::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 4px;
+  background: var(--gradient-primary);
+  margin: var(--spacing-md) auto 0;
+  border-radius: var(--radius-full);
+}
+
+/* Gradient text span */
+.sectionTitle span {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Alignment variants */
+.sectionTitle.left {
+  text-align: left;
+}
+.sectionTitle.left::after {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.sectionTitle.right {
+  text-align: right;
+}
+.sectionTitle.right::after {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.highlight {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1024px) {
+  .sectionTitle {
+    font-size: var(--font-size-3xl) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .sectionTitle {
+    font-size: var(--font-size-2xl) !important;
+    margin-bottom: var(--spacing-xl) !important;
+  }
+  .sectionTitle::after {
+    width: 60px;
+    height: 3px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sectionTitle {
+    font-size: var(--font-size-xl) !important;
+  }
+}

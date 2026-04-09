@@ -14,6 +14,7 @@ import {
   MenuItem,
   Alert,
   Chip,
+  CircularProgress,
 } from "@mui/material";
 import {
   Add,
@@ -23,6 +24,8 @@ import {
   VideoLibrary,
   Description,
 } from "@mui/icons-material";
+import { courseService } from "@/services/course.service";
+import { toastService } from "@/services/toast.service";
 import styles from "@/styles/AddCourse.module.css";
 
 interface Lesson {
@@ -43,10 +46,10 @@ export default function AddCourse() {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    thumbnail: "",
     price: "",
     category: "",
   });
+  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [modules, setModules] = useState<Module[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -65,9 +68,9 @@ export default function AddCourse() {
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setThumbnailFile(file);
       const url = URL.createObjectURL(file);
       setThumbnailPreview(url);
-      setFormData((prev) => ({ ...prev, thumbnail: file.name }));
     }
   };
 
@@ -161,27 +164,42 @@ export default function AddCourse() {
     if (!validate()) return;
 
     setSubmitting(true);
-    // Prepare payload
-    const payload = {
-      ...formData,
-      price: parseFloat(formData.price),
-      modules: modules.map((m) => ({
-        title: m.title,
-        lessons: m.lessons.map((l) => ({
-          title: l.title,
-          videoUrl: l.videoUrl,
-          content: l.content,
-        })),
-      })),
-    };
-    console.log("Submitting course:", payload);
+    try {
+      // Prepare FormData
+      const formDataToSend = new FormData();
 
-    // Simulate API call
-    setTimeout(() => {
-      setSubmitting(false);
-      // Redirect to courses list
+      // Append basic course info as JSON string
+      const courseData = {
+        title: formData.title,
+        description: formData.description,
+        category: formData.category,
+        price: parseFloat(formData.price),
+        modules: modules.map((m) => ({
+          title: m.title,
+          lessons: m.lessons.map((l) => ({
+            title: l.title,
+            videoUrl: l.videoUrl,
+            content: l.content,
+          })),
+        })),
+      };
+      formDataToSend.append("data", JSON.stringify(courseData));
+
+      // Append thumbnail file if present
+      if (thumbnailFile) {
+        formDataToSend.append("thumbnail", thumbnailFile);
+      }
+
+      // Call API
+      await courseService.createCourse(formDataToSend);
+      toastService.success("Course created successfully!");
       router.push("/instructor/courses");
-    }, 1500);
+    } catch (error: any) {
+      console.error("Create course error:", error);
+      toastService.error(error?.response?.data?.message || "Failed to create course");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -418,7 +436,7 @@ export default function AddCourse() {
               onClick={handleSubmit}
               disabled={submitting}
             >
-              {submitting ? "Saving..." : "Save Course"}
+              {submitting ? <CircularProgress size={20} /> : "Save Course"}
             </Button>
           </Box>
         </Paper>

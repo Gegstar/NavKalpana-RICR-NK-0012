@@ -1,0 +1,131 @@
+/* Button.module.css – 5 Variants (Using Root Variables Only) */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: 10px 24px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  border-radius: 40px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: none;
+  background: transparent;
+  text-decoration: none;
+  line-height: 1.2;
+}
+
+/* Sizes */
+.small {
+  padding: 6px 16px;
+  font-size: var(--font-size-xs);
+}
+
+.large {
+  padding: 12px 32px;
+  font-size: var(--font-size-md);
+}
+
+/* ===== VARIANT: PRIMARY (Gradient using primary colors) ===== */
+.primary {
+  background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+}
+
+/* ===== VARIANT: SECONDARY (Outlined using primary) ===== */
+.secondary {
+  background: transparent;
+  border: 2px solid var(--color-primary);
+  color: var(--color-primary);
+}
+.secondary:hover {
+  background: rgba(59, 130, 246, 0.1); /* fallback, but we'll use variable if defined */
+  background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+  transform: translateY(-2px);
+  border-color: var(--color-primary-light);
+  color: var(--color-primary-light);
+}
+
+/* ===== VARIANT: DANGER (Error color) ===== */
+.danger {
+  background: var(--color-error);
+  color: white;
+}
+.danger:hover {
+  background: #EF4444; /* fallback – if you have --color-error-light, use it */
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ===== VARIANT: SUCCESS (Success color) ===== */
+.success {
+  background: var(--color-success);
+  color: white;
+}
+.success:hover {
+  background: #34D399; /* fallback – use --color-success-light if defined */
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ===== VARIANT: GHOST (Transparent, subtle hover) ===== */
+.ghost {
+  background: transparent;
+  color: var(--color-text-primary);
+  border: 1px solid transparent;
+}
+.ghost:hover {
+  background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  transform: translateY(-1px);
+}
+
+/* Loading state */
+.loading {
+  opacity: 0.7;
+  cursor: wait;
+}
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  display: inline-block;
+}
+
+/* Disabled */
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Full width */
+.fullWidth {
+  width: 100%;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .btn {
+    padding: 8px 20px;
+  }
+  .large {
+    padding: 10px 24px;
+  }
+}

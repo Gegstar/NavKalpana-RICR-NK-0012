@@ -1,9 +1,26 @@
+/* ============================================
+   Benefits Section – Premium UI with Smooth Animations
+   ============================================ */
+
 /* ===== SECTION ===== */
 .section {
   padding: var(--spacing-3xl) 0;
   margin-top: var(--spacing-2xl);
   background: var(--color-background);
   position: relative;
+  overflow: hidden;
+}
+
+/* Subtle animated background glow */
+.section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.04) 0%, transparent 60%);
+  pointer-events: none;
 }
 
 /* ===== TITLE ===== */
@@ -13,58 +30,83 @@
   font-weight: var(--font-weight-bold) !important;
   color: var(--color-text-primary);
   font-size: var(--font-size-4xl) !important;
+  letter-spacing: -0.02em;
+  position: relative;
+  width: 100%;
+  animation: fadeInUp 0.6s ease forwards;
 }
 
-/* Gradient text using ROOT */
+/* Underline accent */
+.sectionTitle::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 4px;
+  background: var(--gradient-primary);
+  margin: var(--spacing-md) auto 0;
+  border-radius: var(--radius-full);
+}
+
+/* Gradient text span */
 .sectionTitle span {
   background: var(--gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* ===== CARD ===== */
+/* ===== CARD (base) ===== */
 .card {
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
-
   border-radius: var(--radius-lg);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-
-  transition: var(--transition-base);
+  transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1),
+              box-shadow 0.3s ease,
+              border-color 0.2s ease;
   position: relative;
   overflow: hidden;
   margin-top: var(--spacing-md);
+  will-change: transform, box-shadow;
+
+  /* Entrance animation (fallback) */
+  opacity: 0;
+  transform: translateY(30px);
+  animation: cardFadeUp 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+  animation-delay: calc(var(--index, 0) * 0.1s);
 }
 
-/* Glow effect (using primary color) */
+/* Stagger delays (CSS variable – GSAP will override, no conflict) */
+.card:nth-child(1) { --index: 1; }
+.card:nth-child(2) { --index: 2; }
+.card:nth-child(3) { --index: 3; }
+.card:nth-child(4) { --index: 4; }
+
+/* Glassmorphism shine effect on hover */
 .card::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    120deg,
-    transparent,
-    rgba(99, 102, 241, 0.15),
-    transparent
-  );
+  background: linear-gradient(120deg, transparent, rgba(99, 102, 241, 0.15), transparent);
   opacity: 0;
-  transition: var(--transition-base);
+  transition: opacity 0.4s ease;
+  pointer-events: none;
 }
 
-/* Hover */
+/* Hover state */
 .card:hover {
   transform: translateY(-8px) scale(1.02);
   box-shadow: var(--shadow-lg);
+  border-color: var(--color-primary);
 }
 
 .card:hover::before {
   opacity: 1;
 }
 
-/* ===== CONTENT ===== */
+/* ===== CARD CONTENT ===== */
 .cardContent {
   flex: 1;
   display: flex;
@@ -73,22 +115,19 @@
   padding: var(--spacing-xl);
 }
 
-/* ===== ICON ===== */
+/* ===== ICON WRAPPER ===== */
 .iconWrapper {
   width: 60px;
   height: 60px;
   margin: 0 auto var(--spacing-md);
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   border-radius: var(--radius-md);
   background: var(--gradient-primary);
   color: #fff;
-
-  box-shadow: 0 10px 25px rgba(99,102,241,0.3);
-  transition: var(--transition-base);
+  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+  transition: transform 0.3s ease;
 }
 
 .card:hover .iconWrapper {
@@ -101,6 +140,12 @@
   font-weight: var(--font-weight-semibold);
   margin-top: var(--spacing-sm);
   color: var(--color-text-primary);
+  transition: color 0.2s ease;
+  text-align: center;
+}
+
+.card:hover .title {
+  color: var(--color-primary);
 }
 
 /* ===== DESCRIPTION ===== */
@@ -109,30 +154,81 @@
   color: var(--color-text-secondary);
   margin-top: auto;
   line-height: 1.5;
+  text-align: center;
+}
+
+/* ===== KEYFRAME ANIMATIONS ===== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cardFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .sectionTitle {
+    font-size: var(--font-size-3xl) !important;
+  }
+  .iconWrapper {
+    width: 70px;
+    height: 70px;
+  }
+}
+
 @media (max-width: 768px) {
   .section {
     padding: var(--spacing-2xl) 0;
     margin-top: var(--spacing-xl);
   }
-
   .sectionTitle {
-    font-size: var(--font-size-3xl) !important;
+    font-size: var(--font-size-2xl) !important;
   }
-
+  .sectionTitle::after {
+    width: 60px;
+    height: 3px;
+  }
   .cardContent {
-    padding: var(--spacing-lg);
+    padding: var(--spacing-lg) !important;
+  }
+  .title {
+    font-size: var(--font-size-md);
+  }
+  .description {
+    font-size: var(--font-size-xs);
+  }
+  .card:hover {
+    transform: translateY(-4px) scale(1.01);
   }
 }
 
 @media (max-width: 480px) {
-  .sectionTitle {
-    font-size: var(--font-size-2xl) !important;
+  .section {
+    padding: var(--spacing-xl) 0;
   }
-
-  .description {
-    font-size: var(--font-size-xs);
+  .sectionTitle {
+    font-size: var(--font-size-xl) !important;
+  }
+  .iconWrapper {
+    width: 50px;
+    height: 50px;
+  }
+  .title {
+    font-size: var(--font-size-sm);
   }
 }
