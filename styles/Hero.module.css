@@ -1,8 +1,8 @@
 /* ============================================
-   Hero Section – Premium UI with GSAP & 3D Background
+   Hero Section – Premium UI with GSAP & Three.js
    ============================================ */
 
-/* ===== HERO SECTION ===== */
+/* ----- HERO SECTION ----- */
 .hero {
   min-height: 100vh;
   display: flex;
@@ -11,6 +11,17 @@
   overflow: hidden;
   background: var(--color-background);
   padding: calc(80px + var(--spacing-3xl)) 0 var(--spacing-3xl);
+}
+
+/* Canvas container for Three.js background */
+.canvasContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
 }
 
 /* Animated background glow */
@@ -31,18 +42,18 @@
   50% { opacity: 1; }
 }
 
-/* Container */
+/* Container (keeps content above canvas) */
 .container {
   position: relative;
   z-index: 1;
 }
 
-/* ===== CONTENT ===== */
+/* ----- CONTENT ----- */
 .content {
   animation: fadeInUp 0.8s ease forwards;
 }
 
-/* ===== TYPOGRAPHY ===== */
+/* ----- TYPOGRAPHY ----- */
 .title {
   font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: var(--font-weight-bold);
@@ -65,7 +76,7 @@
   max-width: 550px;
 }
 
-/* ===== BUTTONS ===== */
+/* ----- BUTTONS ----- */
 .buttonGroup {
   display: flex;
   gap: var(--spacing-md);
@@ -73,13 +84,20 @@
   margin-bottom: var(--spacing-2xl);
 }
 
+.primaryBtn,
+.secondaryBtn {
+  transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+  will-change: transform;
+}
+
 .primaryBtn {
   background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
   border: none;
   padding: 12px 32px;
   font-weight: var(--font-weight-semibold);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
   border-radius: var(--radius-full);
+  color: white;
+  box-shadow: var(--shadow-sm);
 }
 
 .primaryBtn:hover {
@@ -91,9 +109,9 @@
   border: 2px solid var(--color-primary);
   padding: 12px 32px;
   font-weight: var(--font-weight-semibold);
-  transition: transform 0.3s ease, background 0.3s ease;
   border-radius: var(--radius-full);
   background: transparent;
+  color: var(--color-primary);
 }
 
 .secondaryBtn:hover {
@@ -101,7 +119,7 @@
   background: rgba(99, 102, 241, 0.1);
 }
 
-/* ===== STATS ===== */
+/* ----- STATS ----- */
 .stats {
   display: flex;
   gap: var(--spacing-2xl);
@@ -122,7 +140,7 @@
   font-size: var(--font-size-sm);
 }
 
-/* ===== IMAGE ===== */
+/* ----- IMAGE (if used, but your component doesn't include it – keeping for completeness) ----- */
 .imageWrapper {
   display: flex;
   justify-content: center;
@@ -147,6 +165,24 @@
 }
 
 /* ===== RESPONSIVE ===== */
+
+/* Tablet (landscape) */
+@media (max-width: 1024px) {
+  .hero {
+    padding: calc(70px + var(--spacing-2xl)) 0 var(--spacing-2xl);
+  }
+  .title {
+    font-size: clamp(2.2rem, 4.5vw, 3.5rem);
+  }
+  .subtitle {
+    font-size: var(--font-size-lg);
+  }
+  .imageContainer {
+    height: 380px;
+  }
+}
+
+/* Tablet (portrait) */
 @media (max-width: 900px) {
   .hero {
     text-align: center;
@@ -174,35 +210,47 @@
   }
 }
 
-@media (max-width: 600px) {
+/* Mobile (large) */
+@media (max-width: 768px) {
   .hero {
-    padding-top: calc(60px + var(--spacing-xl));
+    padding: calc(60px + var(--spacing-xl)) 0 var(--spacing-xl);
   }
   .title {
-    font-size: clamp(2rem, 8vw, 2.8rem);
+    font-size: clamp(2rem, 7vw, 2.8rem);
   }
   .subtitle {
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-md);
+    margin-bottom: var(--spacing-lg);
   }
   .stats {
     gap: var(--spacing-lg);
+    flex-wrap: wrap;
   }
   .imageContainer {
-    height: 250px;
+    height: 280px;
   }
   .primaryBtn, .secondaryBtn {
-    padding: 8px 24px;
+    padding: 10px 28px;
     font-size: var(--font-size-sm);
   }
 }
 
+/* Mobile (small) */
 @media (max-width: 480px) {
+  .hero {
+    padding-top: calc(60px + var(--spacing-lg));
+  }
+  .title {
+    font-size: clamp(1.8rem, 6vw, 2.4rem);
+  }
   .buttonGroup {
     flex-direction: column;
     width: 100%;
   }
   .primaryBtn, .secondaryBtn {
     width: 100%;
+    padding: 12px;
+    justify-content: center;
   }
   .stats {
     flex-direction: column;
@@ -213,13 +261,33 @@
     justify-content: space-between;
     align-items: center;
     gap: var(--spacing-md);
+    background: var(--color-surface);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
   }
   .stats h4 {
     margin-bottom: 0;
   }
+  .imageContainer {
+    height: 220px;
+  }
 }
 
-/* ===== KEYFRAMES ===== */
+/* Extra small devices */
+@media (max-width: 360px) {
+  .title {
+    font-size: 1.8rem;
+  }
+  .subtitle {
+    font-size: var(--font-size-sm);
+  }
+  .imageContainer {
+    height: 180px;
+  }
+}
+
+/* ===== ANIMATIONS ===== */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -230,24 +298,8 @@
     transform: translateY(0);
   }
 }
-/* Add to Hero.module.css */
-.canvasContainer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  pointer-events: none;
-}
 
-.hero {
-  position: relative;
-  overflow: hidden;
-  /* other existing styles */
-}
-
-.container {
-  position: relative;
-  z-index: 1;
+/* Smooth scroll behaviour for the whole page (optional) */
+html {
+  scroll-behavior: smooth;
 }

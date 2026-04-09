@@ -19,7 +19,8 @@ const publicRoutes = [
   "/auth/student_login",
   "/auth/student_signup",
   "/auth/superadmin_login",
-  "/auth/staff_login"
+  "/auth/staff_login",
+  "/auth/forgot_password"
 ];
 
 // ==========================
