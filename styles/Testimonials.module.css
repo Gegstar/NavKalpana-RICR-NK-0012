@@ -1,7 +1,23 @@
+/* ============================================
+   Testimonials Section – Ultra Smooth Animations
+   ============================================ */
+
 /* ===== SECTION ===== */
 .section {
   padding: 5rem 0;
   background: var(--color-background);
+  animation: sectionFade 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+}
+
+@keyframes sectionFade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ===== TITLE ===== */
@@ -11,10 +27,26 @@
   font-weight: var(--font-weight-bold) !important;
   color: var(--color-text-primary);
   font-size: var(--font-size-4xl) !important;
+  letter-spacing: -0.02em;
+  position: relative;
+  width: 100%;
+  animation: fadeInUp 0.6s ease forwards;
 }
 
+/* Underline accent */
+.sectionTitle::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 4px;
+  background: var(--gradient-primary);
+  margin: var(--spacing-md) auto 0;
+  border-radius: var(--radius-full);
+}
+
+/* Gradient text span */
 .sectionTitle span {
-  background: linear-gradient(135deg, #6366f1, #0ea5e9);
+  background: var(--gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -24,10 +56,13 @@
   border-radius: 16px;
   border: 1px solid var(--color-border);
   background: var(--color-surface);
-  transition: all 0.35s ease;
+  transition: transform 0.45s cubic-bezier(0.2, 0.9, 0.4, 1.1),
+              box-shadow 0.45s cubic-bezier(0.2, 0.9, 0.4, 1.1),
+              border-color 0.3s ease;
   height: 100%;
   position: relative;
   overflow: hidden;
+  will-change: transform, box-shadow;
 }
 
 /* Glow effect */
@@ -35,9 +70,10 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(120deg, transparent, rgba(99,102,241,0.15), transparent);
+  background: linear-gradient(120deg, transparent, rgba(99,102,241,0.12), transparent);
   opacity: 0;
-  transition: 0.4s;
+  transition: opacity 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+  pointer-events: none;
 }
 
 .card:hover::before {
@@ -46,8 +82,9 @@
 
 /* Hover */
 .card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+  transform: translateY(-8px);
+  box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.2);
+  border-color: var(--color-primary);
 }
 
 /* ===== CONTENT ===== */
@@ -70,12 +107,23 @@
   width: 50px !important;
   height: 50px !important;
   border: 2px solid #6366f1;
+  transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+}
+
+.card:hover .avatar {
+  transform: scale(1.03);
 }
 
 /* ===== NAME ===== */
 .name {
   font-size: 0.95rem;
   font-weight: 600;
+  color: var(--color-text-primary);
+  transition: color 0.25s ease;
+}
+
+.card:hover .name {
+  color: var(--color-primary);
 }
 
 /* ===== ROLE ===== */
@@ -90,6 +138,11 @@
   color: var(--color-text-secondary);
   line-height: 1.6;
   font-style: italic;
+  transition: color 0.3s ease;
+}
+
+.card:hover .quote {
+  color: var(--color-text-primary);
 }
 
 /* ===== RESPONSIVE ===== */
@@ -97,13 +150,14 @@
   .section {
     padding: 3rem 0;
   }
-
   .sectionTitle {
     font-size: 1.8rem;
   }
-
   .cardContent {
     padding: 1.5rem;
+  }
+  .card:hover {
+    transform: translateY(-5px);
   }
 }
 
@@ -111,8 +165,11 @@
   .sectionTitle {
     font-size: 1.5rem;
   }
-
   .quote {
     font-size: 0.8rem;
+  }
+  .header {
+    flex-direction: column;
+    text-align: center;
   }
 }

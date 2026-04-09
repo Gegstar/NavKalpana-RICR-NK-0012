@@ -1,9 +1,7 @@
 "use client";
 import { useParams, useRouter } from 'next/navigation';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '@/store';
-import { markLessonComplete } from '@/store/coursesSlice';
-import { incrementStreak } from '@/store/studentSlice';
+import { useDispatch } from 'react-redux';
+import { useState, useEffect } from 'react';
 import {
   Container,
   Typography,
@@ -14,41 +12,88 @@ import {
   AccordionDetails,
   Button,
   Chip,
+  Alert,
+  CircularProgress,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Lesson, Module } from '@/store/coursesSlice';
+import { courseService } from '@/services/course.service';
+import { incrementStreak } from '@/store/studentSlice';
+import { Course, Module, Lesson } from '@/store/coursesSlice';
 
 export default function CourseDetail() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const router = useRouter();
-  const course = useSelector((state: RootState) =>
-    state.courses.enrolledCourses.find(c => c.id === parseInt(id as string))
-  );
 
-  if (!course) {
+  const [course, setCourse] = useState<Course | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [completingLesson, setCompletingLesson] = useState<number | null>(null);
+
+  // Fetch course data
+  useEffect(() => {
+    const fetchCourse = async () => {
+      try {
+        setLoading(true);
+        const data = await courseService.getCourseById(id as string);
+        setCourse(data);
+        setError(null);
+      } catch (err: any) {
+        setError(err?.response?.data?.message || 'Failed to load course');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchCourse();
+    }
+  }, [id]);
+
+  // Compute module progress
+  const getModuleProgress = (module: Module): number => {
+    const total = module.lessons.length;
+    const completed = module.lessons.filter((l: Lesson) => l.completed).length;
+    return total ? Math.round((completed / total) * 100) : 0;
+  };
+
+  const handleMarkLessonComplete = async (lessonId: number) => {
+    if (!course) return;
+    setCompletingLesson(lessonId);
+    try {
+      // Call API to mark lesson as complete
+      const updatedCourse = await courseService.markLessonComplete(course.id, lessonId);
+      // Update local state with the returned course data
+      setCourse(updatedCourse);
+      // Update streak in Redux
+      dispatch(incrementStreak());
+    } catch (err: any) {
+      console.error('Failed to mark lesson complete', err);
+      // Optionally show a toast notification
+    } finally {
+      setCompletingLesson(null);
+    }
+  };
+
+  if (loading) {
+    return (
+      <Container maxWidth="lg" sx={{ py: 4, textAlign: 'center' }}>
+        <CircularProgress />
+        <Typography sx={{ mt: 2 }}>Loading course...</Typography>
+      </Container>
+    );
+  }
+
+  if (error || !course) {
     return (
       <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Typography variant="h5">Course not found</Typography>
-        <Button variant="contained" onClick={() => router.push('/student/my-courses')}>
+        <Alert severity="error">{error || 'Course not found'}</Alert>
+        <Button variant="contained" onClick={() => router.push('/student/my-courses')} sx={{ mt: 2 }}>
           Back to My Courses
         </Button>
       </Container>
     );
   }
-
-  // Compute module progress
-  const getModuleProgress = (module: Module): number => {
-    const total = module.lessons.length;
-    const completed = module.lessons.filter(l => l.completed).length;
-    return total ? Math.round((completed / total) * 100) : 0;
-  };
-
-  const handleMarkLessonComplete = (lessonId: number) => {
-    dispatch(markLessonComplete({ courseId: course.id, lessonId }));
-    dispatch(incrementStreak()); // update streak
-    // The dashboard will automatically reflect changes via selectors
-  };
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -109,8 +154,9 @@ export default function CourseDetail() {
                     variant="contained"
                     size="small"
                     onClick={() => handleMarkLessonComplete(lesson.id)}
+                    disabled={completingLesson === lesson.id}
                   >
-                    Mark as Complete
+                    {completingLesson === lesson.id ? <CircularProgress size={20} /> : 'Mark as Complete'}
                   </Button>
                 ) : (
                   <Typography variant="caption" color="success.main">

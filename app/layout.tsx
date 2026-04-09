@@ -23,8 +23,8 @@ async function getSubdomain() {
   if (!host) return null;
 
   console.log("🌐 Host header:", host);
-   if (host.includes("localhost")) return "lms-frontend-1-6mx4";
-  // if (host.includes("localhost")) return "lms-frontend-p2yr";
+  //  if (host.includes("localhost")) return "lms-frontend-1-6mx4";
+  if (host.includes("localhost")) return "lms-frontend-p2yr";
 
   return host.split(".")[0];
 }
