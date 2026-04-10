@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { useAppDispatch, useAppSelector } from '@/store/store';
 import { setUser } from '@/store/userSlice';
 import { usersService } from '@/services/users.service';
 import StudentSidebar from '@/components/Sidebar/Sidebar';

@@ -19,7 +19,9 @@ import {
   Users,
 } from "lucide-react";
 import { Button } from "@mui/material";
-import { useAppSelector } from "@/redux/store"; // ✅ IMPORT
+import { useAppSelector, useAppDispatch } from "@/store/store"; 
+import Logo from "@/components/ui/Logo";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 
 interface SidebarProps {
   isCollapsed: boolean;
@@ -29,6 +31,7 @@ interface SidebarProps {
 const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
   const pathname = usePathname();
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   // ✅ GET USER ROLE FROM REDUX
   const role = useAppSelector((state) => state.user.role);
@@ -113,11 +116,8 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
 
       {/* Logo */}
       <div className={styles.logoContainer}>
-        <div className={styles.logoIcon}>S</div>
         {!isCollapsed && (
-          <span className={styles.logoText}>
-            Skill<span>verse</span>
-          </span>
+          <Logo variant="full" size="medium" />
         )}
       </div>
 
@@ -137,8 +137,11 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
         ))}
       </nav>
 
-      {/* Logout */}
+      {/* Actions */}
       <div className={styles.logoutWrapper}>
+        <div style={{ display: 'flex', justifyContent: isCollapsed ? 'center' : 'flex-start', paddingLeft: isCollapsed ? 0 : '1rem', paddingBottom: '0.5rem' }}>
+          <ThemeToggle />
+        </div>
         <Button onClick={handleLogout} className={styles.logoutBtn}>
           <LogOut size={20} />
           {!isCollapsed && <span>Logout</span>}

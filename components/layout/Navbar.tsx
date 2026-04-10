@@ -20,6 +20,7 @@ import Link from 'next/link';
 import gsap from 'gsap';
 import styles from '@/styles/Navbar.module.css';
 import Logo from '@/components/ui/Logo';
+import ThemeToggle from '@/components/ui/ThemeToggle';
 
 const navItems = [
   { label: 'Home', href: '/' },
@@ -167,6 +168,7 @@ export default function Navbar() {
           </Box>
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <ThemeToggle />
             {!isMobile && (
               <>
                 <Button

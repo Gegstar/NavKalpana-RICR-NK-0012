@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import {
   Box,
@@ -8,20 +8,14 @@ import {
   Paper,
   Typography,
   Button,
-  IconButton,
-  TextField,
-  InputAdornment,
   Avatar,
   Chip,
   LinearProgress,
-  CircularProgress,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
-  Select,
-  MenuItem,
-  FormControl,
+  TextField,
   useTheme,
 } from "@mui/material";
 import {
@@ -36,23 +30,16 @@ import {
   PlayCircle,
   Calendar,
   ChevronRight,
+  ChevronLeft,
   Briefcase,
   Building,
   Users,
   ExternalLink,
-  ChevronLeft,
 } from "lucide-react";
 import toast from "react-hot-toast";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import gsap from "gsap";
 import styles from "@/styles/StudentDashboard.module.css";
+// import ThreeScene from "./ThreeScene"; // You can re-enable this if you want the 3D background
 
 // -------------------- Dummy Data --------------------
 const dummyDashboardData = {
@@ -110,21 +97,21 @@ export default function StudentDashboard() {
   const [selectedDate, setSelectedDate] = useState<number | null>(null);
   const [greeting, setGreeting] = useState("");
 
-  // Dummy data references
-  const displayName = dummyDashboardData.name;
-  const completedAssignments = dummyDashboardData.assignments.completed;
-  const totalAssignments = dummyDashboardData.assignments.total;
-  const performanceValue = dummyDashboardData.academicScore;
-  const learningStreak = dummyDashboardData.learningStreak;
-  const attendancePercent = dummyDashboardData.attendance.percentage;
-  const skills = dummyDashboardData.skills;
-  const totalSkills = dummyDashboardData.totalSkills;
-  const weeklyStats = dummyDashboardData.weeklyActivity;
+  // Refs for GSAP Entrance Animations
+  const containerRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const animateRefs = useRef<(HTMLElement | null)[]>([]);
 
-  // Deterministic heatmap data (same on server and client)
-  const heatmapData = Array.from({ length: 52 }, (_, w) =>
-    Array.from({ length: 7 }, (_, d) => ((w * 7 + d) % 4))
-  );
+  const addToRefs = (el: HTMLElement | null) => {
+    if (el && !animateRefs.current.includes(el)) {
+      animateRefs.current.push(el);
+    }
+  };
+
+  // Refs for Counter Animations
+  const scoreRef = useRef<HTMLSpanElement>(null);
+  const streakRef = useRef<HTMLSpanElement>(null);
+  const assignmentsRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     const hour = new Date().getHours();
@@ -136,6 +123,63 @@ export default function StudentDashboard() {
   useEffect(() => {
     const saved = localStorage.getItem("calendarEvents");
     if (saved) setEvents(JSON.parse(saved));
+  }, []);
+
+  // --- GSAP ANIMATIONS ---
+  useEffect(() => {
+    if (!containerRef.current) return;
+    
+    gsap.killTweensOf("*");
+    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+    // 1. Header fade down
+    if (headerRef.current) {
+      tl.fromTo(headerRef.current, 
+        { y: -30, opacity: 0 }, 
+        { y: 0, opacity: 1, duration: 0.8 }
+      );
+    }
+
+    // 2. Stagger all major cards and sections up
+    if (animateRefs.current.length > 0) {
+      tl.fromTo(animateRefs.current,
+        { y: 40, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, stagger: 0.05 },
+        "-=0.4"
+      );
+    }
+
+    // 3. Counter Animations (Score, Streak, Assignments)
+    const scoreObj = { val: 0 };
+    gsap.to(scoreObj, {
+      val: dummyDashboardData.academicScore,
+      duration: 1.5,
+      ease: "power2.out",
+      onUpdate: () => {
+        if (scoreRef.current) scoreRef.current.innerText = Math.floor(scoreObj.val).toString();
+      }
+    });
+
+    const streakObj = { val: 0 };
+    gsap.to(streakObj, {
+      val: dummyDashboardData.learningStreak,
+      duration: 1.5,
+      ease: "power2.out",
+      onUpdate: () => {
+        if (streakRef.current) streakRef.current.innerText = Math.floor(streakObj.val).toString();
+      }
+    });
+
+    const assignObj = { val: 0 };
+    gsap.to(assignObj, {
+      val: dummyDashboardData.assignments.completed,
+      duration: 1.5,
+      ease: "power2.out",
+      onUpdate: () => {
+        if (assignmentsRef.current) assignmentsRef.current.innerText = Math.floor(assignObj.val).toString();
+      }
+    });
+
   }, []);
 
   const saveEvent = () => {
@@ -168,543 +212,465 @@ export default function StudentDashboard() {
     }
   };
 
-  // Calendar helpers
+  const displayName = dummyDashboardData.name;
+  const heatmapData = Array.from({ length: 52 }, (_, w) =>
+    Array.from({ length: 7 }, (_, d) => ((w * 7 + d) % 4))
+  );
+
   const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const firstDayOfMonth = new Date(selectedYear, selectedMonth, 1).getDay();
   const daysInMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
-
-  // Prepare bar chart data with unique keys
-  const barChartData = weeklyStats.map((val, i) => ({
+  const barChartData = dummyDashboardData.weeklyActivity.map((val, i) => ({
     day: ["M", "T", "W", "T", "F", "S", "S"][i],
     value: val,
-    key: `${["M", "T", "W", "T", "F", "S", "S"][i]}-${i}`,
+    key: `bar-${i}`,
   }));
 
   return (
-    <Box className={styles.dashboardWrapper}>
-      <Container maxWidth="xl">
-        {/* Header */}
-        <Box className={styles.header}>
-          <Box className={styles.welcomeInfo}>
-            <Typography variant="h4" component="h1" className={styles.greetingText}>
-              {greeting ? `${greeting}, ${displayName}! 👋` : "Loading..."}
-            </Typography>
-            <Typography variant="body2" color="text.secondary" className={styles.subText}>
-              Email: {dummyDashboardData.email}
-            </Typography>
-            <Typography variant="body2" color="text.secondary" className={styles.subText}>
-              You have completed {completedAssignments} out of {totalAssignments} assignments.
-            </Typography>
-          </Box>
-          <Box className={styles.headerActions}>
-            <div className={styles.searchBox}>
-              <Search size={18} />
-              <input type="text" placeholder="Search lessons, assignments..." />
-            </div>
-            <button className={styles.notifBadge}>
-              <Bell size={22} />
-            </button>
-            <Avatar
-              src={`https://ui-avatars.com/api/?name=${displayName}&background=${theme.palette.primary.main.replace("#", "")}&color=000`}
-              className={styles.profileImg}
-            />
-          </Box>
-        </Box>
-
-        {/* Bento Stats */}
-        <Grid container spacing={3} alignItems="stretch" className={styles.bentoGrid}>
-          {/* Academic Score Card */}
-          <Grid size={{xs:12,md:4}}  sx={{ display: 'flex' }}>
-            <Paper
-              className={`${styles.bentoCard} ${styles.scoreCard}`}
-              sx={{ 
-                height: '100%', 
-                width: '100%',
-                display: 'flex', 
-                flexDirection: 'column',
-                justifyContent: 'space-between'
-              }}
-            >
-              <Box className={styles.scoreInfo}>
-                <Typography className={styles.label}>Academic Score</Typography>
-                <Typography variant="h3" sx={{ color: theme.palette.primary.main }}>
-                  {performanceValue}%
-                </Typography>
-                <Box className={styles.trendText} sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                  <TrendingUp size={14} />
-                  <Typography variant="caption">+5% vs last month</Typography>
-                </Box>
-              </Box>
-              <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-                <Trophy size={48} color={theme.palette.primary.main} className={styles.iconBg} />
-              </Box>
-            </Paper>
-          </Grid>
-
-          {/* Learning Streak Card */}
-          <Grid size={{xs:12,md:4}} sx={{ display: 'flex' }}>
-            <Paper
-              className={`${styles.bentoCard} ${styles.streakCard}`}
-              sx={{ 
-                height: '100%', 
-                width: '100%',
-                display: 'flex', 
-                flexDirection: 'column',
-                justifyContent: 'space-between'
-              }}
-            >
-              <Box className={styles.cardHeader} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                <Flame size={32} color={theme.palette.warning.main} fill={theme.palette.warning.main} />
-                <Chip label="Keep it up!" size="small" className={styles.badge} />
-              </Box>
-              <Box sx={{ mt: 2 }}>
-                <Typography variant="h3">
-                  {learningStreak} Days
-                </Typography>
-                <Typography className={styles.label}>Learning Streak</Typography>
-              </Box>
-            </Paper>
-          </Grid>
-
-          {/* Assignments Completed Card */}
-          <Grid  size={{xs:12,md:4}} sx={{ display: 'flex' }}>
-            <Paper
-              className={`${styles.bentoCard} ${styles.assignmentCard}`}
-              sx={{ 
-                height: '100%', 
-                width: '100%',
-                display: 'flex', 
-                flexDirection: 'column'
-              }}
-            >
-              <Box sx={{ flexGrow: 1 }}>
-                <Target size={32} color={theme.palette.primary.main} className={styles.iconBg} />
-                <Typography variant="h3" sx={{ mt: 1 }}>
-                  {completedAssignments} / {totalAssignments}
-                </Typography>
-                <Typography className={styles.label}>Assignments Completed</Typography>
-              </Box>
-              
-              <Box className={styles.miniProgress} sx={{ mt: 2 }}>
-                <LinearProgress
-                  variant="determinate"
-                  value={(completedAssignments / totalAssignments) * 100}
-                  sx={{ height: 4, borderRadius: 2, mb: 2 }}
-                />
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  onClick={() => router.push('/student/assignments')}
-                  className={styles.viewBtn}
-                  size="small"
-                >
-                  View Details
-                </Button>
-              </Box>
-            </Paper>
-          </Grid>
-        </Grid>
-
-        {/* Continue Learning Hero */}
-        <Paper className={styles.continueCard}>
-          <div className={styles.continueCardContent}>
-            <span className={styles.resumeTag}>RESUME</span>
-            <Typography variant="h5" gutterBottom>
-              {dummyDashboardData.enrolledCourses[0]?.title || "No Active Course"}
-            </Typography>
-            <Typography variant="body2" color="text.secondary" gutterBottom>
-              By {dummyDashboardData.enrolledCourses[0]?.instructor || "Instructor"}
-            </Typography>
-            <button
-              className={styles.viewCourseBtn}
-              onClick={() => router.push(`/student/course/${dummyDashboardData.enrolledCourses[0]?.id || 1}`)}
-            >
-              <PlayCircle size={18} /> Resume Lesson
-            </button>
-          </div>
-          <div className={styles.bgDecoration}>
-            <PlayCircle size={150} />
-          </div>
-        </Paper>
-
-        {/* Learning Activity Heatmap */}
-        <Paper className={styles.heatmapSection}>
-          <div className={styles.heatmapHeader}>
-            <Typography variant="h6">Learning Activity</Typography>
-            <span className={styles.totalStats}>
-              Total: {weeklyStats.reduce((a, b) => a + b, 0)} hours this week
-            </span>
-          </div>
-          <div className={styles.heatmapContainer}>
-            {heatmapData.map((week, i) => (
-              <div key={i} className={styles.heatmapColumn}>
-                {week.map((day, j) => (
-                  <div
-                    key={j}
-                    className={`${styles.heatmapCell} ${styles[`level${day}`]}`}
-                    title={`Week ${i + 1}, Day ${j + 1}: Activity Level ${day}`}
-                  />
-                ))}
-              </div>
-            ))}
-          </div>
-        </Paper>
-
-        {/* Middle Row: Recent Submissions & Weekly Activity Chart */}
-        <Grid container spacing={3} className={styles.middleRow}>
-          <Grid size={{xs:12,md:4}}>
-            <Paper className={styles.activitySection}>
-              <Typography variant="h6">
-                <Clock size={18} /> Recent Submissions
+    <Box className={styles.dashboardWrapper} ref={containerRef}>
+      {/* <ThreeScene /> */}
+      <Box sx={{ position: "relative", zIndex: 1, width: "100%" }}>
+        <Container maxWidth="xl">
+          {/* Header */}
+          <Box className={styles.header} ref={headerRef}>
+            <Box className={styles.welcomeInfo}>
+              <Typography variant="h4" component="h1" className={styles.greetingText}>
+                {greeting ? `${greeting}, ${displayName}! 👋` : "Loading..."}
               </Typography>
-              <div className={styles.activityList}>
-                {dummyDashboardData.recentAssignments.map((item) => (
-                  <div
-                    key={item.id}
-                    className={styles.activityItem}
-                    onClick={() => router.push(`/student/assignments/${item.id}`)}
-                  >
-                    <div className={styles.activityIcon}>
-                      <CheckCircle2 size={16} />
-                    </div>
-                    <div className={styles.activityInfo}>
-                      <strong>{item.title}</strong>
-                      <span>Submitted on {new Date(item.submittedAt).toLocaleDateString()}</span>
-                    </div>
-                  </div>
-                ))}
+              <Typography variant="body2" color="text.secondary" className={styles.subText}>
+                Email: {dummyDashboardData.email}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" className={styles.subText}>
+                You have completed {dummyDashboardData.assignments.completed} out of {dummyDashboardData.assignments.total} assignments.
+              </Typography>
+            </Box>
+            <Box className={styles.headerActions}>
+              <div className={styles.searchBox}>
+                <Search size={18} />
+                <input type="text" placeholder="Search lessons, assignments..." />
               </div>
-            </Paper>
+              <button className={styles.notifBadge}>
+                <Bell size={22} />
+              </button>
+              <Avatar
+                src={`https://ui-avatars.com/api/?name=${displayName}&background=${theme.palette.primary.main.replace("#", "")}&color=fff`}
+                className={styles.profileImg}
+              />
+            </Box>
+          </Box>
+
+          {/* Bento Stats */}
+          <Grid container spacing={3} alignItems="stretch" className={styles.bentoGrid} sx={{ mb: 4 }}>
+            {/* Academic Score Card */}
+            <Grid size={{xs:12,md:4}} sx={{ display: 'flex' }}>
+              <Paper className={`${styles.bentoCard} ${styles.glassCard}`} ref={addToRefs} sx={{ height: '100%', width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <Box className={styles.scoreInfo}>
+                  <Typography className={styles.label}>Academic Score</Typography>
+                  <Typography variant="h3" sx={{ color: theme.palette.primary.main, fontWeight: "bold" }}>
+                    <span ref={scoreRef}>0</span>%
+                  </Typography>
+                  <Box className={styles.trendText} sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 1 }}>
+                    <TrendingUp size={14} color="#10b981" />
+                    <Typography variant="caption" sx={{ color: "#10b981" }}>+5% vs last month</Typography>
+                  </Box>
+                </Box>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+                  <Trophy size={48} color={theme.palette.primary.main} style={{ opacity: 0.2 }} />
+                </Box>
+              </Paper>
+            </Grid>
+
+            {/* Learning Streak Card */}
+            <Grid size={{xs:12,md:4}} sx={{ display: 'flex' }}>
+              <Paper className={`${styles.bentoCard} ${styles.glassCard}`} ref={addToRefs} sx={{ height: '100%', width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <Box className={styles.cardHeader} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                  <Flame size={32} color={theme.palette.warning.main} fill={theme.palette.warning.main} />
+                  <Chip label="Keep it up!" size="small" sx={{ backgroundColor: "rgba(245, 158, 11, 0.1)", color: theme.palette.warning.main }} />
+                </Box>
+                <Box sx={{ mt: 2 }}>
+                  <Typography variant="h3" sx={{ fontWeight: "bold" }}>
+                    <span ref={streakRef}>0</span> Days
+                  </Typography>
+                  <Typography className={styles.label}>Learning Streak</Typography>
+                </Box>
+              </Paper>
+            </Grid>
+
+            {/* Assignments Completed Card */}
+            <Grid size={{xs:12,md:4}} sx={{ display: 'flex' }}>
+              <Paper className={`${styles.bentoCard} ${styles.glassCard}`} ref={addToRefs} sx={{ height: '100%', width: '100%', display: 'flex', flexDirection: 'column' }}>
+                <Box sx={{ flexGrow: 1 }}>
+                  <Target size={32} color={theme.palette.secondary.main} style={{ opacity: 0.8 }} />
+                  <Typography variant="h3" sx={{ fontWeight: "bold", mt: 1 }}>
+                     <span ref={assignmentsRef}>0</span> / {dummyDashboardData.assignments.total}
+                  </Typography>
+                  <Typography className={styles.label}>Assignments Completed</Typography>
+                </Box>
+                <Box className={styles.miniProgress} sx={{ mt: 2 }}>
+                  <LinearProgress
+                    variant="determinate"
+                    value={(dummyDashboardData.assignments.completed / dummyDashboardData.assignments.total) * 100}
+                    sx={{ height: 6, borderRadius: 3, mb: 2 }}
+                  />
+                  <Button fullWidth variant="outlined" onClick={() => router.push('/student/assignments')} className={styles.viewBtn} size="small">
+                    View Details
+                  </Button>
+                </Box>
+              </Paper>
+            </Grid>
           </Grid>
-          <Grid size={{xs:12,md:4}}>
-            <Paper className={styles.activitySection}>
-              <Typography variant="h6">Weekly Activity</Typography>
-              <div className={styles.barChart}>
-                {barChartData.map((data) => (
-                  <div key={data.key} className={styles.barContainer}>
+
+          {/* Continue Learning Hero */}
+          <Paper className={styles.continueCard} ref={addToRefs} sx={{ mb: 4 }}>
+            <div className={styles.continueCardContent}>
+              <span className={styles.resumeTag}>RESUME</span>
+              <Typography variant="h5" sx={{ mt: 2, mb: 1, fontWeight: "bold" }}>
+                {dummyDashboardData.enrolledCourses[0]?.title || "No Active Course"}
+              </Typography>
+              <Typography variant="body2" sx={{ mb: 3, color: "rgba(255,255,255,0.8)" }}>
+                By {dummyDashboardData.enrolledCourses[0]?.instructor || "Instructor"}
+              </Typography>
+              <button className={styles.viewCourseBtn} onClick={() => router.push(`/student/course/${dummyDashboardData.enrolledCourses[0]?.id || 1}`)}>
+                <PlayCircle size={18} /> Resume Lesson
+              </button>
+            </div>
+            <div className={styles.bgDecoration}>
+              <PlayCircle size={150} opacity={0.1} />
+            </div>
+          </Paper>
+
+          {/* Learning Activity Heatmap */}
+          <Paper className={`${styles.heatmapSection} ${styles.glassCard}`} ref={addToRefs} sx={{ mb: 4 }}>
+            <div className={styles.heatmapHeader} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
+              <Typography variant="h6">Learning Activity</Typography>
+              <span className={styles.totalStats} style={{ color: 'var(--color-text-secondary)', fontSize: '0.875rem' }}>
+                Total: {dummyDashboardData.weeklyActivity.reduce((a, b) => a + b, 0)} hours this week
+              </span>
+            </div>
+            <div className={styles.heatmapContainer} style={{ display: 'flex', gap: '4px', overflowX: 'auto', paddingBottom: '8px' }}>
+              {heatmapData.map((week, i) => (
+                <div key={i} className={styles.heatmapColumn} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  {week.map((day, j) => (
                     <div
-                      className={styles.barFill}
-                      style={{ height: `${data.value}%` }}
-                      title={`${data.value}%`}
+                      key={j}
+                      className={`${styles.heatmapCell} ${styles[`level${day}`]}`}
+                      style={{ width: '12px', height: '12px', borderRadius: '4px', 
+                        backgroundColor: day === 0 ? 'var(--color-border)' : day === 1 ? 'var(--color-primary-light)' : day === 2 ? 'var(--color-primary)' : 'var(--color-accent)' 
+                      }}
+                      title={`Week ${i + 1}, Day ${j + 1}: Activity Level ${day}`}
                     />
-                    <span className={styles.barLabel}>{data.day}</span>
-                  </div>
-                ))}
-              </div>
-            </Paper>
-          </Grid>
-        </Grid>
-
-        {/* My Courses */}
-        <Paper className={styles.coursesSection}>
-          <div className={styles.sectionHeader}>
-            <Typography variant="h6">My Courses</Typography>
-            <button className={styles.viewAllBtn} onClick={() => router.push("/student/courses")}>
-              View All
-            </button>
-          </div>
-          <div className={styles.coursesGrid}>
-            {dummyDashboardData.enrolledCourses.map((course) => (
-              <div key={course.id} className={styles.courseCard}>
-                <div className={styles.courseInfo}>
-                  <h4>{course.title}</h4>
-                  <p>{course.instructor}</p>
-                </div>
-                <div className={styles.progressContainer}>
-                  <div className={styles.progressLabel}>
-                    <span>Progress</span>
-                    <span>{course.progress}%</span>
-                  </div>
-                  <div className={styles.progressBar}>
-                    <div
-                      className={styles.progressFill}
-                      style={{ width: `${course.progress}%` }}
-                    />
-                  </div>
-                </div>
-                <button
-                  className={styles.viewCourseBtn}
-                  onClick={() => router.push(`/student/course/${course.id}`)}
-                >
-                  Continue Learning
-                </button>
-              </div>
-            ))}
-          </div>
-        </Paper>
-
-        {/* Jobs & Internships */}
-        <Paper className={styles.jobSection}>
-          <div className={styles.sectionHeader}>
-            <Typography variant="h6">
-              <Briefcase size={18} /> Jobs & Internships
-            </Typography>
-            <button className={styles.viewAll} onClick={() => router.push("/student/jobs")}>
-              View All →
-            </button>
-          </div>
-          <div className={styles.jobGrid}>
-            {dummyDashboardData.jobPosts.map((job) => (
-              <div key={job.id} className={styles.jobCard}>
-                <div className={styles.cardHeader}>
-                  <Building size={20} />
-                  <span className={styles.badge}>Full-time</span>
-                </div>
-                <h4 className={styles.jobRole}>{job.title}</h4>
-                <p className={styles.companyInfo}>{job.company}</p>
-                <div className={styles.cardFooter}>
-                  <span className={styles.pay}>Not Disclosed</span>
-                  <button
-                    className={styles.applyBtn}
-                    onClick={() => toast.success("Application started!")}
-                  >
-                    Apply
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </Paper>
-
-        {/* Alumni Network */}
-        <Paper className={styles.alumniSection}>
-          <div className={styles.sectionHeader}>
-            <Users size={22} />
-            <Typography variant="h6">Notable Alumni</Typography>
-          </div>
-          <div className={styles.alumniContainer}>
-            {dummyDashboardData.alumni.map((al) => (
-              <div key={al.id} className={styles.alumniCard}>
-                <img
-                  src={`https://ui-avatars.com/api/?name=${al.name}&background=${theme.palette.primary.main.replace("#", "")}&color=000`}
-                  alt={al.name}
-                  className={styles.avatar}
-                />
-                <h4>{al.name}</h4>
-                <p className={styles.role}>{al.role}</p>
-                <p className={styles.batch}>Batch {al.batch}</p>
-                <button className={styles.connectBtn}>
-                  Connect <ExternalLink size={12} />
-                </button>
-              </div>
-            ))}
-          </div>
-        </Paper>
-      </Container>
-
-      {/* Right Sidebar */}
-      <Container maxWidth="xl" className={styles.sidebarContainer}>
-        <Grid container spacing={3}>
-          <Grid size={{xs:12,md:8}}></Grid>
-          <Grid size={{xs:12,md:4}}>
-            {/* Event Calendar */}
-            <Paper className={styles.eventCalendarCard}>
-              <div className={styles.calendarHeader}>
-                <h3 className={styles.sidebarTitle}>
-                  <Calendar size={18} /> Event Calendar
-                </h3>
-                <div className={styles.navActions}>
-                  <button onClick={prevMonth} className={styles.navBtn}>
-                    <ChevronLeft size={16} />
-                  </button>
-                  <span className={styles.currentMonth}>
-                    {monthNames[selectedMonth]} {selectedYear}
-                  </span>
-                  <button onClick={nextMonth} className={styles.navBtn}>
-                    <ChevronRight size={16} />
-                  </button>
-                </div>
-              </div>
-              <div className={styles.calendarGrid}>
-                {["S", "M", "T", "W", "T", "F", "S"].map((d, idx) => (
-                  <div key={`${d}-${idx}`} className={styles.weekdayLabel}>{d}</div>
-                ))}
-                {Array.from({ length: firstDayOfMonth }).map((_, i) => (
-                  <div key={`empty-${i}`} className={styles.emptySlot}></div>
-                ))}
-                {Array.from({ length: daysInMonth }, (_, i) => i + 1).map((date) => {
-                  const dateStr = `${selectedYear}-${selectedMonth + 1}-${date}`;
-                  const hasEvent = !!events[dateStr];
-                  const isToday = new Date().toDateString() === new Date(selectedYear, selectedMonth, date).toDateString();
-                  return (
-                    <div
-                      key={date}
-                      onClick={() => { setSelectedDate(date); setShowModal(true); }}
-                      className={`${styles.calendarDay} ${isToday ? styles.today : ""} ${hasEvent ? styles.hasEvent : ""}`}
-                    >
-                      {date}
-                      {hasEvent && <span className={styles.eventDot}></span>}
-                    </div>
-                  );
-                })}
-              </div>
-            </Paper>
-
-            {/* Performance */}
-            <Paper className={styles.monthlyTracker}>
-              <div className={styles.trackerHeader}>
-                <h3>Performance</h3>
-                <div className={styles.filterGroup}>
-                  <select
-                    value={selectedMonth}
-                    onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
-                    className={styles.filterSelect}
-                  >
-                    {monthNames.map((m, i) => <option key={i} value={i}>{m.slice(0, 3)}</option>)}
-                  </select>
-                  <select
-                    value={selectedYear}
-                    onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-                    className={styles.filterSelect}
-                  >
-                    {Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - 5 + i).map(y => (
-                      <option key={y} value={y}>{y}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <div className={styles.trackerContent}>
-                <div className={styles.progressCircle}>
-                  <svg viewBox="0 0 36 36" className={styles.circularChart}>
-                    <path
-                      className={styles.circleBg}
-                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                      fill="none"
-                      stroke="var(--color-border)"
-                      strokeWidth="3"
-                    />
-                    <path
-                      className={styles.circle}
-                      stroke="var(--color-accent)"
-                      strokeDasharray={`${performanceValue}, 100`}
-                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                      fill="none"
-                      strokeWidth="3"
-                    />
-                    <text x="18" y="20.35" className={styles.percentage} textAnchor="middle">
-                      {performanceValue}%
-                    </text>
-                  </svg>
-                </div>
-                <div className={styles.trackerStats}>
-                  <div className={styles.statMini}>
-                    <span>Goals</span>
-                    <strong>{Math.floor(performanceValue / 6)}/16</strong>
-                  </div>
-                  <div className={styles.statMini}>
-                    <span>Hours</span>
-                    <strong>{performanceValue}h</strong>
-                  </div>
-                </div>
-              </div>
-            </Paper>
-
-            {/* Upcoming Quizzes */}
-            <Paper className={styles.activitySection}>
-              <h3 className={styles.sectionHeader}>Upcoming Quizzes</h3>
-              {dummyDashboardData.upcomingQuizzes.map((quiz) => (
-                <div key={quiz.id} className={styles.quizCard}>
-                  <div className={styles.dateBadge}>
-                    <span className={styles.month}>
-                      {new Date(quiz.date).toLocaleString("default", { month: "short" }).toUpperCase()}
-                    </span>
-                    <strong className={styles.day}>{new Date(quiz.date).getDate()}</strong>
-                  </div>
-                  <div className={styles.quizInfo}>
-                    <h4>{quiz.title}</h4>
-                    <div className={styles.quizMeta}>
-                      <span>{quiz.time}</span>
-                      <span className={styles.separator}>•</span>
-                      <span>{quiz.duration}</span>
-                    </div>
-                  </div>
-                  <div className={styles.arrowIcon}>
-                    <ChevronRight size={18} />
-                  </div>
+                  ))}
                 </div>
               ))}
-            </Paper>
+            </div>
+          </Paper>
 
-            {/* Skills Acquired */}
-            <Paper className={styles.skillsSection}>
-              <div className={styles.skillsHeaderWrapper}>
-                <h3>Skills Acquired</h3>
-                <span className={styles.skillCount}>{skills.length}/{totalSkills}</span>
-              </div>
-              <div className={styles.pillsContainer}>
-                {skills.slice(0, 5).map((skill) => (
-                  <div key={skill} className={styles.skillPill}>
-                    <CheckCircle2 size={14} className={styles.checkIcon} />
-                    {skill}
-                  </div>
-                ))}
-                {skills.length > 5 && (
-                  <div className={`${styles.skillPill} ${styles.morePill}`}>
-                    +{skills.length - 5} More
-                  </div>
-                )}
-              </div>
-              <div className={styles.skillProgressBar}>
-                <div
-                  className={styles.skillProgressFill}
-                  style={{ width: `${(skills.length / totalSkills) * 100}%` }}
-                />
-              </div>
-            </Paper>
-
-            {/* Attendance */}
-            <Paper className={`${styles.bentoCard} ${styles.attendanceCard}`}>
-              <div className={styles.cardHeader}>
-                <h4>My Attendance</h4>
-              </div>
-              <div className={styles.attendanceBody}>
-                <div className={styles.circularProgress}>
-                  <span className={styles.progressValue}>{attendancePercent}%</span>
+          {/* Middle Row: Recent Submissions & Weekly Activity Chart */}
+          <Grid container spacing={3} className={styles.middleRow} sx={{ mb: 4 }}>
+            <Grid size={{xs:12,md:6}}>
+              <Paper className={`${styles.activitySection} ${styles.glassCard}`} ref={addToRefs}>
+                <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+                  <Clock size={18} /> Recent Submissions
+                </Typography>
+                <div className={styles.activityList} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  {dummyDashboardData.recentAssignments.map((item) => (
+                    <div key={item.id} className={styles.activityItem} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', backgroundColor: 'var(--color-background)', borderRadius: '8px', cursor: 'pointer' }} onClick={() => router.push(`/student/assignments/${item.id}`)}>
+                      <div className={styles.activityIcon} style={{ width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--color-surface)', borderRadius: '8px' }}>
+                        <CheckCircle2 size={16} />
+                      </div>
+                      <div className={styles.activityInfo} style={{ flex: 1 }}>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>{item.title}</Typography>
+                        <Typography variant="caption" color="text.secondary">Submitted on {new Date(item.submittedAt).toLocaleDateString()}</Typography>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <div className={styles.attendanceInfo}>
-                  <p>Total Classes: <strong>{dummyDashboardData.attendance.totalClasses}</strong></p>
-                  <p>Present: <strong>{dummyDashboardData.attendance.present}</strong></p>
+              </Paper>
+            </Grid>
+            <Grid size={{xs:12,md:6}}>
+              <Paper className={`${styles.activitySection} ${styles.glassCard}`} ref={addToRefs}>
+                <Typography variant="h6" sx={{ mb: 2 }}>Weekly Activity</Typography>
+                <div className={styles.barChart}>
+                  {barChartData.map((data, index) => (
+                    <div key={data.key} className={styles.barContainer}>
+                      <div
+                        className={styles.barFillGsap}
+                        style={{ height: `${data.value}%`, transitionDelay: `${index * 0.1}s` }}
+                        title={`${data.value}%`}
+                      />
+                      <span className={styles.barLabel}>{data.day}</span>
+                    </div>
+                  ))}
                 </div>
-              </div>
-              <p className={styles.statusText}>
-                {attendancePercent >= 75 ? "✅ Good Standing" : "⚠️ Low Attendance"}
-              </p>
-            </Paper>
-
-            {/* Top Performers */}
-            <Paper className={styles.leaderboardCard}>
-              <h3>Top Performers</h3>
-              <div className={styles.leaderList}>
-                {dummyDashboardData.topPerformers.map((user, idx) => (
-                  <div key={idx} className={styles.leaderItem}>
-                    <span className={styles.rank}>#{idx + 1}</span>
-                    <span className={styles.userName}>{user.name}</span>
-                    <span className={styles.userScore}>{user.score} XP</span>
-                  </div>
-                ))}
-              </div>
-            </Paper>
+              </Paper>
+            </Grid>
           </Grid>
-        </Grid>
-      </Container>
+
+          {/* My Courses */}
+          <Paper className={`${styles.coursesSection} ${styles.glassCard}`} ref={addToRefs} sx={{ mb: 4 }}>
+            <div className={styles.sectionHeader} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <Typography variant="h6">My Courses</Typography>
+              <Button size="small" variant="outlined" onClick={() => router.push("/student/courses")}>View All</Button>
+            </div>
+            <Grid container spacing={3}>
+              {dummyDashboardData.enrolledCourses.map((course) => (
+                <Grid size={{xs:12,sm:6,md:4}} key={course.id}>
+                  <Box className={styles.courseCard} style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '12px', padding: '16px' }}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 0.5 }}>{course.title}</Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>{course.instructor}</Typography>
+                    <Box sx={{ mb: 2 }}>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                        <Typography variant="caption" color="text.secondary">Progress</Typography>
+                        <Typography variant="caption" color="text.secondary">{course.progress}%</Typography>
+                      </Box>
+                      <LinearProgress variant="determinate" value={course.progress} sx={{ height: 6, borderRadius: 3 }} />
+                    </Box>
+                    <Button fullWidth variant="contained" sx={{ bgcolor: 'var(--color-accent)' }} onClick={() => router.push(`/student/course/${course.id}`)}>
+                      Continue Learning
+                    </Button>
+                  </Box>
+                </Grid>
+              ))}
+            </Grid>
+          </Paper>
+
+          {/* Jobs & Internships */}
+          <Paper className={`${styles.jobSection} ${styles.glassCard}`} ref={addToRefs} sx={{ mb: 4 }}>
+            <div className={styles.sectionHeader} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Briefcase size={18} /> Jobs & Internships
+              </Typography>
+              <Button size="small" onClick={() => router.push("/student/jobs")}>View All →</Button>
+            </div>
+            <Grid container spacing={2}>
+              {dummyDashboardData.jobPosts.map((job) => (
+                <Grid size={{xs:12,sm:6,md:4}} key={job.id}>
+                  <Box className={styles.jobCard} style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '8px', padding: '16px' }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                      <Building size={20} color="var(--color-text-secondary)" />
+                      <Chip label="Full-time" size="small" />
+                    </Box>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>{job.title}</Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>{job.company}</Typography>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Typography variant="caption" sx={{ fontWeight: 'bold' }}>Not Disclosed</Typography>
+                      <Button size="small" variant="outlined" onClick={() => toast.success("Application started!")}>Apply</Button>
+                    </Box>
+                  </Box>
+                </Grid>
+              ))}
+            </Grid>
+          </Paper>
+
+          {/* Alumni Network */}
+          <Paper className={`${styles.alumniSection} ${styles.glassCard}`} ref={addToRefs} sx={{ mb: 4 }}>
+            <div className={styles.sectionHeader} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+              <Users size={22} color="var(--color-primary)" />
+              <Typography variant="h6">Notable Alumni</Typography>
+            </div>
+            <Grid container spacing={3}>
+              {dummyDashboardData.alumni.map((al) => (
+                <Grid size={{xs:12,sm:4}} key={al.id}>
+                  <Box className={styles.alumniCard} style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '12px', padding: '16px', textAlign: 'center' }}>
+                    <Avatar 
+                      src={`https://ui-avatars.com/api/?name=${al.name}&background=${theme.palette.primary.main.replace("#", "")}&color=fff`} 
+                      sx={{ width: 64, height: 64, mx: 'auto', mb: 2 }} 
+                    />
+                    <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>{al.name}</Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>{al.role}</Typography>
+                    <Chip label={`Batch ${al.batch}`} size="small" sx={{ mb: 2 }} />
+                    <Button fullWidth variant="outlined" size="small" endIcon={<ExternalLink size={14} />}>Connect</Button>
+                  </Box>
+                </Grid>
+              ))}
+            </Grid>
+          </Paper>
+        </Container>
+
+        {/* Right Sidebar Elements appended into the same layout context or grid if we want. Originally the sidebar was in a Container alongside an empty 8 grid. We can just place them linearly or structured. */}
+        <Container maxWidth="xl" className={styles.sidebarContainer} sx={{ mt: 4 }}>
+          <Grid container spacing={3}>
+            {/* Performance & Calendar */}
+            <Grid size={{xs:12,md:4}}>
+              <Paper className={`${styles.glassCard}`} ref={addToRefs} sx={{ mb: 3 }}>
+                <Typography variant="h6" sx={{ mb: 2 }}>Performance</Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Box sx={{ position: 'relative', width: 120, height: 120 }}>
+                    <svg viewBox="0 0 36 36" style={{ width: '100%', height: '100%' }}>
+                      <path
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        fill="none"
+                        stroke="var(--color-border)"
+                        strokeWidth="3"
+                      />
+                      <path
+                        stroke="var(--color-accent)"
+                        strokeDasharray={`${dummyDashboardData.academicScore}, 100`}
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        fill="none"
+                        strokeWidth="3"
+                      />
+                    </svg>
+                    <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Typography variant="h6" sx={{ fontWeight: 'bold' }}>{dummyDashboardData.academicScore}%</Typography>
+                    </Box>
+                  </Box>
+                </Box>
+                <Box sx={{ display: 'flex', justifyContent: 'space-around', mt: 2 }}>
+                  <Box sx={{ textAlign: 'center' }}>
+                    <Typography variant="body2" color="text.secondary">Goals</Typography>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>{Math.floor(dummyDashboardData.academicScore / 6)}/16</Typography>
+                  </Box>
+                  <Box sx={{ textAlign: 'center' }}>
+                    <Typography variant="body2" color="text.secondary">Hours</Typography>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>{dummyDashboardData.academicScore}h</Typography>
+                  </Box>
+                </Box>
+              </Paper>
+
+
+              <Paper className={`${styles.eventCalendarCard} ${styles.glassCard}`} ref={addToRefs}>
+                <div className={styles.calendarHeader}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Calendar size={18} /> 
+                    <Typography variant="h6">Calendar</Typography>
+                  </Box>
+                  <div className={styles.navActions}>
+                    <button onClick={prevMonth} className={styles.navBtn}><ChevronLeft size={16} /></button>
+                    <span className={styles.currentMonth}>{monthNames[selectedMonth]} {selectedYear}</span>
+                    <button onClick={nextMonth} className={styles.navBtn}><ChevronRight size={16} /></button>
+                  </div>
+                </div>
+                <div className={styles.calendarGrid}>
+                  {["S", "M", "T", "W", "T", "F", "S"].map((d, idx) => (
+                    <div key={`${d}-${idx}`} className={styles.weekdayLabel}>{d}</div>
+                  ))}
+                  {Array.from({ length: firstDayOfMonth }).map((_, i) => (
+                    <div key={`empty-${i}`} className={styles.emptySlot}></div>
+                  ))}
+                  {Array.from({ length: daysInMonth }, (_, i) => i + 1).map((date) => {
+                     const dateStr = `${selectedYear}-${selectedMonth + 1}-${date}`;
+                     const hasEvent = !!events[dateStr];
+                     const isToday = new Date().toDateString() === new Date(selectedYear, selectedMonth, date).toDateString();
+                     return (
+                       <div
+                         key={date}
+                         onClick={() => { setSelectedDate(date); setShowModal(true); }}
+                         className={`${styles.calendarDay} ${isToday ? styles.today : ""} ${hasEvent ? styles.hasEvent : ""}`}
+                       >
+                         {date}
+                         {hasEvent && <span className={styles.eventDot}></span>}
+                       </div>
+                     );
+                  })}
+                </div>
+              </Paper>
+            </Grid>
+
+            {/* Attendance & Skills */}
+            <Grid size={{xs:12,md:4}}>
+              <Paper className={`${styles.skillsSection} ${styles.glassCard}`} ref={addToRefs} sx={{ mb: 3 }}>
+                <div className={styles.skillsHeaderWrapper}>
+                  <Typography variant="h6">Skills Acquired</Typography>
+                  <span className={styles.skillCount}>{dummyDashboardData.skills.length}/{dummyDashboardData.totalSkills}</span>
+                </div>
+                <div className={styles.pillsContainer} style={{ marginTop: "16px" }}>
+                  {dummyDashboardData.skills.slice(0, 5).map((skill) => (
+                    <div key={skill} className={styles.skillPill} style={{ padding: '6px 12px', border: '1px solid var(--color-border)', borderRadius: '20px', fontSize: '0.875rem' }}>
+                      <CheckCircle2 size={14} className={styles.checkIcon} color={theme.palette.primary.main} />
+                      {skill}
+                    </div>
+                  ))}
+                  {dummyDashboardData.skills.length > 5 && (
+                    <div className={styles.skillPill} style={{ padding: '6px 12px', border: '1px dashed var(--color-border)', borderRadius: '20px', fontSize: '0.875rem' }}>
+                      +{dummyDashboardData.skills.length - 5} More
+                    </div>
+                  )}
+                </div>
+                <div className={styles.skillProgressBar} style={{ marginTop: "24px" }}>
+                  <div className={styles.skillProgressFillGsap} style={{ width: `${(dummyDashboardData.skills.length / dummyDashboardData.totalSkills) * 100}%` }} />
+                </div>
+              </Paper>
+
+              <Paper className={`${styles.glassCard}`} ref={addToRefs}>
+                <Typography variant="h6" sx={{ mb: 2 }}>My Attendance</Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                  <Box sx={{ width: 64, height: 64, borderRadius: '50%', backgroundColor: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10b981', fontWeight: 'bold' }}>
+                    {dummyDashboardData.attendance.percentage}%
+                  </Box>
+                  <Box>
+                    <Typography variant="body2" color="text.secondary">Total Classes: {dummyDashboardData.attendance.totalClasses}</Typography>
+                    <Typography variant="body2" color="text.secondary">Present: {dummyDashboardData.attendance.present}</Typography>
+                  </Box>
+                </Box>
+              </Paper>
+            </Grid>
+
+            {/* Upcoming Quizzes & Leaderboard */}
+            <Grid size={{xs:12,md:4}}>
+               <Paper className={`${styles.glassCard}`} ref={addToRefs} sx={{ mb: 3 }}>
+                 <Typography variant="h6" sx={{ mb: 2 }}>Upcoming Quizzes</Typography>
+                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                   {dummyDashboardData.upcomingQuizzes.map((quiz) => (
+                     <Box key={quiz.id} sx={{ display: 'flex', alignItems: 'center', gap: 2, p: 1.5, bgcolor: 'var(--color-background)', borderRadius: 2, border: '1px solid var(--color-border)' }}>
+                       <Box sx={{ textAlign: 'center', minWidth: 45 }}>
+                         <Typography variant="caption" sx={{ display: 'block', fontWeight: 'bold', color: 'var(--color-text-secondary)', textTransform: 'uppercase' }}>
+                           {new Date(quiz.date).toLocaleString("default", { month: "short" })}
+                         </Typography>
+                         <Typography variant="h6" sx={{ lineHeight: 1, fontWeight: 'bold', color: 'var(--color-primary)' }}>
+                           {new Date(quiz.date).getDate()}
+                         </Typography>
+                       </Box>
+                       <Box sx={{ flexGrow: 1 }}>
+                         <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>{quiz.title}</Typography>
+                         <Typography variant="caption" color="text.secondary">
+                           {quiz.time} • {quiz.duration}
+                         </Typography>
+                       </Box>
+                       <ChevronRight size={18} color="var(--color-text-secondary)" />
+                     </Box>
+                   ))}
+                 </Box>
+               </Paper>
+
+               <Paper className={`${styles.leaderboardCard} ${styles.glassCard}`} ref={addToRefs}>
+                <Typography variant="h6" sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Trophy size={18} color={theme.palette.primary.main} /> Leaderboard
+                </Typography>
+                <div className={styles.leaderList}>
+                  {dummyDashboardData.topPerformers.map((user, idx) => (
+                    <div key={idx} className={styles.leaderItem}>
+                      <span className={styles.rank} style={{ color: idx === 0 ? '#fbbf24' : idx === 1 ? '#9ca3af' : idx === 2 ? '#b45309' : 'inherit', fontWeight: idx < 3 ? 'bold' : 'normal' }}>#{idx + 1}</span>
+                      <Avatar src={`https://ui-avatars.com/api/?name=${user.name}&background=random&color=fff`} sx={{ width: 28, height: 28, mr: 1.5 }} />
+                      <span className={styles.userName} style={{ flexGrow: 1 }}>{user.name}</span>
+                      <span className={styles.userScore} style={{ fontWeight: 'bold' }}>{user.score} XP</span>
+                    </div>
+                  ))}
+                </div>
+              </Paper>
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
 
       {/* Event Modal */}
       <Dialog open={showModal} onClose={() => setShowModal(false)}>
         <DialogTitle>
-          {events[`${selectedYear}-${selectedMonth + 1}-${selectedDate}`] ? "Edit Event" : "Add Event"}
+          {events[`${selectedYear}-${selectedMonth + 1}-${selectedDate}`] ? "Edit Event" : "Add Custom Event"}
         </DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
             fullWidth
+            margin="dense"
             value={newEventName}
             onChange={(e) => setNewEventName(e.target.value)}
-            placeholder="What's happening?"
+            placeholder="Event Title..."
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setShowModal(false)}>Cancel</Button>
-          <Button onClick={saveEvent} variant="contained">Save</Button>
+          <Button onClick={() => setShowModal(false)} sx={{ color: "text.secondary" }}>Cancel</Button>
+          <Button onClick={saveEvent} variant="contained" sx={{ bgcolor: "primary.main" }}>Save</Button>
         </DialogActions>
       </Dialog>
     </Box>

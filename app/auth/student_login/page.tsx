@@ -15,7 +15,7 @@ import * as THREE from "three";
 import styles from "@/styles/StudentLogin.module.css";
 import { authService } from "@/services/auth.service";
 import { toastService } from "@/services/toast.service";
-import { useAppSelector } from "@/redux/store";
+import { useAppSelector } from "@/store/store";
 import Logo from "@/components/ui/Logo";
 import PlainButton from "@/components/ui/PlainButton";
 

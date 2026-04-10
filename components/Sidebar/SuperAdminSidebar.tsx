@@ -52,32 +52,32 @@ const SuperAdminSidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
     {
       name: "Dashboard",
       icon: <LayoutDashboard size={20} />,
-      path: "/superadmin/dashboard",
+      path: "/dashboard",
     },
     {
       name: "Business Units",
       icon: <Building2 size={20} />,
-      path: "/superadmin/business-units",
+      path: "/business-units",
     },
     {
       name: "Users",
       icon: <Users size={20} />,
-      path: "/superadmin/users",
+      path: "/users",
     },
     {
       name: "Roles & Permissions",
       icon: <ShieldCheck size={20} />,
-      path: "/superadmin/roles",
+      path: "/roles",
     },
     {
       name: "System Logs",
       icon: <Activity size={20} />,
-      path: "/superadmin/logs",
+      path: "/logs",
     },
     {
       name: "Settings",
       icon: <Settings size={20} />,
-      path: "/superadmin/settings",
+      path: "/settings",
     },
   ];
 

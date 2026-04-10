@@ -4,10 +4,11 @@ import NavbarWrapper from "@/components/layout/NavbarWrapper";
 import Footer from "@/components/layout/Footer";
 import { Toaster } from "react-hot-toast";
 
-import ReduxProvider from "@/redux/provider";
-import InitRedux from "@/redux/store/InitRedux";
+import ReduxProvider from "@/store/provider";
+import InitRedux from "@/store/InitRedux";
 import ThemeRegistry from "@/app/ThemeRegistry";
 import AppProviderWrapper from "@/components/AppProviderWrapper"; // import the wrapper
+import { ThemeProvider } from "@/context/ThemeContext";
 
 import { headers } from "next/headers";
 
@@ -82,12 +83,14 @@ export default async function RootLayout({
 
             {/*  CLIENT‑SIDE CONTEXT PROVIDER */}
             <AppProviderWrapper>
-              <ThemeRegistry>
-               <NavbarWrapper />
-                <main>{children}</main>
-                <Footer />
-                <Toaster position="top-center" />
-              </ThemeRegistry>
+              <ThemeProvider>
+                <ThemeRegistry>
+                 <NavbarWrapper />
+                  <main>{children}</main>
+                  <Footer />
+                  <Toaster position="top-center" />
+                </ThemeRegistry>
+              </ThemeProvider>
             </AppProviderWrapper>
           </ReduxProvider>
         </AppRouterCacheProvider>

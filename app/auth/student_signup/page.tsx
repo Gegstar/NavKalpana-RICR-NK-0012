@@ -7,8 +7,9 @@ import { TextField, IconButton, InputAdornment, CircularProgress } from '@mui/ma
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import toast from "react-hot-toast";
-import { useAppSelector } from "@/redux/store";
+import { useAppSelector } from "@/store/store";
 import { Eye, EyeOff, Mail, Lock, User } from 'lucide-react';
+import { setTokens, setSettings } from "@/store/globalSlice";
 import { LocalSignupRequest, VerifyAccountRequest } from '@/models/auth.model';
 import Logo from '@/components/ui/Logo';
 import gsap from 'gsap';
