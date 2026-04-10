@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import { useAppDispatch } from "@/redux/store";
-import { setSettings } from "@/redux/globalSlice";
+import { useAppDispatch } from "@/store/store";
+import { setSettings } from "@/store/globalSlice";
 
 export default function InitRedux({
   settings,

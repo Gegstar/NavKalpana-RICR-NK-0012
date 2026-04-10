@@ -33,6 +33,17 @@ const globalSlice = createSlice({
       state.settings = action.payload;
     },
 
+    // 🌗 TOGGLE DARK MODE
+    toggleDarkMode: (state) => {
+      if (!state.settings) {
+        state.settings = { theme_settings: { dark_mode_enabled: true } };
+      } else if (!state.settings.theme_settings) {
+        state.settings.theme_settings = { dark_mode_enabled: true };
+      } else {
+        state.settings.theme_settings.dark_mode_enabled = !state.settings.theme_settings.dark_mode_enabled;
+      }
+    },
+
     // 🚪 LOGOUT
     logout: (state) => {
       state.accessToken = null;
@@ -42,5 +53,5 @@ const globalSlice = createSlice({
   },
 });
 
-export const { setTokens, setSettings, logout } = globalSlice.actions;
+export const { setTokens, setSettings, toggleDarkMode, logout } = globalSlice.actions;
 export default globalSlice.reducer;

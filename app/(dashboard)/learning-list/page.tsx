@@ -97,14 +97,14 @@ export default function LearningList({ items, onItemClick, onComplete }: Learnin
   };
 
   // Sort: overdue first → pending by due date → completed
-  const sortedItems = [...items].sort((a, b) => {
+  const sortedItems = Array.isArray(items) ? [...items].sort((a, b) => {
     if (a.status === 'overdue' && b.status !== 'overdue') return -1;
     if (a.status !== 'overdue' && b.status === 'overdue') return 1;
     if (a.status === 'completed' && b.status !== 'completed') return 1;
     if (a.status !== 'completed' && b.status === 'completed') return -1;
     if (a.dueDate && b.dueDate) return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
     return 0;
-  });
+  }) : [];
 
   return (
     <Paper className={styles.container}>

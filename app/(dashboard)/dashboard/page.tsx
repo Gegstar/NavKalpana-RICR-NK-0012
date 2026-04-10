@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useApp } from "@/contexts/AppContext";
+import { useApp } from "@/context/AppContext";
 
 // ✅ Import Dashboards
 import StudentDashboard from "@/components/dashboard/StudentDashboard";
 import SuperAdminDashboard from "@/components/dashboard/SuperAdminDashboard";
-// import AdminDashboard from "@/components/Dashboard/AdminDashboard";
+import AdminDashboard from "@/components/dashboard/AdminDashboard";
 import InstructorDashboard from "@/components/dashboard/InstructorDashboard";
 
 export default function DashboardPage() {
@@ -38,16 +38,17 @@ export default function DashboardPage() {
   // ✅ ROLE-BASED RENDERING
   switch (role) {
     case "SUPER_ADMIN":
+      
       return <SuperAdminDashboard />;
 
-    // case "ADMIN":
-    //   return <AdminDashboard />;
+    case "ADMIN":
+      return <AdminDashboard />;
 
     case "INSTRUCTOR":
       return <InstructorDashboard />;
 
     case "STUDENT":
-    // default:
+    default:
       return <StudentDashboard />;
   }
 }

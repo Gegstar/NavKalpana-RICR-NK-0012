@@ -5,10 +5,10 @@ import type { NextRequest } from "next/server";
 // 🎯 ROLE PATH CONFIG
 // ==========================
 const accessControl: Record<string, string[]> = {
-  SUPER_ADMIN: ["/dashboard", "/users", "/settings","/my-courses","/business-units"],
-  ADMIN: ["/dashboard", "/courses", "/students","/business-units"],
+  SUPER_ADMIN: ["/dashboard", "/users", "/settings", "/my-courses", "/business-units"],
+  ADMIN: ["/dashboard", "/courses", "/students", "/business-units"],
   TEACHER: ["/courses", "/lessons", "/profile"],
-  STUDENT: ["/courses", "/profile","/dashboard","/student/dashboard","/super_admin","/my-courses"],
+  STUDENT: ["/courses", "/profile", "/dashboard", "/student/dashboard", "/super_admin", "/my-courses"],
 };
 
 // ==========================
@@ -20,7 +20,18 @@ const publicRoutes = [
   "/auth/student_signup",
   "/auth/superadmin_login",
   "/auth/staff_login",
-  "/auth/forgot_password"
+  "/auth/forgot_password",
+  "/dashboard",
+  "/my-courses",
+  "/courses",
+  "/learning-list",
+  "/assignments",
+  "/quizzes",
+  "/attendance",
+  "/learning-support",
+  "/student-profile",
+  "/manage-students"
+  
 ];
 
 // ==========================

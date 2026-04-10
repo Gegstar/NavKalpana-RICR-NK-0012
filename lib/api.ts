@@ -1,5 +1,5 @@
 import axios from "axios";
-import { store } from "@/redux/store";
+import { store } from "@/store/store";
 import { authService } from "@/services/auth.service";
 
 const api = axios.create({

@@ -73,6 +73,7 @@
 }
 
 /* 🌙 DARK MODE */
+[data-theme='dark'],
 .dark {
   --color-background: var(--color-background-dark);
   --color-surface: var(--color-surface-dark);

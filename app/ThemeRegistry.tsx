@@ -3,7 +3,7 @@
 import { useMemo, useEffect, useState } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import { useAppSelector } from "@/redux/store";
+import { useAppSelector } from "@/store/store";
 import { Box } from "@mui/material";
 
 export default function ThemeRegistry({
