@@ -1,0 +1,51 @@
+.heatmapSection {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--glass-border);
+}
+
+.heatmapHeader {
+  margin-bottom: var(--spacing-md);
+}
+
+.title {
+  font-weight: 700 !important;
+  color: var(--color-text-primary);
+}
+
+.subtitle {
+  color: var(--color-text-secondary);
+}
+
+.heatmapContainer {
+  display: flex;
+  gap: 3px;
+  overflow-x: auto;
+  padding-bottom: var(--spacing-sm);
+}
+
+.heatmapColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.heatmapCell {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  background: var(--color-bg-dark);
+  transition: transform 0.2s;
+}
+
+.heatmapCell:hover {
+  transform: scale(1.2);
+  z-index: 1;
+}
+
+.level0 { background: var(--color-bg-dark); }
+.level1 { background: rgba(99, 102, 241, 0.2); }
+.level2 { background: rgba(99, 102, 241, 0.4); }
+.level3 { background: rgba(99, 102, 241, 0.7); }
+.level4 { background: var(--color-primary); }

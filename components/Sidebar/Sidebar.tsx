@@ -1,25 +1,17 @@
 "use client";
 
+import React, { Dispatch, SetStateAction } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { 
+  LayoutDashboard, BookOpen, GraduationCap, BookUser, 
+  LogOut, ChevronLeft, ChevronRight, Calendar, 
+  Settings, Users, ClipboardList, BarChart3
+} from "lucide-react";
+
 import styles from "@/styles/StudentSidebar.module.css";
 import { authService } from "@/services/auth.service";
-import { Dispatch, SetStateAction } from "react";
-import {
-  LayoutDashboard,
-  BookOpen,
-  GraduationCap,
-  BookUser,
-  LogOut,
-  ChevronLeft,
-  ChevronRight,
-  Calendar,
-  Flame,
-  Settings,
-  Users,
-} from "lucide-react";
-import { Button } from "@mui/material";
-import { useAppSelector, useAppDispatch } from "@/store/store"; 
+import { useAppSelector } from "@/store/store"; 
 import Logo from "@/components/ui/Logo";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 
@@ -28,108 +20,82 @@ interface SidebarProps {
   setIsCollapsed: Dispatch<SetStateAction<boolean>>;
 }
 
+interface MenuItem {
+  name: string;
+  icon: React.ReactNode;
+  path: string;
+}
+
 const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
   const pathname = usePathname();
   const router = useRouter();
-  const dispatch = useAppDispatch();
-
-  // ✅ GET USER ROLE FROM REDUX
   const role = useAppSelector((state) => state.user.role);
 
-  const toggleSidebar = () => {
-    setIsCollapsed(!isCollapsed);
-  };
-
-  // ✅ LOGOUT FUNCTION
   const handleLogout = async () => {
-    await authService.logout();
-    router.push("/");
-    setTimeout(() => {
-      window.location.reload();
-    }, 100);
-  };
-
-  // ================= ROLE-BASED MENUS =================
-
-  const studentMenu = [
-    { name: "Dashboard", icon: <LayoutDashboard size={20} />, path: "/dashboard" },
-    { name: "My Courses", icon: <BookOpen size={20} />, path: "/my-courses" },
-    { name: "All Courses", icon: <BookUser size={20} />, path: "/courses" },
-    { name: "Learning List", icon: <Flame size={20} />, path: "/learning-list"},
-    { name: "Assignments", icon: <Flame size={20} />, path: "/assignments" },
-    { name: "Quizzes", icon: <GraduationCap size={20} />, path: "/quizzes" },
-    { name: "Attendance", icon: <Calendar size={20} />, path: "/attendance" },
-    { name: "Learning Support", icon: <BookUser size={20} />, path: "/learning-support" },
-    { name: "Profile", icon: <Users /> , path: "/student-profile"}
-  ];
-
-  const adminMenu = [
-    { name: "Dashboard", icon: <LayoutDashboard size={20} />, path: "/dashboard" },
-    { name: "Business Units", icon: <Users size={20} />, path: "/business-units" },
-    { name: "Users", icon: <Users size={20} />, path: "/users" },
-    { name: "Courses", icon: <BookOpen size={20} />, path: "/courses" },
-    { name: "Settings", icon: <Settings size={20} />, path: "/settings" },
-  ];
-
-  const superAdminMenu = [
-    { name: "Dashboard", icon: <LayoutDashboard size={20} />, path: "/dashboard" },
-    { name: "Business Units", icon: <Users size={20} />, path: "/business-units" },
-    { name: "Users", icon: <Users size={20} />, path: "/users" },
-    { name: "Settings", icon: <Settings size={20} />, path: "/settings" },
-  ];
-
-  const instructorMenu = [
-  { name: "Dashboard", icon: <LayoutDashboard size={20} />, path: "/dashboard" },
-  { name: "My Courses", icon: <BookOpen size={20} />, path: "/courses" },
-  { name: "Assignments", icon: <Flame size={20} />, path: "/assignments" },
-  { name: "Quizzes", icon: <GraduationCap size={20} />, path: "/quizzes" },
-  { name: "Students", icon: <Users size={20} />, path: "/students" },
-  { name: "Analytics", icon: <GraduationCap size={20} />, path: "/analytics" },
-  { name: "Settings", icon: <Settings size={20} />, path: "/settings" },
-];
- 
-
-  //  SELECT MENU BASED ON ROLE
-  const getMenu = () => {
-    switch (role) {
-      case "SUPER_ADMIN":
-        return superAdminMenu;
-      case "ADMIN":
-        return adminMenu;
-        case "INSTRUCTOR":
-      return instructorMenu;
-      case "STUDENT":
-      default:
-        return studentMenu;
+    try {
+      await authService.logout();
+      router.push("/");
+      setTimeout(() => window.location.reload(), 100);
+    } catch (err) {
+      console.error("Logout failed:", err);
     }
   };
 
-  const menuItems = getMenu();
+  const menuConfigs: Record<string, MenuItem[]> = {
+    STUDENT: [
+      { name: "Dashboard", icon: <LayoutDashboard size={20} />, path: "/dashboard" },
+      { name: "My Courses", icon: <BookOpen size={20} />, path: "/my-courses" },
+      { name: "All Courses", icon: <BookUser size={20} />, path: "/courses" },
+      { name: "Assignments", icon: <ClipboardList size={20} />, path: "/assignments" },
+      { name: "Quizzes", icon: <GraduationCap size={20} />, path: "/quizzes" },
+      { name: "Attendance", icon: <Calendar size={20} />, path: "/attendance" },
+      { name: "Profile", icon: <Users size={20} /> , path: "/student-profile"}
+    ],
+    ADMIN: [
+      { name: "Dashboard", icon: <LayoutDashboard size={20} />, path: "/dashboard" },
+      { name: "Business Units", icon: <Users size={20} />, path: "/business-units" },
+      { name: "Users", icon: <Users size={20} />, path: "/users" },
+      { name: "Courses", icon: <BookOpen size={20} />, path: "/courses" },
+      { name: "Settings", icon: <Settings size={20} />, path: "/settings" },
+    ],
+    SUPER_ADMIN: [
+      { name: "Dashboard", icon: <LayoutDashboard size={20} />, path: "/dashboard" },
+      { name: "Business Units", icon: <Users size={20} />, path: "/business-units" },
+      { name: "Users", icon: <Users size={20} />, path: "/users" },
+      { name: "Settings", icon: <Settings size={20} />, path: "/settings" },
+    ],
+    INSTRUCTOR: [
+      { name: "Dashboard", icon: <LayoutDashboard size={20} />, path: "/dashboard" },
+      { name: "My Courses", icon: <BookOpen size={20} />, path: "/courses" },
+      { name: "Assignments", icon: <ClipboardList size={20} />, path: "/assignments" },
+      { name: "Quizzes", icon: <GraduationCap size={20} />, path: "/quizzes" },
+      { name: "Students", icon: <Users size={20} />, path: "/students" },
+      { name: "Analytics", icon: <BarChart3 size={20} />, path: "/analytics" },
+    ]
+  };
+
+  const menuItems = menuConfigs[role as keyof typeof menuConfigs] || menuConfigs.STUDENT;
 
   return (
     <aside className={`${styles.sidebar} ${isCollapsed ? styles.collapsed : ""}`}>
-      
-      {/* Collapse Button */}
-      <button className={styles.toggleBtn} onClick={toggleSidebar}>
-        {isCollapsed ? <ChevronRight size={15} /> : <ChevronLeft size={15} />}
+      <button 
+        className={styles.toggleBtn} 
+        onClick={() => setIsCollapsed(!isCollapsed)}
+        aria-label="Toggle Sidebar"
+      >
+        {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
       </button>
 
-      {/* Logo */}
       <div className={styles.logoContainer}>
-        {!isCollapsed && (
-          <Logo variant="full" size="medium" />
-        )}
+        <Logo variant={isCollapsed ? "icon" : "full"} size="medium" />
       </div>
 
-      {/* Navigation */}
       <nav className={styles.navMenu}>
         {menuItems.map((item) => (
           <Link
             key={item.name}
             href={item.path}
-            className={`${styles.navItem} ${
-              pathname === item.path ? styles.navActive : ""
-            }`}
+            className={`${styles.navItem} ${pathname === item.path ? styles.navActive : ""}`}
           >
             {item.icon}
             {!isCollapsed && <span>{item.name}</span>}
@@ -137,16 +103,16 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
         ))}
       </nav>
 
-      {/* Actions */}
-      <div className={styles.logoutWrapper}>
-        <div style={{ display: 'flex', justifyContent: isCollapsed ? 'center' : 'flex-start', paddingLeft: isCollapsed ? 0 : '1rem', paddingBottom: '0.5rem' }}>
+      <footer className={styles.logoutWrapper}>
+        <div className={styles.themeBox}>
           <ThemeToggle />
+          {!isCollapsed && <span style={{ marginLeft: '12px', fontSize: '0.85rem', fontWeight: 600 }}>Theme</span>}
         </div>
-        <Button onClick={handleLogout} className={styles.logoutBtn}>
+        <button onClick={handleLogout} className={styles.logoutBtn}>
           <LogOut size={20} />
-          {!isCollapsed && <span>Logout</span>}
-        </Button>
-      </div>
+          {!isCollapsed && <span>Sign Out</span>}
+        </button>
+      </footer>
     </aside>
   );
 };

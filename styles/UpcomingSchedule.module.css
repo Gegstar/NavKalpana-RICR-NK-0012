@@ -1,0 +1,41 @@
+.scheduleCard {
+  border-radius: var(--radius-xl);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  height: 100%;
+}
+
+.cardContent {
+  padding: var(--spacing-xl) !important;
+}
+
+.title {
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-lg) !important;
+}
+
+.timelineItem {
+  min-height: 80px;
+}
+
+.timeText {
+  color: var(--color-text-secondary);
+  font-weight: 600;
+  font-size: var(--font-size-xs);
+}
+
+.eventTitle {
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.eventSubtitle {
+  color: var(--color-text-muted);
+}
+
+.dot {
+  box-shadow: 0 0 10px var(--color-primary-glow);
+}

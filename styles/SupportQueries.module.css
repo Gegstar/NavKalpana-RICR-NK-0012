@@ -1,0 +1,69 @@
+.supportCard {
+  border-radius: var(--radius-xl);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  height: 100%;
+}
+
+.cardContent {
+  padding: var(--spacing-xl) !important;
+}
+
+.title {
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-lg) !important;
+}
+
+.queryList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.queryItem {
+  padding: var(--spacing-md);
+  border-radius: var(--radius-lg);
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid var(--glass-border);
+  transition: var(--transition-base);
+}
+
+.queryItem:hover {
+  background: var(--glass-bg-hover);
+  border-color: var(--glass-border-hover);
+}
+
+.queryHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.studentName {
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.statusChip {
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+}
+
+.statusNew { background: rgba(99, 102, 241, 0.1); color: var(--color-primary); }
+.statusPending { background: rgba(245, 158, 11, 0.1); color: var(--color-warning); }
+
+.queryText {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

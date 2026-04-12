@@ -7,6 +7,8 @@
 
   --color-secondary: #06B6D4;
   --color-accent: #F59E0B;
+  --color-success: #10B981;
+  --color-error: #EF4444;
 
   /* 🧠 NEUTRAL COLORS (Better contrast) */
   --color-background: #F8FAFC;
@@ -70,6 +72,16 @@
   /* ⚡ TRANSITIONS */
   --transition-fast: 0.2s ease;
   --transition-base: 0.3s ease;
+  --transition-speed: 0.3s;
+
+  /* 🏛️ LEGACY/NEW UI ALIASES */
+  --bg-light: var(--color-background);
+  --bg-white: var(--color-surface);
+  --text-primary: var(--color-text-primary);
+  --text-secondary: var(--color-text-secondary);
+  --border-light: var(--color-border);
+  --primary-yellow: #FACC15;
+  --primary-yellow-hover: #EAB308;
 }
 
 /* 🌙 DARK MODE */

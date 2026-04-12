@@ -1,0 +1,61 @@
+.scoreCard {
+  border-radius: var(--radius-xl);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: var(--transition-smooth);
+}
+
+.scoreCard:hover {
+  background: var(--glass-bg-hover);
+  border-color: var(--glass-border-hover);
+}
+
+.cardContent {
+  padding: var(--spacing-xl) !important;
+  text-align: center;
+}
+
+.label {
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  margin-bottom: var(--spacing-sm) !important;
+  display: block;
+}
+
+.torusContainer {
+  position: relative;
+  margin-bottom: var(--spacing-sm);
+}
+
+.scoreOverlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.scoreValue {
+  font-weight: 900;
+  color: var(--color-text-primary);
+}
+
+.trendContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  color: var(--color-success);
+}
+
+.trendText {
+  font-weight: 600;
+}

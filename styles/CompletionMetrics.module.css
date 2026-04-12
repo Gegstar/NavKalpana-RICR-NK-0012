@@ -1,0 +1,53 @@
+.metricsCard {
+  border-radius: var(--radius-xl);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  height: 100%;
+}
+
+.cardContent {
+  padding: var(--spacing-xl) !important;
+}
+
+.title {
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-lg) !important;
+}
+
+.metricsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.metricItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.progressLabel {
+  display: flex;
+  flex-direction: column;
+}
+
+.metricValue {
+  font-weight: 800;
+  color: var(--color-text-primary);
+}
+
+.metricName {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.activeProgress :global(.MuiCircularProgress-circle) {
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 5px var(--color-primary-glow));
+}
