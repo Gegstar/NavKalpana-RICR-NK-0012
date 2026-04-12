@@ -1,186 +1,47 @@
-/* InstructorDashboard.module.css – Uses global root variables */
-
 .dashboardWrapper {
-  background: var(--color-background);
+  position: relative;
   min-height: 100vh;
-  padding: var(--spacing-lg);
-  animation: fadeIn 0.5s ease;
-}
-
-.header {
-  margin-bottom: var(--spacing-2xl);
-  animation: fadeInDown 0.5s ease;
-}
-
-.title {
-  font-weight: var(--font-weight-bold);
+  padding-bottom: var(--spacing-2xl);
+  padding-top: var(--spacing-md);
   color: var(--color-text-primary);
-  margin-bottom: var(--spacing-xs);
+  overflow: hidden;
 }
 
-.subtitle {
-  color: var(--color-text-secondary);
+.analyticsCard {
+  border-radius: var(--radius-xl);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: var(--transition-bounce);
 }
 
-/* Stats Grid */
-.statsGrid {
-  margin-bottom: var(--spacing-lg);
+.analyticsCard:hover {
+  background: var(--glass-bg-hover);
+  border-color: var(--glass-border-hover);
+  transform: translateY(-5px);
 }
 
-.statCard {
-  background: var(--color-surface);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-lg);
+.cardContent {
+  padding: var(--spacing-xl) !important;
   text-align: center;
-  transition: all var(--transition-base);
-  animation: scaleIn 0.5s ease;
-  animation-fill-mode: both;
-  border: 1px solid var(--color-border);
 }
 
-.statCard:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
-}
-
-.statIcon {
-  color: var(--color-primary);
+.overline {
+  font-weight: 700;
+  letter-spacing: 1.5px;
   margin-bottom: var(--spacing-sm);
-  width: 32px;
-  height: 32px;
-}
-
-.statCard h3 {
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
-  margin: var(--spacing-sm) 0;
-}
-
-.statCard p {
+  display: block;
+  text-transform: uppercase;
   color: var(--color-text-secondary);
 }
 
-/* Growth Card */
-.growthCard {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-lg);
-  color: white;
-  margin-bottom: var(--spacing-lg);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: var(--spacing-md);
-  animation: fadeInUp 0.5s ease;
-}
-
-.growthContent {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-}
-
-.growthContent h4 {
-  color: white;
-  font-weight: var(--font-weight-bold);
-}
-
-.growthCard svg {
-  color: white;
-}
-
-.growthCard p {
-  color: rgba(255, 255, 255, 0.9);
-}
-
-/* Section Cards */
-.sectionCard {
-  background: var(--color-surface);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-lg);
-  border: 1px solid var(--color-border);
-  margin-bottom: var(--spacing-lg);
-  animation: fadeInUp 0.5s ease;
-}
-
-.sectionCard h6 {
-  font-weight: var(--font-weight-semibold);
+.analyticsValue {
+  font-weight: 800;
+  margin-top: var(--spacing-md);
   color: var(--color-text-primary);
-  margin-bottom: var(--spacing-md);
-}
-
-/* Middle Row */
-.middleRow {
-  margin-bottom: var(--spacing-lg);
-}
-
-/* Actions Grid */
-.actionsGrid {
-  margin-top: var(--spacing-lg);
-}
-
-/* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Responsive */
-@media (max-width: 900px) {
-  .dashboardWrapper {
-    padding: var(--spacing-md);
-  }
-  .statCard {
-    padding: var(--spacing-md);
-  }
-}
-
-@media (max-width: 600px) {
-  .dashboardWrapper {
-    padding: var(--spacing-sm);
-  }
-  .title {
-    font-size: var(--font-size-2xl);
-  }
-  .growthCard {
-    flex-direction: column;
-    text-align: center;
-  }
-  .growthContent {
-    justify-content: center;
-  }
 }

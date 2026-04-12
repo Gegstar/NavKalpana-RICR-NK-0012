@@ -1,6 +1,6 @@
 'use client';
-import Link from 'next/link';
-import { Box, Typography, useTheme } from '@mui/material';
+import NextLink from 'next/link';
+import { Box, Typography, useTheme, Link as MuiLink } from '@mui/material';
 
 interface LogoProps {
   variant?: 'full' | 'icon' | 'text';
@@ -48,39 +48,45 @@ export default function Logo({ variant = 'full', size = 'medium', showText = tru
     letterSpacing: '-0.02em',
   };
 
-  // Hover effect on the whole logo
   const hoverSx = {
     '&:hover .logo-icon': {
       transform: 'scale(1.05)',
     },
   };
 
+  // Common wrapper that supports sx and uses NextLink for navigation
+  const LinkWrapper = ({ children, sx }: { children: React.ReactNode; sx?: any }) => (
+    <MuiLink component={NextLink} href="/" sx={{ ...logoSx, ...sx }}>
+      {children}
+    </MuiLink>
+  );
+
   if (variant === 'icon') {
     return (
-      <Link href="/" style={logoSx}>
+      <LinkWrapper>
         <Box sx={iconSx} className="logo-icon">S</Box>
-      </Link>
+      </LinkWrapper>
     );
   }
 
   if (variant === 'text') {
     return (
-      <Link href="/" style={logoSx}>
+      <LinkWrapper>
         <Typography sx={textSx}>
           Skill<span style={{ color: theme.palette.primary.main }}>Verse</span>
         </Typography>
-      </Link>
+      </LinkWrapper>
     );
   }
 
   // Full variant: icon + text
   return (
-    <Link href="/" style={{ ...logoSx, ...hoverSx }}>
+    <LinkWrapper sx={hoverSx}>
       {showText && (
         <Typography sx={textSx}>
           Skill<span style={{ color: theme.palette.primary.main }}>Verse</span>
         </Typography>
       )}
-    </Link>
+    </LinkWrapper>
   );
 }

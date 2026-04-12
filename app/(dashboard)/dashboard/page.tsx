@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 import { useApp } from "@/context/AppContext";
 
 // ✅ Import Dashboards
-import StudentDashboard from "@/components/dashboard/StudentDashboard";
+import StudentDashboard from "@/components/dashboard/student/StudentDashboard";
 import SuperAdminDashboard from "@/components/dashboard/SuperAdminDashboard";
 import AdminDashboard from "@/components/dashboard/AdminDashboard";
-import InstructorDashboard from "@/components/dashboard/InstructorDashboard";
+import InstructorDashboard from "@/components/dashboard/instructor/InstructorDashboard";
 
 export default function DashboardPage() {
   const { user, role } = useApp();
@@ -45,6 +45,7 @@ export default function DashboardPage() {
       return <AdminDashboard />;
 
     case "INSTRUCTOR":
+      
       return <InstructorDashboard />;
 
     case "STUDENT":

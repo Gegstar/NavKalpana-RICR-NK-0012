@@ -1,0 +1,39 @@
+.engagementCard {
+  border-radius: var(--radius-xl);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  height: 100%;
+}
+
+.cardContent {
+  padding: var(--spacing-xl) !important;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.title {
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.chartContainer {
+  height: 300px;
+  width: 100%;
+}
+
+/* Custom Tooltip Styles for Recharts (handled in TSX usually, but classes help) */
+.tooltip {
+  background: var(--color-overlay);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-md);
+  box-shadow: var(--glass-shadow);
+}

@@ -1,0 +1,73 @@
+.courseCard {
+  border-radius: var(--radius-xl);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  height: 100%;
+}
+
+.cardContent {
+  padding: var(--spacing-xl) !important;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.title {
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.courseList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.courseItem {
+  padding: var(--spacing-md);
+  border-radius: var(--radius-lg);
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid var(--glass-border);
+  transition: var(--transition-base);
+}
+
+.courseItem:hover {
+  background: var(--glass-bg-hover);
+  border-color: var(--glass-border-hover);
+  transform: translateX(4px);
+}
+
+.courseInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.courseName {
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.statsText {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+}
+
+.progressBar {
+  height: 6px !important;
+  border-radius: 3px !important;
+  background-color: var(--color-bg-dark) !important;
+  margin-top: 8px;
+}
+
+.progressBar :global(.MuiLinearProgress-bar) {
+  background-color: var(--color-primary) !important;
+  border-radius: 3px;
+}

@@ -1,55 +1,120 @@
-/* ==========================
-   GLOBAL & LAYOUT
-   ========================== */
+/* StudentDashboard.module.css – Implementation from User Specification */
+
 .dashboardWrapper {
-  padding: 1rem 0;
+  display: flex;
+  gap: 1.5rem;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  background: var(--bg-light);
   min-height: 100vh;
-  background-color: var(--color-background, #f8fafc);
-  color: var(--color-text-primary, #0f172a);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  animation: fadeIn 0.5s ease;
 }
 
+.mainContent {
+  flex: 1;
+  min-width: 0;
+  animation: fadeInLeft 0.5s ease;
+}
+
+.rightPanel {
+  width: 340px;
+  flex-shrink: 0;
+  animation: fadeInRight 0.5s ease;
+}
+
+.rightPanelInner {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 0 0.5rem;
+  position: sticky;
+  top: 1.5rem;
+}
+
+.loadingState {
+  padding: 1.5rem;
+  width: 100%;
+  animation: fadeIn 0.5s ease;
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-light) 25%,
+    var(--border-light) 50%,
+    var(--bg-light) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite linear;
+  border-radius: 8px;
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeletonHero { height: 200px; border-radius: 12px; margin-bottom: 2rem; }
+.skeletonCard { height: 120px; border-radius: 12px; }
+.skeletonHeader { height: 40px; width: 200px; margin-bottom: 1rem; }
+.skeletonText { height: 14px; width: 100%; margin-bottom: 0.5rem; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* Header */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 2rem;
   flex-wrap: wrap;
   gap: 1rem;
-  margin-bottom: 2rem;
+  animation: fadeInDown 0.5s ease;
 }
 
 .welcomeInfo {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+  flex: 1;
 }
 
 .greetingText {
-  font-weight: 700;
-  font-size: 1.8rem;
-  color: var(--color-text-primary);
+  font-size: 1.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem 0;
+  animation: fadeInLeft 0.5s ease;
 }
 
 .subText {
-  color: var(--color-text-secondary, #64748b);
-  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0.25rem 0;
+  font-size: 0.95rem;
+  animation: fadeInLeft 0.5s ease 0.1s both;
 }
 
 .headerActions {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .searchBox {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background-color: var(--color-surface, #ffffff);
-  border: 1px solid var(--color-border, #e2e8f0);
+  background: var(--bg-white);
+  border: 1px solid var(--border-light);
   border-radius: 8px;
   padding: 0.5rem 1rem;
   width: 250px;
+  transition: all var(--transition-speed) ease;
+  animation: fadeInRight 0.5s ease;
+}
+
+.searchBox:focus-within {
+  border-color: var(--primary-yellow);
+  box-shadow: 0 0 0 2px rgba(250, 204, 21, 0.1);
+  transform: translateY(-1px);
 }
 
 .searchBox input {
@@ -57,129 +122,238 @@
   background: transparent;
   outline: none;
   width: 100%;
-  color: var(--color-text-primary);
+  color: var(--text-primary);
 }
 
 .notifBadge {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background: var(--bg-white);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
   padding: 0.5rem;
-  border-radius: 50%;
   cursor: pointer;
-  color: var(--color-text-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all var(--transition-speed) ease;
+  position: relative;
+}
+
+.notifBadge:hover {
+  border-color: var(--primary-yellow);
+  color: var(--primary-yellow);
 }
 
 .profileImg {
-  cursor: pointer;
-  border: 2px solid var(--color-primary);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--border-light);
+  transition: all var(--transition-speed) ease;
+  animation: fadeInRight 0.5s ease 0.2s both;
 }
 
-/* ==========================
-   BENTO STATS
-   ========================== */
+.profileImg:hover {
+  border-color: var(--primary-yellow);
+  transform: scale(1.05);
+}
+
+/* Bento Grid */
 .bentoGrid {
-  margin-bottom: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .bentoCard {
-  background: var(--color-surface, #fff);
-  border-radius: 16px;
+  background: var(--bg-white);
+  border-radius: 12px;
   padding: 1.5rem;
-  border: 1px solid var(--color-border, #e2e8f0);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-  display: flex;
-  flex-direction: column;
+  border: 1px solid var(--border-light);
+  transition: all var(--transition-speed) ease;
   position: relative;
   overflow: hidden;
-  transition: transform 0.2s, box-shadow 0.2s;
+  animation: scaleIn 0.5s ease;
+  animation-fill-mode: both;
 }
 
 .bentoCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.scoreCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.scoreInfo {
+  flex: 1;
 }
 
 .label {
-  font-size: 0.9rem;
-  color: var(--color-text-secondary);
-  margin-top: 0.25rem;
-  font-weight: 500;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.yellowText {
+  color: var(--primary-yellow);
+  font-size: 2rem;
+  margin: 0.5rem 0;
+  animation: fadeInUp 0.5s ease;
 }
 
 .trendText {
-  color: #10b981; /* Default success green */
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #10b981;
+  font-size: 0.875rem;
 }
 
 .iconBg {
   opacity: 0.2;
+  transition: all var(--transition-speed) ease;
+}
+
+.bentoCard:hover .iconBg {
+  transform: scale(1.1);
+  opacity: 0.3;
+}
+
+.streakCard h3 {
+  font-size: 2rem;
+  color: var(--text-primary);
+  margin: 0.5rem 0 0.25rem;
 }
 
 .badge {
-  background-color: rgba(245, 158, 11, 0.1) !important;
-  color: #f59e0b !important;
-  font-weight: 600;
+  background: var(--bg-light);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  transition: all var(--transition-speed) ease;
 }
 
-.viewBtn {
-  margin-top: auto;
+.assignmentCard h3 {
+  font-size: 2rem;
+  color: var(--text-primary);
+  margin: 0.5rem 0 0.25rem;
 }
 
 .miniProgress {
-  margin-top: 1.25rem;
-}
-
-/* ==========================
-   HERO / CONTINUE LEARNING
-   ========================== */
-.continueCard {
-  background: linear-gradient(135deg, var(--color-primary, #6366f1) 0%, #4f46e5 100%);
-  color: white;
-  border-radius: 16px;
-  padding: 2rem;
-  position: relative;
-  overflow: hidden;
-  margin-bottom: 2rem;
+  margin-top: 1rem;
   display: flex;
   align-items: center;
+  gap: 1rem;
 }
 
-.continueCardContent {
+.miniBar {
+  flex: 1;
+  height: 4px;
+  background: var(--border-light);
+  border-radius: 2px;
   position: relative;
-  z-index: 2;
-  flex-grow: 1;
+  overflow: hidden;
+}
+
+.miniBar::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: var(--primary-yellow);
+  width: var(--progress, 0%);
+  transition: width 1s ease;
+}
+
+.viewBtn {
+  background: none;
+  border: none;
+  color: var(--primary-yellow-hover);
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color var(--transition-speed) ease;
+}
+
+.viewBtn:hover {
+  color: var(--primary-yellow);
+  transform: translateX(4px);
+}
+
+/* Continue Learning */
+.continueSection {
+  margin-bottom: 1.5rem;
+}
+
+.continueCard {
+  background: linear-gradient(135deg, var(--bg-white) 0%, var(--bg-light) 100%);
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  border: 1px solid var(--border-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  min-height: 180px;
+}
+
+.continueCard:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-yellow);
 }
 
 .resumeTag {
-  background: rgba(255, 255, 255, 0.2);
-  padding: 0.25rem 0.75rem;
-  border-radius: 16px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  background: var(--primary-yellow);
+  color: black;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 800;
   display: inline-block;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.continueCardContent h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  max-width: 80%;
+}
+
+.continueCardContent .subText {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
 }
 
 .viewCourseBtn {
+  background: var(--primary-yellow);
+  color: black;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 700;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  background: white;
-  color: var(--color-primary);
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-weight: 600;
+  gap: 0.75rem;
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: all 0.3s ease;
 }
 
 .viewCourseBtn:hover {
-  opacity: 0.9;
+  background: var(--primary-yellow-hover);
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(250, 204, 21, 0.3);
 }
 
 .bgDecoration {
@@ -187,19 +361,24 @@
   right: -2rem;
   top: 50%;
   transform: translateY(-50%);
-  opacity: 0.1;
-  z-index: 1;
+  opacity: 0.05;
+  pointer-events: none;
+  color: var(--color-primary);
 }
 
-/* ==========================
-   HEATMAP
-   ========================== */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Heatmap Section */
 .heatmapSection {
-  background: var(--color-surface);
-  border-radius: 16px;
+  background: var(--bg-white);
+  border-radius: 12px;
   padding: 1.5rem;
-  border: 1px solid var(--color-border);
-  margin-bottom: 2rem;
+  border: 1px solid var(--border-light);
+  margin-bottom: 1.5rem;
+  animation: fadeInUp 0.5s ease 0.4s both;
 }
 
 .heatmapHeader {
@@ -209,701 +388,817 @@
   margin-bottom: 1rem;
 }
 
+.heatmapHeader h3 {
+  color: var(--text-primary);
+  font-size: 1.1rem;
+}
+
 .heatmapContainer {
   display: flex;
-  gap: 4px;
+  gap: 2px;
   overflow-x: auto;
-  padding-bottom: 8px;
+  padding: 0.5rem 0;
 }
 
 .heatmapColumn {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
 }
 
 .heatmapCell {
   width: 12px;
   height: 12px;
-  border-radius: 3px;
+  border-radius: 2px;
+  background: var(--border-light);
+  transition: transform var(--transition-speed) ease;
 }
 
-.level0 { background-color: var(--color-border); opacity: 0.3; }
-.level1 { background-color: var(--color-primary); opacity: 0.4; }
-.level2 { background-color: var(--color-primary); opacity: 0.7; }
-.level3 { background-color: var(--color-primary); opacity: 1; }
+.heatmapCell:hover {
+  transform: scale(1.3);
+  z-index: 1;
+}
 
-/* ==========================
-   RECENT SUBMISSIONS & WEEKLY
-   ========================== */
+.level0 { background: var(--border-light); }
+.level1 { background: #FEF9C3; }
+.level2 { background: #FDE047; }
+.level3 { background: var(--primary-yellow); }
+
+/* Activity Sections */
 .middleRow {
-  margin-bottom: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .activitySection {
-  background: var(--color-surface);
-  border-radius: 16px;
+  background: var(--bg-white);
+  border-radius: 12px;
   padding: 1.5rem;
-  border: 1px solid var(--color-border);
-  height: 100%;
+  border: 1px solid var(--border-light);
+  animation: fadeInUp 0.5s ease 0.5s both;
 }
 
-.activityList {
+.activitySection h3 {
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-top: 1rem;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  margin: 0 0 1rem 0;
 }
 
 .activityItem {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem;
-  background: var(--color-background);
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: var(--bg-light);
   border-radius: 8px;
-  cursor: pointer;
-  border: 1px solid transparent;
-  transition: border-color 0.2s;
+  transition: all var(--transition-speed) ease;
+  animation: slideIn 0.3s ease;
+  animation-fill-mode: both;
 }
 
 .activityItem:hover {
-  border-color: var(--color-primary);
+  transform: translateX(4px);
+  background: var(--bg-white);
+  box-shadow: var(--shadow-sm);
 }
 
-.activityIcon {
-  width: 40px;
-  height: 40px;
+/* Animations */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeInLeft { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes fadeInRight { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+@keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-light); }
+::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+
+/* Alumni Network Section */
+.alumniSection {
+  margin-bottom: 2.5rem;
+  animation: fadeInUp 0.5s ease both;
+}
+
+.alumniContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.25rem;
+}
+
+.alumniCard {
+  background: var(--bg-white);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 1.1rem;
+  text-align: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.alumniCard:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-yellow);
+}
+
+.alumniAvatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 2px solid var(--border-light);
+  padding: 2px;
+  transition: all 0.3s ease;
+  margin-bottom: 0.5rem;
+}
+
+.alumniCard:hover .alumniAvatar {
+  border-color: var(--primary-yellow);
+  transform: scale(1.05);
+}
+
+.alumniCard h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.alumniCard .role {
+  font-size: 0.75rem;
+  color: var(--color-primary);
+  font-weight: 600;
+  margin: 0;
+}
+
+.alumniCard .batch {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.connectBtn {
+  margin-top: 0.75rem;
+  width: 100%;
+  background: var(--bg-light);
+  color: var(--text-primary);
+  border: 1px solid var(--border-light);
+  padding: 0.4rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-surface);
-  border-radius: 8px;
-  color: var(--color-primary);
-  border: 1px solid var(--color-border);
-}
-
-.activityInfo {
-  display: flex;
-  flex-direction: column;
-}
-
-.activityInfo strong {
-  font-size: 0.95rem;
-  color: var(--color-text-primary);
-}
-
-.activityInfo span {
-  font-size: 0.8rem;
-  color: var(--color-text-secondary);
-}
-
-.barChart {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  height: 200px;
-  margin-top: 1rem;
-  padding-top: 2rem;
-}
-
-.barContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  flex: 1;
-}
-
-.barFill {
-  width: 30px;
-  background-color: var(--color-primary);
-  border-radius: 4px 4px 0 0;
-  opacity: 0.8;
-  transition: opacity 0.2s, height 0.5s ease-out;
-}
-
-.barFill:hover {
-  opacity: 1;
-}
-
-.barLabel {
-  font-size: 0.8rem;
-  color: var(--color-text-secondary);
-  font-weight: 500;
-}
-
-/* ==========================
-   COURSES GRID
-   ========================== */
-.coursesSection {
-  background: var(--color-surface);
-  border-radius: 16px;
-  padding: 1.5rem;
-  border: 1px solid var(--color-border);
-  margin-bottom: 2rem;
-}
-
-.sectionHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  color: var(--color-text-primary);
-}
-
-.viewAllBtn, .viewAll {
-  background: transparent;
-  border: 1px solid var(--color-border);
-  color: var(--color-text-primary);
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
   cursor: pointer;
-  font-weight: 500;
-  transition: background 0.2s;
 }
 
-.viewAllBtn:hover, .viewAll:hover {
-  background: var(--color-background);
+.alumniCard:hover .connectBtn {
+  background: var(--primary-yellow);
+  border-color: var(--primary-yellow);
+  color: black;
 }
 
-.coursesGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
+/* Courses, Jobs, Alumni (Merged from existing) */
+.coursesSection, .jobSection, .alumniSection {
+  margin-bottom: 1.5rem;
+  animation: fadeInUp 0.5s ease both;
 }
 
 .courseCard {
-  background: var(--color-background);
-  border: 1px solid var(--color-border);
+  background: var(--bg-white);
+  border: 1px solid var(--border-light);
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: 1.1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.75rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.courseCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--primary-yellow);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.courseCard:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary-yellow);
+}
+
+.courseCard:hover::before {
+  opacity: 1;
 }
 
 .courseInfo h4 {
-  margin: 0;
-  font-size: 1.05rem;
-  color: var(--color-text-primary);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.15rem;
+  line-height: 1.2;
 }
 
 .courseInfo p {
-  margin: 0.25rem 0 0 0;
   font-size: 0.85rem;
-  color: var(--color-text-secondary);
+  color: var(--text-secondary);
 }
 
-.progressContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+.progressWrapper {
+  margin-top: auto;
 }
 
 .progressLabel {
   display: flex;
   justify-content: space-between;
-  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
   font-weight: 600;
-  color: var(--color-text-secondary);
 }
 
-.progressBar {
-  width: 100%;
+.progressBarRoot {
   height: 6px;
-  background: var(--color-border);
+  background: var(--bg-light);
   border-radius: 3px;
   overflow: hidden;
 }
 
 .progressFill {
   height: 100%;
-  background: var(--color-primary);
-  border-radius: 3px;
+  background: var(--primary-yellow);
+  transition: width 1s ease-in-out;
+  box-shadow: 0 0 10px var(--primary-yellow);
 }
 
-/* ==========================
-   JOBS & ALUMNI
-   ========================== */
-.jobSection, .alumniSection {
-  background: var(--color-surface);
-  border-radius: 16px;
-  padding: 1.5rem;
-  border: 1px solid var(--color-border);
-  margin-bottom: 2rem;
-}
-
-.jobGrid, .alumniContainer {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
-}
-
-.jobCard, .alumniCard {
-  background: var(--color-background);
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
-  padding: 1.5rem;
-}
-
-.cardHeader {
+.courseFooter {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: var(--color-text-secondary);
+  margin-top: 0.5rem;
 }
 
-.jobRole {
-  margin: 1rem 0 0.5rem;
-  font-size: 1.1rem;
-  color: var(--color-text-primary);
-}
-
-.companyInfo {
-  margin: 0 0 1.5rem 0;
-  font-size: 0.9rem;
-  color: var(--color-text-secondary);
-}
-
-.cardFooter {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.pay {
-  font-size: 0.85rem;
+.continueBtn {
+  background: var(--bg-light);
+  color: var(--text-primary);
+  border: 1px solid var(--border-light);
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
   font-weight: 600;
-  color: var(--color-text-primary);
-}
-
-.applyBtn {
-  background: transparent;
-  border: 1px solid var(--color-primary);
-  color: var(--color-primary);
-  padding: 0.4rem 1rem;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.applyBtn:hover {
-  background: var(--color-primary);
-  color: white;
-}
-
-.alumniCard {
-  text-align: center;
+  border-radius: 8px;
   display: flex;
-  flex-direction: column;
   align-items: center;
   gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.courseCard:hover .continueBtn {
+  background: var(--primary-yellow);
+  border-color: var(--primary-yellow);
+  color: black;
 }
 
 .avatar {
-  width: 72px;
-  height: 72px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  margin-bottom: 0.5rem;
+  margin: 0 auto 0.75rem;
+  border: 2px solid var(--border-light);
 }
 
-.role {
-  color: var(--color-text-secondary);
-  font-size: 0.85rem;
-}
-
-.batch {
-  background: var(--color-border);
-  padding: 0.2rem 0.6rem;
+/* Sidebar Components */
+.eventCalendarCard, .monthlyTracker, .skillsSection, .attendanceCard, .leaderboardCard {
+  background: var(--bg-white);
   border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--color-text-primary);
-}
-
-.connectBtn {
-  margin-top: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: transparent;
-  border: 1px solid var(--color-border);
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  color: var(--color-text-primary);
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.connectBtn:hover {
-  background: var(--color-background);
-}
-
-/* ==========================
-   SIDEBAR & WIDGETS
-   ========================== */
-.sidebarContainer {
-  margin-top: 2rem;
-}
-
-.eventCalendarCard, .monthlyTracker, .activitySection, .skillsSection, .attendanceCard, .leaderboardCard {
-  background: var(--color-surface);
-  border-radius: 16px;
   padding: 1.5rem;
-  border: 1px solid var(--color-border);
-  margin-bottom: 1.5rem;
+  border: 1px solid var(--border-light);
+  animation: fadeInRight 0.5s ease both;
 }
 
-.calendarHeader, .trackerHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-}
-
-.sidebarTitle {
-  font-size: 1.1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin: 0;
-  color: var(--color-text-primary);
-}
-
-.navActions {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.navBtn {
-  background: var(--color-background);
-  border: 1px solid var(--color-border);
-  border-radius: 4px;
-  padding: 0.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: var(--color-text-primary);
-}
-
-.currentMonth {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--color-text-primary);
+.month {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  text-transform: uppercase;
 }
 
 .calendarGrid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 0.5rem;
-  text-align: center;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
 }
 
-.weekdayLabel {
-  font-weight: 600;
-  font-size: 0.75rem;
-  color: var(--color-text-secondary);
-  margin-bottom: 0.5rem;
+.dayLabel {
+  text-align: center;
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  padding-bottom: 0.5rem;
 }
 
 .calendarDay {
-  padding: 0.5rem;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  cursor: pointer;
-  position: relative;
-  border: 1px solid transparent;
-  color: var(--color-text-primary);
-}
-
-.calendarDay:hover {
-  border-color: var(--color-primary);
-}
-
-.today {
-  background: var(--color-primary);
-  color: white;
-  font-weight: 600;
-}
-
-.hasEvent .eventDot {
-  position: absolute;
-  bottom: 2px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 4px;
-  height: 4px;
-  background: #ef4444;
-  border-radius: 50%;
-}
-
-/* ==========================
-   TRACKER & CIRCULAR PROGRESS
-   ========================== */
-.filterGroup {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.filterSelect {
-  padding: 0.3rem;
-  border-radius: 4px;
-  border: 1px solid var(--color-border);
-  background: var(--color-background);
-  color: var(--color-text-primary);
-}
-
-.trackerContent {
+  aspect-ratio: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
 }
 
-.progressCircle {
-  width: 150px;
-  height: 150px;
+.calendarDay:hover {
+  background: var(--bg-light);
+  color: var(--color-primary);
 }
 
-.circularChart {
-  display: block;
-  margin: 0 auto;
-  max-width: 100%;
-  max-height: 250px;
+.today {
+  background: var(--primary-yellow);
+  color: black !important;
+  font-weight: 800;
 }
 
-.circleBg {
-  fill: none;
-  stroke: var(--color-border);
-  stroke-width: 3;
-}
-
-.circle {
-  fill: none;
-  stroke-width: 3;
-  stroke-linecap: round;
-  animation: progress 1s ease-out forwards;
-}
-
-.percentage {
-  fill: var(--color-text-primary);
-  font-family: inherit;
-  font-size: 0.4em;
-  font-weight: bold;
-}
-
-.trackerStats {
-  display: flex;
-  justify-content: space-around;
-  width: 100%;
-  padding-top: 1rem;
-  border-top: 1px solid var(--color-border);
+.eventDot {
+  position: absolute;
+  bottom: 4px;
+  width: 3px;
+  height: 3px;
+  background: var(--color-primary);
+  border-radius: 50%;
 }
 
 .statMini {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.statMini span {
-  font-size: 0.8rem;
-  color: var(--color-text-secondary);
-}
-
-.statMini strong {
-  font-size: 1.2rem;
-  color: var(--color-text-primary);
-}
-
-/* ==========================
-   QUIZZES
-   ========================== */
-.quizCard {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem;
-  background: var(--color-background);
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  margin-top: 1rem;
-}
-
-.dateBadge {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 45px;
-}
-
-.month {
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: var(--color-text-secondary);
-}
-
-.day {
-  font-size: 1.3rem;
-  color: var(--color-primary);
-}
-
-.quizInfo h4 {
-  margin: 0 0 0.25rem 0;
-  font-size: 0.95rem;
-  color: var(--color-text-primary);
-}
-
-.quizMeta {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.8rem;
-  color: var(--color-text-secondary);
-}
-
-.separator {
-  color: var(--color-border);
-}
-
-.arrowIcon {
-  margin-left: auto;
-  color: var(--color-text-secondary);
-}
-
-/* ==========================
-   SKILLS & ATTENDANCE
-   ========================== */
-.skillsHeaderWrapper {
-  display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.skillCount {
-  font-weight: 600;
-  color: var(--color-primary);
-}
-
-.pillsContainer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+  font-size: 0.875rem;
 }
 
 .skillPill {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 0.25rem;
-  padding: 0.4rem 0.8rem;
-  background: var(--color-background);
-  border: 1px solid var(--color-border);
+  background: var(--bg-light);
+  border: 1px solid var(--border-light);
   border-radius: 20px;
+  padding: 0.25rem 0.75rem;
   font-size: 0.85rem;
-  color: var(--color-text-primary);
-}
-
-.checkIcon {
-  color: #10b981;
-}
-
-.morePill {
-  border-style: dashed;
-}
-
-.skillProgressBar {
-  height: 6px;
-  background: var(--color-border);
-  border-radius: 3px;
-  margin-top: 1.5rem;
-  overflow: hidden;
-}
-
-.skillProgressFill {
-  height: 100%;
-  background: var(--color-primary);
-  border-radius: 3px;
-}
-
-.attendanceBody {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  margin: 1.5rem 0;
-}
-
-.circularProgress {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: rgba(16, 185, 129, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #10b981;
-  font-weight: bold;
-  font-size: 1.2rem;
-}
-
-.attendanceInfo p {
-  margin: 0.25rem 0;
-  font-size: 0.9rem;
-  color: var(--color-text-secondary);
-}
-
-.attendanceInfo strong {
-  color: var(--color-text-primary);
-}
-
-.statusText {
-  margin: 0;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--color-text-primary);
-}
-
-/* ==========================
-   LEADERBOARD
-   ========================== */
-.leaderList {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-top: 1rem;
 }
 
 .leaderItem {
   display: flex;
   align-items: center;
-  padding: 0.75rem;
-  background: var(--color-background);
+  gap: 0.75rem;
+  padding: 0.5rem;
+  background: var(--bg-light);
+  border-radius: 6px;
+  transition: transform 0.2s;
+}
+
+.leaderItem:hover {
+  transform: translateX(4px);
+}
+
+.trackerContent {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.circularProgress {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.progressSvg {
+  transform: rotate(-90deg);
+  width: 100%;
+  height: 100%;
+}
+
+.progressCircleBg {
+  fill: none;
+  stroke: var(--bg-light);
+  stroke-width: 6;
+}
+
+.progressCircleFill {
+  fill: none;
+  stroke: var(--primary-yellow);
+  stroke-width: 6;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s ease-in-out;
+}
+
+.progressValue {
+  position: absolute;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.trackerStats {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.statMini {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.statMini strong {
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.quizCard {
+  background: var(--bg-light);
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid var(--border-light);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.quizCard:hover {
+  background: var(--bg-white);
+  border-color: var(--primary-yellow);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.dateBadge {
+  background: var(--bg-white);
+  border: 1px solid var(--border-light);
   border-radius: 8px;
-  border: 1px solid var(--color-border);
+  padding: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 48px;
 }
 
-.rank {
-  font-weight: bold;
-  width: 30px;
-  color: var(--color-text-secondary);
+.miniMonth {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--color-error);
 }
 
-.leaderItem:nth-child(1) .rank { color: #f59e0b; }
-.leaderItem:nth-child(2) .rank { color: #94a3b8; }
-.leaderItem:nth-child(3) .rank { color: #b45309; }
+.miniDay {
+  font-size: 1.1rem;
+  font-weight: 800;
+  line-height: 1;
+}
 
-.userName {
-  flex-grow: 1;
+.quizInfo h4 {
   font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--color-text-primary);
+  font-weight: 700;
+  margin-bottom: 0.15rem;
 }
 
-.userScore {
-  font-weight: bold;
+.quizInfo p {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+/* Deadline Section */
+.deadlineHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.deadlineHeader h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.deadlineList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.deadlineItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  background: var(--bg-light);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.deadlineItem:hover {
+  background: var(--bg-white);
+  border-color: var(--primary-yellow);
+  transform: translateX(4px);
+  box-shadow: var(--shadow-sm);
+}
+
+.deadlineIcon {
+  width: 36px;
+  height: 36px;
+  background: var(--bg-white);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-yellow);
+  border: 1px solid var(--border-light);
+  flex-shrink: 0;
+}
+
+.deadlineInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.deadlineInfo h4 {
   font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.2rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.deadlineInfo p {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.urgencyBadge {
+  background: rgba(250, 204, 21, 0.1);
+  color: #854D0E;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+/* Job Board Section */
+.jobSection {
+  margin-bottom: 2.5rem;
+  animation: fadeInUp 0.5s ease both;
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.sectionTitle h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.jobGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  overflow: hidden;
+}
+
+.jobCard {
+  background: var(--bg-white);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 1.1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: relative;
+}
+
+.jobCard:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-primary);
+}
+
+.jobHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.companyBadge {
+  background: var(--bg-light);
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: var(--color-primary);
+  border: 1px solid var(--border-light);
 }
+
+.jobTypeTag {
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--color-primary);
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.jobBody h4 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.15rem;
+}
+
+.jobBody p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.jobFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 1.25rem;
+  border-top: 1px dashed var(--border-light);
+}
+
+.sectionFooter {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.loadMoreBtn {
+  background: var(--bg-white);
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  padding: 0.75rem 2.5rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.loadMoreBtn:hover {
+  background: var(--color-primary);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.2);
+}
+
+.salary {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-success);
+}
+
+.applyBtn {
+  background: var(--color-primary);
+  color: white;
+  padding: 0.6rem 1.5rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.applyBtn:hover {
+  background: var(--color-primary-dark);
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+}
+
+/* Activity Heatmap Section */
+.heatmapSection {
+  margin-bottom: 2.5rem;
+}
+
+.heatmapHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.heatmapHeader h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.heatmapHeader .consistency {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--bg-light);
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+}
+
+.heatmapGrid {
+  display: flex;
+  gap: 0.35rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scrollbar-width: thin;
+}
+
+.heatmapGrid::-webkit-scrollbar {
+  height: 4px;
+}
+
+.heatmapGrid::-webkit-scrollbar-thumb {
+  background: var(--border-light);
+  border-radius: 10px;
+}
+
+.heatmapWeek {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.heatmapCell {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.heatmapCell:hover {
+  transform: scale(1.4);
+  z-index: 10;
+  box-shadow: 0 0 10px rgba(250, 204, 21, 0.5);
+}
+
+.cell-0 { background: var(--border-light); }
+.cell-1 { background: rgba(250, 204, 21, 0.15); }
+.cell-2 { background: rgba(250, 204, 21, 0.35); }
+.cell-3 { background: rgba(250, 204, 21, 0.65); }
+.cell-4 { background: var(--primary-yellow); }
