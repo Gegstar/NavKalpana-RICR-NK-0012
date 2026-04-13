@@ -1,8 +1,17 @@
 "use client";
 
-import React from "react";
-import { Briefcase, Building, MapPin, Globe, ArrowRight } from "lucide-react";
-import styles from "@/styles/StudentDashboard.module.css";
+import React, { useRef } from "react";
+import { Box, Typography, Button, IconButton } from "@mui/material";
+import {
+  Briefcase,
+  Building,
+  MapPin,
+  Globe,
+  ArrowRight,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+import styles from "@/styles/JobBoard.module.css";
 
 interface Job {
   id: number;
@@ -18,57 +27,91 @@ interface JobBoardProps {
 }
 
 export default function JobBoard({ jobs }: JobBoardProps) {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const scroll = (direction: "left" | "right") => {
+    if (scrollContainerRef.current) {
+      const cardWidth =
+        scrollContainerRef.current.querySelector(`.${styles.card}`)?.clientWidth || 320;
+      const scrollAmount = cardWidth + 24; // card width + gap
+      scrollContainerRef.current.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
+
   return (
-    <section className={styles.jobSection}>
-      <div className={styles.sectionTitle}>
-        <Briefcase size={24} color="var(--color-primary)" />
-        <h2>Opportunities for You</h2>
-      </div>
+    <Box component="section" className={styles.section}>
+      <Box className={styles.sectionHeader}>
+        <Box className={styles.titleWrapper}>
+          <Briefcase size={24} className={styles.icon} />
+          <Typography variant="h2" className={styles.title}>
+            Opportunities for You
+          </Typography>
+        </Box>
+        <Box className={styles.scrollControls}>
+          <IconButton
+            onClick={() => scroll("left")}
+            className={styles.scrollButton}
+            aria-label="Scroll left"
+          >
+            <ChevronLeft size={20} />
+          </IconButton>
+          <IconButton
+            onClick={() => scroll("right")}
+            className={styles.scrollButton}
+            aria-label="Scroll right"
+          >
+            <ChevronRight size={20} />
+          </IconButton>
+        </Box>
+      </Box>
 
-      <div className={styles.jobGrid}>
+      <Box className={styles.grid} ref={scrollContainerRef}>
         {jobs.length > 0 ? (
-          jobs.slice(0, 3).map((job) => (
-            <div key={job.id} className={styles.jobCard}>
-              <div className={styles.jobHeader}>
-                <div className={styles.companyBadge}>
+          jobs.map((job) => (
+            <Box key={job.id} className={styles.card}>
+              <Box className={styles.cardHeader}>
+                <Box className={styles.companyBadge}>
                   <Building size={20} />
-                </div>
-                <span className={styles.jobTypeTag}>
+                </Box>
+                <Typography component="span" className={styles.typeTag}>
                   {job.type || "Full-time"}
-                </span>
-              </div>
+                </Typography>
+              </Box>
 
-              <div className={styles.jobBody}>
-                <h4>{job.title}</h4>
-                <p>
+              <Box className={styles.cardBody}>
+                <Typography variant="h4" className={styles.jobTitle}>
+                  {job.title}
+                </Typography>
+                <Box className={styles.meta}>
                   <MapPin size={14} />
-                  {job.location || "Remote"}
-                </p>
-                <p style={{ marginTop: '0.25rem' }}>
+                  <Typography variant="body2">{job.location || "Remote"}</Typography>
+                </Box>
+                <Box className={styles.meta}>
                   <Globe size={14} />
-                  {job.company?.name || "Tech Solutions"}
-                </p>
-              </div>
+                  <Typography variant="body2">
+                    {job.company?.name || "Tech Solutions"}
+                  </Typography>
+                </Box>
+              </Box>
 
-              <div className={styles.jobFooter}>
-                <span className={styles.salary}>{job.salary || "$45k - $60k"}</span>
-                <button className={styles.applyBtn}>Quick Apply</button>
-              </div>
-            </div>
+              <Box className={styles.cardFooter}>
+                <Typography className={styles.salary}>
+                  {job.salary || "$45k - $60k"}
+                </Typography>
+                <Button className={styles.applyBtn}>Quick Apply</Button>
+              </Box>
+            </Box>
           ))
         ) : (
-          <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)', width: '100%' }}>
-            Stay tuned! New opportunities are coming your way.
-          </div>
+          <Box className={styles.emptyState}>
+            <Typography>Stay tuned! New opportunities are coming your way.</Typography>
+          </Box>
         )}
-      </div>
+      </Box>
 
-      <div className={styles.sectionFooter}>
-        <button className={styles.loadMoreBtn}>
-          Explore All Opportunities
-          <ArrowRight size={18} />
-        </button>
-      </div>
-    </section>
+    </Box>
   );
 }

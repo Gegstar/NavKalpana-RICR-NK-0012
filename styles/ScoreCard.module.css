@@ -1,61 +1,53 @@
-.scoreCard {
-  border-radius: var(--radius-xl);
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
-  height: 100%;
+/* ScoreCard.module.css – Uses global root variables */
+
+.scoreInfo {
+  position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  transition: var(--transition-smooth);
-}
-
-.scoreCard:hover {
-  background: var(--glass-bg-hover);
-  border-color: var(--glass-border-hover);
-}
-
-.cardContent {
-  padding: var(--spacing-xl) !important;
-  text-align: center;
+  flex: 1;
 }
 
 .label {
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  color: var(--color-text-secondary);
+  color: var(--color-text-secondary) !important;
+  font-size: var(--font-size-xs) !important;
   text-transform: uppercase;
-  margin-bottom: var(--spacing-sm) !important;
-  display: block;
+  letter-spacing: 0.03em;
+  margin-bottom: var(--spacing-xs);
 }
 
-.torusContainer {
-  position: relative;
-  margin-bottom: var(--spacing-sm);
+.score {
+  color: var(--color-primary) !important;
+  font-weight: var(--font-weight-bold) !important;
+  margin-bottom: var(--spacing-xs) !important;
 }
 
-.scoreOverlay {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-}
-
-.scoreValue {
-  font-weight: 900;
-  color: var(--color-text-primary);
-}
-
-.trendContainer {
+.trendWrapper {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: var(--spacing-xs);
+}
+
+.trendIcon {
   color: var(--color-success);
 }
 
 .trendText {
-  font-weight: 600;
+  color: var(--color-success) !important;
+  font-size: var(--font-size-xs) !important;
+  font-weight: var(--font-weight-medium);
+}
+
+.iconBg {
+  position: absolute;
+  right: var(--spacing-lg);
+  top: var(--spacing-lg);
+  color: var(--color-primary);
+  opacity: 0.15;
+  transition: all var(--transition-base);
+  pointer-events: none;
+}
+
+.scoreInfo:hover .iconBg {
+  opacity: 0.25;
+  transform: scale(1.05) rotate(5deg);
 }

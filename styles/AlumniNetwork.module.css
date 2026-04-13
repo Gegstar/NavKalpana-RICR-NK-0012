@@ -1,43 +1,162 @@
-.alumniSection {
-  background: var(--color-surface);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-lg);
-  border: 1px solid var(--glass-border);
+/* AlumniNetwork.module.css – Netflix‑style horizontal scroll */
+
+.section {
+  width: 100%;
+  margin-bottom: var(--spacing-2xl);
 }
 
 .sectionHeader {
-  margin-bottom: var(--spacing-lg);
-}
-
-.alumniContainer {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: var(--spacing-md);
-}
-
-.alumniCard {
-  background: var(--color-bg-deep);
-  border-radius: var(--radius-md);
-  padding: var(--spacing-lg);
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+  flex-wrap: wrap;
+}
+
+.sectionIcon {
+  color: var(--color-primary);
+}
+
+.sectionTitle {
+  font-size: var(--font-size-xl) !important;
+  font-weight: var(--font-weight-bold) !important;
+  color: var(--color-text-primary);
+}
+
+/* Scroll container – shows 3 cards at a time */
+.scrollContainer {
+  display: flex;
+  gap: var(--spacing-md);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding-bottom: var(--spacing-md);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important;  /* IE/Edge */
+}
+
+.scrollContainer::-webkit-scrollbar {
+  display: none !important; /* Chrome/Safari */
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Each card snaps into place and takes exactly 1/3 of container width minus gap */
+.alumniCard {
+  flex: 0 0 calc((100% - 2 * var(--spacing-md)) / 3);
+  scroll-snap-align: start;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg) var(--spacing-md);
   text-align: center;
-  border: 1px solid var(--glass-border);
-  transition: var(--transition-smooth);
+  transition: all var(--transition-base);
 }
 
 .alumniCard:hover {
-  transform: scale(1.02);
-  background: var(--color-surface);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-primary-light);
 }
 
-.role {
-  margin-top: var(--spacing-xs) !important;
-  display: block;
+.avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  margin: 0 auto var(--spacing-md);
+  border: 3px solid var(--color-primary-light);
+  object-fit: cover;
 }
 
-.batch {
-  margin-top: 2px !important;
+.name {
+  font-size: var(--font-size-md) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-xs) !important;
+}
+
+.position {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.batchWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-md);
+}
+
+.batchIcon {
   color: var(--color-text-muted);
 }
+
+.batchText {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.connectButton {
+  background: transparent !important;
+  border: 1px solid var(--color-border) !important;
+  color: var(--color-text-primary) !important;
+  padding: var(--spacing-xs) var(--spacing-md) !important;
+  border-radius: var(--radius-full) !important;
+  font-size: var(--font-size-xs) !important;
+  text-transform: none !important;
+  display: inline-flex !important;
+  align-items: center;
+  gap: var(--spacing-xs) !important;
+  transition: all var(--transition-fast) !important;
+  min-height: 36px !important;
+}
+
+.connectButton:hover {
+  background: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+  color: white !important;
+}
+
+.emptyState {
+  padding: var(--spacing-2xl);
+  text-align: center;
+  color: var(--color-text-secondary);
+  width: 100%;
+  font-size: var(--font-size-sm);
+}
+
+/* ── Responsive ─────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .alumniCard {
+    flex: 0 0 calc((100% - var(--spacing-md)) / 2);
+  }
+}
+
+@media (max-width: 600px) {
+  .sectionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .alumniCard {
+    flex: 0 0 75vw;
+    max-width: 280px;
+  }
+
+  .avatar {
+    width: 56px;
+    height: 56px;
+  }
+}
+
+@media (max-width: 400px) {
+  .alumniCard {
+    flex: 0 0 85vw;
+    padding: var(--spacing-md) var(--spacing-sm);
+  }
+}
+

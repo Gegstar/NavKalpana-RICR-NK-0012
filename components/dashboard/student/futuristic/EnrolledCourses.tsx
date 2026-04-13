@@ -1,8 +1,9 @@
 "use client";
 
-import React from "react";
-import { BookOpen, ChevronRight, Play } from "lucide-react";
-import styles from "@/styles/StudentDashboard.module.css";
+import React, { useRef } from "react";
+import { Box, Typography, Button, IconButton } from "@mui/material";
+import { BookOpen, ChevronRight, Play, ChevronLeft } from "lucide-react";
+import styles from "@/styles/EnrolledCourses.module.css";
 
 interface Course {
   id: number;
@@ -14,58 +15,98 @@ interface Course {
 
 interface EnrolledCoursesProps {
   courses: Course[];
+  onViewAll?: () => void;
+  onContinue?: (courseId: number) => void;
 }
 
-export default function EnrolledCourses({ courses }: EnrolledCoursesProps) {
-  return (
-    <section className={styles.coursesSection}>
-      <div className={styles.sectionHeader} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <BookOpen size={24} color="var(--primary-yellow)" />
-          <h2 style={{ fontSize: '1.25rem', fontWeight: 700 }}>My Courses</h2>
-        </div>
-        <button style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer' }}>
-          View all courses
-        </button>
-      </div>
+export default function EnrolledCourses({
+  courses,
+  onViewAll,
+  onContinue,
+}: EnrolledCoursesProps) {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-      <div className={styles.bentoGrid}>
+  const scroll = (direction: "left" | "right") => {
+    if (scrollContainerRef.current) {
+      const cardWidth = scrollContainerRef.current.querySelector(`.${styles.courseCard}`)?.clientWidth || 300;
+      const scrollAmount = cardWidth + 16; // card width + gap
+      scrollContainerRef.current.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  return (
+    <Box component="section" className={styles.section}>
+      <Box className={styles.sectionHeader}>
+        <Box className={styles.headerLeft}>
+          <BookOpen size={24} className={styles.headerIcon} />
+          <Typography component="h2" className={styles.headerTitle}>
+            My Courses
+          </Typography>
+        </Box>
+        <Box className={styles.headerActions}>
+          <IconButton
+            onClick={() => scroll("left")}
+            className={styles.scrollButton}
+            aria-label="Scroll left"
+          >
+            <ChevronLeft size={20} />
+          </IconButton>
+          <IconButton
+            onClick={() => scroll("right")}
+            className={styles.scrollButton}
+            aria-label="Scroll right"
+          >
+            <ChevronRight size={20} />
+          </IconButton>
+          <Button className={styles.viewAllButton} onClick={onViewAll}>
+            View all courses
+          </Button>
+        </Box>
+      </Box>
+
+      <Box className={styles.coursesGrid} ref={scrollContainerRef}>
         {courses.length > 0 ? (
-          courses.slice(0, 3).map((course) => (
-            <div key={course.id} className={styles.courseCard}>
-              <div className={styles.courseInfo}>
+          courses.slice(0, 10).map((course) => (
+            <Box key={course.id} className={styles.courseCard}>
+              <Box className={styles.courseInfo}>
                 <h4>{course.title}</h4>
                 <p>by {course.instructor || "University Faculty"}</p>
-              </div>
+              </Box>
 
-              <div className={styles.progressWrapper}>
-                <div className={styles.progressLabel}>
+              <Box className={styles.progressWrapper}>
+                <Box className={styles.progressLabel}>
                   <span>Course Progress</span>
                   <span>{course.progress || 0}%</span>
-                </div>
-                <div className={styles.progressBarRoot}>
-                  <div 
-                    className={styles.progressFill} 
+                </Box>
+                <Box className={styles.progressBarRoot}>
+                  <Box
+                    className={styles.progressFill}
                     style={{ width: `${course.progress || 0}%` }}
                   />
-                </div>
-              </div>
+                </Box>
+              </Box>
 
-              <div className={styles.courseFooter}>
-                <button className={styles.continueBtn}>
+              <Box className={styles.courseFooter}>
+                <Button
+                  className={styles.continueBtn}
+                  onClick={() => onContinue?.(course.id)}
+                >
                   <Play size={14} fill="currentColor" />
                   Continue
-                </button>
-                <ChevronRight size={18} color="var(--text-muted)" />
-              </div>
-            </div>
+                </Button>
+                <ChevronRight size={18} className={styles.arrowIcon} />
+              </Box>
+            </Box>
           ))
         ) : (
-          <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-secondary)', width: '100%' }}>
+          <Box className={styles.emptyState}>
             No active courses found. Start learning today!
-          </div>
+          </Box>
         )}
-      </div>
-    </section>
+      </Box>
+    </Box>
   );
 }

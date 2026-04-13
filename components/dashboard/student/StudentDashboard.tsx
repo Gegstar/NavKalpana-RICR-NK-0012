@@ -56,7 +56,8 @@ const STUB_DATA = {
       { id: 2, name: "David Chen", position: "Product Designer @ Meta", batch: "2023", avatar: "https://i.pravatar.cc/150?u=david" },
       { id: 3, name: "Elena Rodriguez", position: "Founder @ AI-Labs", batch: "2021", avatar: "https://i.pravatar.cc/150?u=elena" },
       { id: 4, name: "James Wilson", position: "Data Scientist @ Netlify", batch: "2019", avatar: "https://i.pravatar.cc/150?u=james" },
-      { id: 5, name: "Sophia Lee", position: "UX Researcher @ Uber", batch: "2020", avatar: "https://i.pravatar.cc/150?u=sophia" }
+      { id: 5, name: "Sophia Lee", position: "UX Researcher @ Uber", batch: "2020", avatar: "https://i.pravatar.cc/150?u=sophia" },
+      { id: 6, name: "Uttam turkar", }
     ],
     topPerformers: [
       { name: "John Doe", score: 4500 },
@@ -67,7 +68,8 @@ const STUB_DATA = {
   courses: [
     { id: 1, title: "Advanced Data Visualization", instructor: "Dr. Robert Fox", progress: 85 },
     { id: 2, title: "Machine Learning with Python", instructor: "Prof. Linda Blair", progress: 42 },
-    { id: 3, title: "Strategic Management", instructor: "Prof. Linda Blair", progress: 15 }
+    { id: 3, title: "Strategic Management", instructor: "Prof. Linda Blair", progress: 15 },
+    { id: 4, title: "Strategic Management", instructor: "Prof. Linda Blair", progress: 15}
   ]
 };
 

@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
+import { Box, Typography } from "@mui/material";
 import { Clock, AlertCircle } from "lucide-react";
-import styles from "@/styles/StudentDashboard.module.css";
+import styles from "@/styles/DeadlineList.module.css";
 
 interface Deadline {
   id: number;
@@ -13,65 +14,65 @@ interface Deadline {
 }
 
 const urgencyConfig = {
-  critical: { label: "Today",    color: "#DC2626", bg: "rgba(220, 38, 38, 0.08)" },
-  high:     { label: "Tomorrow", color: "#D97706", bg: "rgba(217, 119, 6, 0.08)" },
-  medium:   { label: "Soon",     color: "#6366F1", bg: "rgba(99, 102, 241, 0.08)" },
-  low:      { label: "Later",    color: "#64748B", bg: "rgba(100, 116, 139, 0.08)" },
+  critical: { label: "Today", color: "#DC2626", bg: "rgba(220, 38, 38, 0.08)", border: "rgba(220, 38, 38, 0.2)" },
+  high:     { label: "Tomorrow", color: "#D97706", bg: "rgba(217, 119, 6, 0.08)", border: "rgba(217, 119, 6, 0.2)" },
+  medium:   { label: "Soon", color: "#6366F1", bg: "rgba(99, 102, 241, 0.08)", border: "rgba(99, 102, 241, 0.2)" },
+  low:      { label: "Later", color: "#64748B", bg: "rgba(100, 116, 139, 0.08)", border: "rgba(100, 116, 139, 0.2)" },
 };
 
 export default function DeadlineList({ deadlines }: { deadlines: Deadline[] }) {
   return (
-    <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
-      <div className={styles.deadlineHeader}>
-        <Clock size={20} color="var(--primary-yellow)" />
-        <h3>Upcoming Deadlines</h3>
-        <span style={{ marginLeft: "auto", fontSize: "0.75rem", color: "var(--text-secondary)", fontWeight: 600 }}>
+    <Box className={styles.container}>
+      <Box className={styles.header}>
+        <Clock size={20} className={styles.headerIcon} />
+        <Typography component="h3" className={styles.headerTitle}>
+          Upcoming Deadlines
+        </Typography>
+        <Typography component="span" className={styles.taskCount}>
           {deadlines.length} tasks
-        </span>
-      </div>
+        </Typography>
+      </Box>
 
-      <div className={styles.deadlineList}>
+      <Box className={styles.list}>
         {deadlines.length > 0 ? (
           deadlines.map((item) => {
             const cfg = urgencyConfig[item.urgency ?? "low"];
             return (
-              <div key={item.id} className={styles.deadlineItem}>
-                <div
-                  className={styles.deadlineIcon}
-                  style={{ color: cfg.color, background: cfg.bg, borderColor: cfg.color + "33" }}
+              <Box key={item.id} className={styles.item}>
+                <Box
+                  className={styles.iconWrapper}
+                  style={{
+                    '--bg-color': cfg.bg,
+                    '--color': cfg.color,
+                    '--border-color': cfg.border,
+                  } as React.CSSProperties}
                 >
                   <AlertCircle size={16} />
-                </div>
+                </Box>
 
-                <div className={styles.deadlineInfo}>
+                <Box className={styles.info}>
                   <h4>{item.displayTitle || item.title}</h4>
                   <p>{item.dueDate ?? "Upcoming"}</p>
-                </div>
+                </Box>
 
-                <span
-                  className={styles.urgencyBadge}
-                  style={{ background: cfg.bg, color: cfg.color }}
+                <Box
+                  className={styles.badge}
+                  style={{
+                    '--bg-color': cfg.bg,
+                    '--color': cfg.color,
+                  } as React.CSSProperties}
                 >
                   {cfg.label}
-                </span>
-              </div>
+                </Box>
+              </Box>
             );
           })
         ) : (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flex: 1,
-              color: "var(--text-secondary)",
-              fontSize: "0.875rem",
-            }}
-          >
+          <Box className={styles.emptyState}>
             🎉 All caught up!
-          </div>
+          </Box>
         )}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }
