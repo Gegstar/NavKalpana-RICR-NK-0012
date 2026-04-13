@@ -1,69 +1,108 @@
-.deadlineCard {
-  border-radius: var(--radius-xl);
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
+/* DeadlineList.module.css – Uses global root variables */
+
+.container {
   height: 100%;
-}
-
-.cardContent {
-  padding: var(--spacing-xl) !important;
-}
-
-.label {
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  color: var(--color-text-secondary);
-  text-transform: uppercase;
-  margin-bottom: var(--spacing-lg) !important;
-  display: block;
-}
-
-.deadlineList {
-  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
 }
 
-.deadlineItem {
-  padding-left: var(--spacing-md) !important;
-  padding-right: var(--spacing-md) !important;
-  border-radius: var(--radius-lg) !important;
-  background: rgba(0, 0, 0, 0.02);
-  border: 1px solid var(--glass-border);
-  transition: var(--transition-base);
-}
-
-.deadlineItem:hover {
-  background: var(--glass-bg-hover);
-  border-color: var(--glass-border-hover);
-}
-
-.avatar {
-  background-color: rgba(99, 102, 241, 0.1) !important;
-  color: var(--color-primary) !important;
-}
-
-.titleContainer {
+.header {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
 }
 
-.deadlineTitle {
-  font-weight: 700;
+.headerIcon {
+  color: var(--color-primary);
+}
+
+.headerTitle {
+  font-size: var(--font-size-md) !important;
+  font-weight: var(--font-weight-bold) !important;
   color: var(--color-text-primary);
 }
 
-.urgentDot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: var(--color-error);
+.taskCount {
+  margin-left: auto;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-semibold);
 }
 
-.deadlineMeta {
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  flex: 1;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-background);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.item:hover {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  transform: translateX(4px);
+  box-shadow: var(--shadow-sm);
+}
+
+.iconWrapper {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid;
+  transition: all var(--transition-fast);
+  background: var(--bg-color, rgba(100, 116, 139, 0.08));
+  color: var(--color, #64748B);
+  border-color: var(--border-color, rgba(100, 116, 139, 0.2));
+}
+
+.info {
+  flex: 1;
+}
+
+.info h4 {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0 0 2px;
+}
+
+.info p {
+  font-size: var(--font-size-xs);
   color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.badge {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  background: var(--bg-color, rgba(100, 116, 139, 0.08));
+  color: var(--color, #64748B);
+}
+
+.emptyState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
 }

@@ -3,7 +3,7 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import { Trophy, TrendingUp } from "lucide-react";
-import styles from "@/styles/StudentDashboard.module.css";
+import styles from "@/styles/ScoreCard.module.css";
 
 interface ScoreCardProps {
   score: number;
@@ -13,17 +13,19 @@ interface ScoreCardProps {
 export default function ScoreCard({ score, trend }: ScoreCardProps) {
   return (
     <Box className={styles.scoreInfo}>
-      <Typography variant="caption" className={styles.label}>Academic Score</Typography>
-      <Typography variant="h3" className={styles.yellowText}>
+      <Typography variant="caption" className={styles.label}>
+        Academic Score
+      </Typography>
+      <Typography variant="h3" className={styles.score}>
         {score}%
       </Typography>
-      <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-        <TrendingUp size={16} color="var(--color-success)" />
-        <Typography variant="caption" className={styles.trendText} sx={{ color: "var(--color-success)" }}>
+      <Box className={styles.trendWrapper}>
+        <TrendingUp size={16} className={styles.trendIcon} />
+        <Typography variant="caption" className={styles.trendText}>
           {trend} vs last month
         </Typography>
       </Box>
-      <Trophy size={48} className={styles.iconBg} style={{ position: 'absolute', right: 20, top: 20 }} />
+      <Trophy size={48} className={styles.iconBg} />
     </Box>
   );
 }

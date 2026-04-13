@@ -1,7 +1,7 @@
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 
 import NavbarWrapper from "@/components/layout/NavbarWrapper";
-import Footer from "@/components/layout/Footer";
+import FooterWrapper from "@/components/layout/FooterWrapper";
 import { Toaster } from "react-hot-toast";
 
 import ReduxProvider from "@/store/provider";
@@ -87,7 +87,7 @@ export default async function RootLayout({
                 <ThemeRegistry>
                  <NavbarWrapper />
                   <main>{children}</main>
-                  <Footer />
+                  <FooterWrapper />
                   <Toaster position="top-center" />
                 </ThemeRegistry>
               </ThemeProvider>

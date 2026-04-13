@@ -1,124 +1,90 @@
-.progressCard {
-  border-radius: var(--radius-xl);
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
-  height: 100%;
-  transition: var(--transition-smooth);
-}
+/* AssignmentProgress.module.css – Uses global root variables */
 
-.progressCard:hover {
-  background: var(--glass-bg-hover);
-  border-color: var(--glass-border-hover);
-}
-
-.cardContent {
-  padding: var(--spacing-xl) !important;
-}
-
-.header {
+.container {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: var(--spacing-lg);
+  flex-direction: column;
 }
 
-.iconWrapper {
+.icon {
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.count {
+  font-weight: var(--font-weight-bold) !important;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-xs) !important;
+}
+
+.label {
+  color: var(--color-text-secondary) !important;
+  margin-bottom: var(--spacing-md) !important;
+}
+
+.progressWrapper {
   display: flex;
   align-items: center;
   gap: var(--spacing-md);
 }
 
-.iconContainer {
-  padding: 12px;
-  border-radius: 12px;
-  /* ✨ Updated to use a semi‑transparent primary glow variable */
-  background: rgba(99, 102, 241, 0.1); /* fallback */
-  background: color-mix(in srgb, var(--color-primary) 10%, transparent);
-  color: var(--color-primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* For better cross‑browser support, you could also define a new CSS variable, e.g.:
-   --color-primary-soft: color-mix(in srgb, var(--color-primary) 10%, transparent);
-   and then use background: var(--color-primary-soft);
-*/
-
-.title {
-  font-weight: 700;
-  color: var(--color-text-primary);
-}
-
-.subText {
-  color: var(--color-text-secondary);
-}
-
-.launchButton {
-  color: var(--color-text-muted) !important;
-}
-
-.progressContainer {
-  margin-bottom: var(--spacing-md);
-}
-
-.progressHeader {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: var(--spacing-xs);
-}
-
-.countText {
-  font-weight: 600;
-  color: var(--color-text-primary);
-}
-
-.percentageText {
-  font-weight: 700;
-  color: var(--color-primary);
-}
-
 .progressBar {
-  height: 10px !important;
-  border-radius: 5px !important;
-  background-color: var(--color-bg-dark) !important;
+  flex: 1;
+  height: 6px;
+  background: var(--color-border);
+  border-radius: var(--radius-full);
+  overflow: hidden;
 }
 
-.progressBar :global(.MuiLinearProgress-bar) {
-  border-radius: 5px;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary)) !important;
-  box-shadow: 0 0 10px var(--color-primary-glow);
+.progressFill {
+  height: 100%;
+  background: var(--color-primary);
+  border-radius: var(--radius-full);
+  transition: width 0.5s cubic-bezier(0.2, 0, 0, 1);
+  width: var(--progress, 0%);
 }
 
-.caption {
-  color: var(--color-text-secondary);
-}
-.buttonContainer {
-  margin-top: var(--spacing-md);
-  display: flex;
-  justify-content: flex-end;
-}
-
-.viewButton {
-  color: var(--color-primary) !important;
-  font-weight: 600 !important;
-  text-transform: none !important;
+.detailsButton {
+  background: transparent !important;
+  border: 1px solid var(--color-border) !important;
+  color: var(--color-text-secondary) !important;
   padding: var(--spacing-xs) var(--spacing-md) !important;
-  border-radius: var(--radius-md) !important;
-  transition: var(--transition-smooth) !important;
+  border-radius: var(--radius-full) !important;
+  font-size: var(--font-size-xs) !important;
+  font-weight: var(--font-weight-medium) !important;
+  text-transform: none !important;
+  white-space: nowrap;
+  transition: all var(--transition-fast) !important;
 }
 
-.viewButton:hover {
-  background: color-mix(in srgb, var(--color-primary) 10%, transparent) !important;
-  transform: translateX(4px);
+.detailsButton:hover {
+  border-color: var(--color-primary) !important;
+  color: var(--color-primary) !important;
+  background: rgba(99, 102, 241, 0.04) !important;
 }
 
-.viewButton :global(.MuiButton-endIcon) {
-  transition: var(--transition-smooth);
+.viewLink {
+  margin-top: var(--spacing-md);
+  color: var(--color-primary) !important;
+  text-transform: none !important;
+  padding: 0 !important;
+  font-size: var(--font-size-sm) !important;
+  font-weight: var(--font-weight-medium) !important;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  transition: all var(--transition-fast) !important;
 }
 
-.viewButton:hover :global(.MuiButton-endIcon) {
-  transform: translateX(4px);
+.viewLink:hover {
+  color: var(--color-primary-dark) !important;
+  background: transparent !important;
+  transform: translateX(2px);
+}
+
+.viewLink svg {
+  transition: transform var(--transition-fast);
+}
+
+.viewLink:hover svg {
+  transform: translateX(2px);
 }

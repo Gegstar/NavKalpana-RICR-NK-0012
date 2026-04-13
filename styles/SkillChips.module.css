@@ -1,47 +1,69 @@
-.skillsCard {
-  border-radius: var(--radius-xl);
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
+/* SkillChips.module.css – Uses global root variables */
+
+.container {
   height: 100%;
-  perspective: 1000px;
+  display: flex;
+  flex-direction: column;
 }
 
-.cardContent {
-  padding: var(--spacing-xl) !important;
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
 }
 
-.label {
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  color: var(--color-text-secondary);
-  text-transform: uppercase;
-  margin-bottom: var(--spacing-lg) !important;
-  display: block;
+.headerIcon {
+  color: var(--color-primary);
 }
 
-.chipGrid {
+.headerTitle {
+  font-weight: var(--font-weight-bold) !important;
+  color: var(--color-text-primary);
+}
+
+.chipsContainer {
   display: flex;
   flex-wrap: wrap;
   gap: var(--spacing-md);
+  flex: 1;
 }
 
-.chipWrapper {
-  display: inline-block;
-}
-
-.skillChip {
-  background: rgba(0, 0, 0, 0.03) !important;
-  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+.chip {
   border-radius: var(--radius-md) !important;
+  border-color: var(--color-border) !important;
+  background: var(--color-background) !important;
+  font-weight: var(--font-weight-bold) !important;
+  font-size: var(--font-size-sm) !important;
   color: var(--color-text-primary) !important;
-  font-weight: 600 !important;
-  cursor: pointer;
-  transition: var(--transition-smooth) !important;
+  transition: all var(--transition-base) !important;
+  padding: var(--spacing-xs) var(--spacing-sm) !important;
+  height: auto !important;
 }
 
-.skillChip:hover {
-  background: rgba(0, 0, 0, 0.06) !important;
-  border-color: rgba(0, 0, 0, 0.2) !important;
+.chip:hover {
+  background: var(--color-surface) !important;
+  border-color: var(--color-primary) !important;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+  color: var(--color-primary) !important;
+}
+
+.milestoneBox {
+  margin-top: var(--spacing-lg);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-background);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.milestoneText {
+  color: var(--color-text-secondary) !important;
+  display: block;
+  font-size: var(--font-size-xs);
+}
+
+.milestoneText strong {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-semibold);
 }

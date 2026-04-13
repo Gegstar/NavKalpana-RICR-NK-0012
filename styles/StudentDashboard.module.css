@@ -1,12 +1,9 @@
-/* StudentDashboard.module.css – Implementation from User Specification */
+/* StudentDashboard.module.css – Uses global root design system variables */
 
 .dashboardWrapper {
   display: flex;
-  gap: 1.5rem;
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 1.5rem;
-  background: var(--bg-light);
+  gap: var(--spacing-xl);
+  background: var(--color-background);
   min-height: 100vh;
   animation: fadeIn 0.5s ease;
 }
@@ -23,17 +20,35 @@
   animation: fadeInRight 0.5s ease;
 }
 
+/* ── Tablet: stack right panel below ───────────────────────────── */
+@media (max-width: 1280px) {
+  .rightPanel {
+    width: 300px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .dashboardWrapper {
+    flex-direction: column;
+    gap: var(--spacing-lg);
+  }
+
+  .rightPanel {
+    width: 100%;
+  }
+}
+
 .rightPanelInner {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  padding: 0 0.5rem;
+  gap: var(--spacing-lg);
+  padding: 0 var(--spacing-sm);
   position: sticky;
-  top: 1.5rem;
+  top: var(--spacing-xl);
 }
 
 .loadingState {
-  padding: 1.5rem;
+  padding: var(--spacing-xl);
   width: 100%;
   animation: fadeIn 0.5s ease;
 }
@@ -41,13 +56,13 @@
 .skeleton {
   background: linear-gradient(
     90deg,
-    var(--bg-light) 25%,
-    var(--border-light) 50%,
-    var(--bg-light) 75%
+    var(--color-background) 25%,
+    var(--color-border) 50%,
+    var(--color-background) 75%
   );
   background-size: 200% 100%;
   animation: skeleton-loading 1.5s infinite linear;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
 }
 
 @keyframes skeleton-loading {
@@ -55,10 +70,10 @@
   100% { background-position: -200% 0; }
 }
 
-.skeletonHero { height: 200px; border-radius: 12px; margin-bottom: 2rem; }
-.skeletonCard { height: 120px; border-radius: 12px; }
-.skeletonHeader { height: 40px; width: 200px; margin-bottom: 1rem; }
-.skeletonText { height: 14px; width: 100%; margin-bottom: 0.5rem; }
+.skeletonHero { height: 200px; border-radius: var(--radius-lg); margin-bottom: var(--spacing-2xl); }
+.skeletonCard { height: 120px; border-radius: var(--radius-lg); }
+.skeletonHeader { height: 40px; width: 200px; margin-bottom: var(--spacing-md); }
+.skeletonText { height: 14px; width: 100%; margin-bottom: var(--spacing-sm); }
 
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
@@ -67,9 +82,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: var(--spacing-2xl);
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: var(--spacing-md);
   animation: fadeInDown 0.5s ease;
 }
 
@@ -78,42 +93,42 @@
 }
 
 .greetingText {
-  font-size: 1.875rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin: 0 0 0.5rem 0;
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--spacing-sm);
   animation: fadeInLeft 0.5s ease;
 }
 
 .subText {
-  color: var(--text-secondary);
-  margin: 0.25rem 0;
-  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  margin: var(--spacing-xs) 0;
+  font-size: var(--font-size-sm);
   animation: fadeInLeft 0.5s ease 0.1s both;
 }
 
 .headerActions {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: var(--spacing-md);
 }
 
 .searchBox {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  background: var(--bg-white);
-  border: 1px solid var(--border-light);
-  border-radius: 8px;
-  padding: 0.5rem 1rem;
+  gap: var(--spacing-sm);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm) var(--spacing-md);
   width: 250px;
-  transition: all var(--transition-speed) ease;
+  transition: all var(--transition-base);
   animation: fadeInRight 0.5s ease;
 }
 
 .searchBox:focus-within {
-  border-color: var(--primary-yellow);
-  box-shadow: 0 0 0 2px rgba(250, 204, 21, 0.1);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
   transform: translateY(-1px);
 }
 
@@ -122,25 +137,29 @@
   background: transparent;
   outline: none;
   width: 100%;
-  color: var(--text-primary);
+  color: var(--color-text-primary);
+}
+
+.searchBox input::placeholder {
+  color: var(--color-text-muted);
 }
 
 .notifBadge {
-  background: var(--bg-white);
-  border: 1px solid var(--border-light);
-  border-radius: 8px;
-  padding: 0.5rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all var(--transition-speed) ease;
+  transition: all var(--transition-base);
   position: relative;
 }
 
 .notifBadge:hover {
-  border-color: var(--primary-yellow);
-  color: var(--primary-yellow);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
 .profileImg {
@@ -148,30 +167,37 @@
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid var(--border-light);
-  transition: all var(--transition-speed) ease;
+  border: 2px solid var(--color-border);
+  transition: all var(--transition-base);
   animation: fadeInRight 0.5s ease 0.2s both;
 }
 
 .profileImg:hover {
-  border-color: var(--primary-yellow);
+  border-color: var(--color-primary);
   transform: scale(1.05);
 }
 
 /* Bento Grid */
 .bentoGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+@media (max-width: 640px) {
+  .bentoGrid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
 }
 
 .bentoCard {
-  background: var(--bg-white);
-  border-radius: 12px;
-  padding: 1.5rem;
-  border: 1px solid var(--border-light);
-  transition: all var(--transition-speed) ease;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  transition: all var(--transition-base);
   position: relative;
   overflow: hidden;
   animation: scaleIn 0.5s ease;
@@ -181,6 +207,7 @@
 .bentoCard:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-lg);
+  border-color: var(--color-primary-light);
 }
 
 .scoreCard {
@@ -194,29 +221,29 @@
 }
 
 .label {
-  color: var(--text-secondary);
-  font-size: 0.875rem;
-  margin-bottom: 0.5rem;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--spacing-sm);
 }
 
 .yellowText {
-  color: var(--primary-yellow);
-  font-size: 2rem;
-  margin: 0.5rem 0;
+  color: var(--color-primary);
+  font-size: var(--font-size-4xl);
+  margin: var(--spacing-sm) 0;
   animation: fadeInUp 0.5s ease;
 }
 
 .trendText {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
-  color: #10b981;
-  font-size: 0.875rem;
+  gap: var(--spacing-xs);
+  color: var(--color-success);
+  font-size: var(--font-size-sm);
 }
 
 .iconBg {
   opacity: 0.2;
-  transition: all var(--transition-speed) ease;
+  transition: all var(--transition-base);
 }
 
 .bentoCard:hover .iconBg {
@@ -225,38 +252,38 @@
 }
 
 .streakCard h3 {
-  font-size: 2rem;
-  color: var(--text-primary);
-  margin: 0.5rem 0 0.25rem;
+  font-size: var(--font-size-4xl);
+  color: var(--color-text-primary);
+  margin: var(--spacing-sm) 0 var(--spacing-xs);
 }
 
 .badge {
-  background: var(--bg-light);
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  transition: all var(--transition-speed) ease;
+  background: var(--color-background);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  transition: all var(--transition-base);
 }
 
 .assignmentCard h3 {
-  font-size: 2rem;
-  color: var(--text-primary);
-  margin: 0.5rem 0 0.25rem;
+  font-size: var(--font-size-4xl);
+  color: var(--color-text-primary);
+  margin: var(--spacing-sm) 0 var(--spacing-xs);
 }
 
 .miniProgress {
-  margin-top: 1rem;
+  margin-top: var(--spacing-md);
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: var(--spacing-md);
 }
 
 .miniBar {
   flex: 1;
   height: 4px;
-  background: var(--border-light);
-  border-radius: 2px;
+  background: var(--color-border);
+  border-radius: var(--radius-sm);
   position: relative;
   overflow: hidden;
 }
@@ -267,7 +294,7 @@
   left: 0;
   top: 0;
   height: 100%;
-  background: var(--primary-yellow);
+  background: var(--color-primary);
   width: var(--progress, 0%);
   transition: width 1s ease;
 }
@@ -275,28 +302,28 @@
 .viewBtn {
   background: none;
   border: none;
-  color: var(--primary-yellow-hover);
+  color: var(--color-primary-dark);
   cursor: pointer;
-  font-size: 0.875rem;
-  font-weight: 500;
-  transition: color var(--transition-speed) ease;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  transition: color var(--transition-base);
 }
 
 .viewBtn:hover {
-  color: var(--primary-yellow);
+  color: var(--color-primary);
   transform: translateX(4px);
 }
 
 /* Continue Learning */
 .continueSection {
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--spacing-lg);
 }
 
 .continueCard {
-  background: linear-gradient(135deg, var(--bg-white) 0%, var(--bg-light) 100%);
-  border-radius: 12px;
-  padding: 1.5rem 2rem;
-  border: 1px solid var(--border-light);
+  background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-background) 100%);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl) var(--spacing-2xl);
+  border: 1px solid var(--color-border);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -306,54 +333,84 @@
   min-height: 180px;
 }
 
+@media (max-width: 768px) {
+  .continueCard {
+    padding: var(--spacing-lg);
+    min-height: auto;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+  }
+
+  .bgDecoration {
+    display: none;
+  }
+
+  .continueCardContent h2 {
+    font-size: var(--font-size-xl);
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .continueCard {
+    padding: var(--spacing-md);
+  }
+
+  .viewCourseBtn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 .continueCard:hover {
   box-shadow: var(--shadow-md);
-  border-color: var(--primary-yellow);
+  border-color: var(--color-primary);
 }
 
 .resumeTag {
-  background: var(--primary-yellow);
-  color: black;
-  padding: 0.25rem 0.6rem;
-  border-radius: 4px;
-  font-size: 0.7rem;
-  font-weight: 800;
+  background: var(--color-primary);
+  color: var(--color-text-on-primary, #000);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
   display: inline-block;
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--spacing-sm);
 }
 
 .continueCardContent h2 {
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: var(--text-primary);
-  margin-bottom: 0.5rem;
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-sm);
   max-width: 80%;
 }
 
 .continueCardContent .subText {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-  margin-bottom: 1.5rem;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-xl);
 }
 
 .viewCourseBtn {
-  background: var(--primary-yellow);
-  color: black;
+  background: var(--color-primary);
+  color: #000;
   border: none;
-  border-radius: 8px;
-  padding: 0.75rem 1.5rem;
-  font-weight: 700;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-weight: var(--font-weight-bold);
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--spacing-sm);
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .viewCourseBtn:hover {
-  background: var(--primary-yellow-hover);
+  background: var(--color-primary-dark);
   transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(250, 204, 21, 0.3);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
 
 .bgDecoration {
@@ -373,11 +430,11 @@
 
 /* Heatmap Section */
 .heatmapSection {
-  background: var(--bg-white);
-  border-radius: 12px;
-  padding: 1.5rem;
-  border: 1px solid var(--border-light);
-  margin-bottom: 1.5rem;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  margin-bottom: var(--spacing-lg);
   animation: fadeInUp 0.5s ease 0.4s both;
 }
 
@@ -385,19 +442,19 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: var(--spacing-md);
 }
 
 .heatmapHeader h3 {
-  color: var(--text-primary);
-  font-size: 1.1rem;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-lg);
 }
 
 .heatmapContainer {
   display: flex;
   gap: 2px;
   overflow-x: auto;
-  padding: 0.5rem 0;
+  padding: var(--spacing-sm) 0;
 }
 
 .heatmapColumn {
@@ -410,8 +467,8 @@
   width: 12px;
   height: 12px;
   border-radius: 2px;
-  background: var(--border-light);
-  transition: transform var(--transition-speed) ease;
+  background: var(--color-border);
+  transition: transform var(--transition-base);
 }
 
 .heatmapCell:hover {
@@ -419,51 +476,58 @@
   z-index: 1;
 }
 
-.level0 { background: var(--border-light); }
+.level0 { background: var(--color-border); }
 .level1 { background: #FEF9C3; }
 .level2 { background: #FDE047; }
-.level3 { background: var(--primary-yellow); }
+.level3 { background: var(--color-primary); }
 
 /* Activity Sections */
 .middleRow {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+@media (max-width: 640px) {
+  .middleRow {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
 }
 
 .activitySection {
-  background: var(--bg-white);
-  border-radius: 12px;
-  padding: 1.5rem;
-  border: 1px solid var(--border-light);
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
   animation: fadeInUp 0.5s ease 0.5s both;
 }
 
 .activitySection h3 {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  color: var(--text-primary);
-  font-size: 1.1rem;
-  margin: 0 0 1rem 0;
+  gap: var(--spacing-sm);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-lg);
+  margin: 0 0 var(--spacing-md) 0;
 }
 
 .activityItem {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem;
-  background: var(--bg-light);
-  border-radius: 8px;
-  transition: all var(--transition-speed) ease;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background: var(--color-background);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
   animation: slideIn 0.3s ease;
   animation-fill-mode: both;
 }
 
 .activityItem:hover {
   transform: translateX(4px);
-  background: var(--bg-white);
+  background: var(--color-surface);
   box-shadow: var(--shadow-sm);
 }
 
@@ -478,115 +542,115 @@
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: var(--bg-light); }
-::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+::-webkit-scrollbar-track { background: var(--color-background); }
+::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-text-secondary); }
 
 /* Alumni Network Section */
 .alumniSection {
-  margin-bottom: 2.5rem;
+  margin-bottom: var(--spacing-3xl);
   animation: fadeInUp 0.5s ease both;
 }
 
 .alumniContainer {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1.25rem;
+  gap: var(--spacing-md);
 }
 
 .alumniCard {
-  background: var(--bg-white);
-  border: 1px solid var(--border-light);
-  border-radius: 12px;
-  padding: 1.1rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
   text-align: center;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--spacing-sm);
 }
 
 .alumniCard:hover {
   transform: translateY(-5px);
   box-shadow: var(--shadow-md);
-  border-color: var(--primary-yellow);
+  border-color: var(--color-primary);
 }
 
 .alumniAvatar {
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  border: 2px solid var(--border-light);
+  border: 2px solid var(--color-border);
   padding: 2px;
   transition: all 0.3s ease;
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--spacing-sm);
 }
 
 .alumniCard:hover .alumniAvatar {
-  border-color: var(--primary-yellow);
+  border-color: var(--color-primary);
   transform: scale(1.05);
 }
 
 .alumniCard h4 {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--text-primary);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
   margin: 0;
 }
 
 .alumniCard .role {
-  font-size: 0.75rem;
+  font-size: var(--font-size-xs);
   color: var(--color-primary);
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   margin: 0;
 }
 
 .alumniCard .batch {
-  font-size: 0.7rem;
-  color: var(--text-secondary);
-  font-weight: 500;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
 }
 
 .connectBtn {
-  margin-top: 0.75rem;
+  margin-top: var(--spacing-sm);
   width: 100%;
-  background: var(--bg-light);
-  color: var(--text-primary);
-  border: 1px solid var(--border-light);
-  padding: 0.4rem;
-  border-radius: 8px;
-  font-size: 0.75rem;
-  font-weight: 600;
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  padding: var(--spacing-xs);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.4rem;
+  gap: var(--spacing-xs);
   transition: all 0.2s ease;
   cursor: pointer;
 }
 
 .alumniCard:hover .connectBtn {
-  background: var(--primary-yellow);
-  border-color: var(--primary-yellow);
-  color: black;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #000;
 }
 
-/* Courses, Jobs, Alumni (Merged from existing) */
+/* Courses, Jobs, Alumni */
 .coursesSection, .jobSection, .alumniSection {
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--spacing-lg);
   animation: fadeInUp 0.5s ease both;
 }
 
 .courseCard {
-  background: var(--bg-white);
-  border: 1px solid var(--border-light);
-  border-radius: 12px;
-  padding: 1.1rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: var(--spacing-sm);
   position: relative;
   overflow: hidden;
 }
@@ -598,7 +662,7 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: var(--primary-yellow);
+  background: var(--color-primary);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -606,7 +670,7 @@
 .courseCard:hover {
   transform: translateY(-8px);
   box-shadow: var(--shadow-lg);
-  border-color: var(--primary-yellow);
+  border-color: var(--color-primary);
 }
 
 .courseCard:hover::before {
@@ -614,16 +678,16 @@
 }
 
 .courseInfo h4 {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 0.15rem;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-xs);
   line-height: 1.2;
 }
 
 .courseInfo p {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
 }
 
 .progressWrapper {
@@ -633,89 +697,89 @@
 .progressLabel {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 600;
+  margin-bottom: var(--spacing-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
 }
 
 .progressBarRoot {
   height: 6px;
-  background: var(--bg-light);
-  border-radius: 3px;
+  background: var(--color-background);
+  border-radius: var(--radius-sm);
   overflow: hidden;
 }
 
 .progressFill {
   height: 100%;
-  background: var(--primary-yellow);
+  background: var(--color-primary);
   transition: width 1s ease-in-out;
-  box-shadow: 0 0 10px var(--primary-yellow);
+  box-shadow: 0 0 10px var(--color-primary);
 }
 
 .courseFooter {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 0.5rem;
+  margin-top: var(--spacing-sm);
 }
 
 .continueBtn {
-  background: var(--bg-light);
-  color: var(--text-primary);
-  border: 1px solid var(--border-light);
-  padding: 0.5rem 1rem;
-  font-size: 0.8rem;
-  font-weight: 600;
-  border-radius: 8px;
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--spacing-sm);
   transition: all 0.2s ease;
 }
 
 .courseCard:hover .continueBtn {
-  background: var(--primary-yellow);
-  border-color: var(--primary-yellow);
-  color: black;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #000;
 }
 
 .avatar {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  margin: 0 auto 0.75rem;
-  border: 2px solid var(--border-light);
+  margin: 0 auto var(--spacing-sm);
+  border: 2px solid var(--color-border);
 }
 
 /* Sidebar Components */
 .eventCalendarCard, .monthlyTracker, .skillsSection, .attendanceCard, .leaderboardCard {
-  background: var(--bg-white);
-  border-radius: 12px;
-  padding: 1.5rem;
-  border: 1px solid var(--border-light);
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
   animation: fadeInRight 0.5s ease both;
 }
 
 .month {
-  font-size: 0.75rem;
-  font-weight: 800;
-  color: var(--text-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
   text-transform: uppercase;
 }
 
 .calendarGrid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 0.25rem;
-  margin-top: 0.5rem;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-sm);
 }
 
 .dayLabel {
   text-align: center;
-  font-size: 0.65rem;
-  font-weight: 800;
-  color: var(--text-muted);
-  padding-bottom: 0.5rem;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-muted);
+  padding-bottom: var(--spacing-sm);
 }
 
 .calendarDay {
@@ -724,24 +788,24 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  border-radius: 8px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  border-radius: var(--radius-md);
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
 }
 
 .calendarDay:hover {
-  background: var(--bg-light);
+  background: var(--color-background);
   color: var(--color-primary);
 }
 
 .today {
-  background: var(--primary-yellow);
-  color: black !important;
-  font-weight: 800;
+  background: var(--color-primary);
+  color: #000 !important;
+  font-weight: var(--font-weight-bold);
 }
 
 .eventDot {
@@ -756,27 +820,27 @@
 .statMini {
   display: flex;
   justify-content: space-between;
-  font-size: 0.875rem;
+  font-size: var(--font-size-sm);
 }
 
 .skillPill {
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
-  background: var(--bg-light);
-  border: 1px solid var(--border-light);
-  border-radius: 20px;
-  padding: 0.25rem 0.75rem;
-  font-size: 0.85rem;
+  gap: var(--spacing-xs);
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  padding: var(--spacing-xs) var(--spacing-md);
+  font-size: var(--font-size-sm);
 }
 
 .leaderItem {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.5rem;
-  background: var(--bg-light);
-  border-radius: 6px;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background: var(--color-background);
+  border-radius: var(--radius-sm);
   transition: transform 0.2s;
 }
 
@@ -787,8 +851,8 @@
 .trackerContent {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
 }
 
 .circularProgress {
@@ -809,13 +873,13 @@
 
 .progressCircleBg {
   fill: none;
-  stroke: var(--bg-light);
+  stroke: var(--color-background);
   stroke-width: 6;
 }
 
 .progressCircleFill {
   fill: none;
-  stroke: var(--primary-yellow);
+  stroke: var(--color-primary);
   stroke-width: 6;
   stroke-linecap: round;
   transition: stroke-dashoffset 1s ease-in-out;
@@ -823,55 +887,55 @@
 
 .progressValue {
   position: absolute;
-  font-size: 1.1rem;
-  font-weight: 800;
-  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
 }
 
 .trackerStats {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--spacing-sm);
 }
 
 .statMini {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.8rem;
-  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
 }
 
 .statMini strong {
-  color: var(--text-primary);
-  font-size: 0.9rem;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
 }
 
 .quizCard {
-  background: var(--bg-light);
-  border-radius: 12px;
-  padding: 1rem;
+  background: var(--color-background);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
   display: flex;
   align-items: center;
-  gap: 1rem;
-  border: 1px solid var(--border-light);
+  gap: var(--spacing-md);
+  border: 1px solid var(--color-border);
   transition: all 0.3s ease;
   cursor: pointer;
 }
 
 .quizCard:hover {
-  background: var(--bg-white);
-  border-color: var(--primary-yellow);
+  background: var(--color-surface);
+  border-color: var(--color-primary);
   transform: translateY(-2px);
   box-shadow: var(--shadow-sm);
 }
 
 .dateBadge {
-  background: var(--bg-white);
-  border: 1px solid var(--border-light);
-  border-radius: 8px;
-  padding: 0.4rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-xs);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -879,46 +943,46 @@
 }
 
 .miniMonth {
-  font-size: 0.65rem;
-  font-weight: 800;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
   color: var(--color-error);
 }
 
 .miniDay {
-  font-size: 1.1rem;
-  font-weight: 800;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
   line-height: 1;
 }
 
 .quizInfo h4 {
-  font-size: 0.9rem;
-  font-weight: 700;
-  margin-bottom: 0.15rem;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-xs);
 }
 
 .quizInfo p {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
 }
 
 /* Deadline Section */
 .deadlineHeader {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1.25rem;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
 }
 
 .deadlineHeader h3 {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
 }
 
 .deadlineList {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: var(--spacing-sm);
   overflow-y: auto;
   flex: 1;
 }
@@ -926,18 +990,18 @@
 .deadlineItem {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 0.85rem 1rem;
-  background: var(--bg-light);
-  border: 1px solid var(--border-light);
-  border-radius: 12px;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
   transition: all 0.3s ease;
   cursor: pointer;
 }
 
 .deadlineItem:hover {
-  background: var(--bg-white);
-  border-color: var(--primary-yellow);
+  background: var(--color-surface);
+  border-color: var(--color-primary);
   transform: translateX(4px);
   box-shadow: var(--shadow-sm);
 }
@@ -945,13 +1009,13 @@
 .deadlineIcon {
   width: 36px;
   height: 36px;
-  background: var(--bg-white);
-  border-radius: 8px;
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--primary-yellow);
-  border: 1px solid var(--border-light);
+  color: var(--color-primary);
+  border: 1px solid var(--color-border);
   flex-shrink: 0;
 }
 
@@ -961,66 +1025,79 @@
 }
 
 .deadlineInfo h4 {
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 0.2rem;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-xs);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .deadlineInfo p {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
 }
 
 .urgencyBadge {
   background: rgba(250, 204, 21, 0.1);
   color: #854D0E;
-  padding: 0.25rem 0.6rem;
-  border-radius: 6px;
-  font-size: 0.65rem;
-  font-weight: 800;
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
   text-transform: uppercase;
   flex-shrink: 0;
 }
 
 /* Job Board Section */
 .jobSection {
-  margin-bottom: 2.5rem;
+  margin-bottom: var(--spacing-3xl);
   animation: fadeInUp 0.5s ease both;
 }
 
 .sectionTitle {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-xl);
 }
 
 .sectionTitle h2 {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--text-primary);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
 }
 
 .jobGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
+  gap: var(--spacing-lg);
   overflow: hidden;
 }
 
+@media (max-width: 1024px) {
+  .jobGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .jobGrid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+}
+
 .jobCard {
-  background: var(--bg-white);
-  border: 1px solid var(--border-light);
-  border-radius: 12px;
-  padding: 1.1rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--spacing-md);
   position: relative;
 }
 
@@ -1037,40 +1114,40 @@
 }
 
 .companyBadge {
-  background: var(--bg-light);
+  background: var(--color-background);
   width: 48px;
   height: 48px;
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--color-primary);
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--color-border);
 }
 
 .jobTypeTag {
   background: rgba(99, 102, 241, 0.1);
   color: var(--color-primary);
-  padding: 0.25rem 0.75rem;
-  border-radius: 6px;
-  font-size: 0.7rem;
-  font-weight: 700;
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
   text-transform: uppercase;
 }
 
 .jobBody h4 {
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 0.15rem;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-xs);
 }
 
 .jobBody p {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--spacing-sm);
 }
 
 .jobFooter {
@@ -1078,29 +1155,29 @@
   justify-content: space-between;
   align-items: center;
   margin-top: auto;
-  padding-top: 1.25rem;
-  border-top: 1px dashed var(--border-light);
+  padding-top: var(--spacing-md);
+  border-top: 1px dashed var(--color-border);
 }
 
 .sectionFooter {
   display: flex;
   justify-content: center;
-  margin-top: 2rem;
+  margin-top: var(--spacing-2xl);
 }
 
 .loadMoreBtn {
-  background: var(--bg-white);
+  background: var(--color-surface);
   color: var(--color-primary);
   border: 1px solid var(--color-primary);
-  padding: 0.75rem 2.5rem;
-  font-size: 0.9rem;
-  font-weight: 700;
-  border-radius: 12px;
+  padding: var(--spacing-md) var(--spacing-3xl);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  border-radius: var(--radius-lg);
   transition: all 0.3s ease;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--spacing-sm);
 }
 
 .loadMoreBtn:hover {
@@ -1111,19 +1188,19 @@
 }
 
 .salary {
-  font-size: 1rem;
-  font-weight: 700;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
   color: var(--color-success);
 }
 
 .applyBtn {
   background: var(--color-primary);
   color: white;
-  padding: 0.6rem 1.5rem;
+  padding: var(--spacing-sm) var(--spacing-xl);
   border: none;
-  border-radius: 10px;
-  font-size: 0.85rem;
-  font-weight: 600;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
   transition: all 0.2s ease;
   cursor: pointer;
 }
@@ -1135,36 +1212,23 @@
 
 /* Activity Heatmap Section */
 .heatmapSection {
-  margin-bottom: 2.5rem;
-}
-
-.heatmapHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.25rem;
-}
-
-.heatmapHeader h3 {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--text-primary);
+  margin-bottom: var(--spacing-3xl);
 }
 
 .heatmapHeader .consistency {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  background: var(--bg-light);
-  padding: 0.2rem 0.6rem;
-  border-radius: 6px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  background: var(--color-background);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
 }
 
 .heatmapGrid {
   display: flex;
   gap: 0.35rem;
   overflow-x: auto;
-  padding-bottom: 0.5rem;
+  padding-bottom: var(--spacing-sm);
   scrollbar-width: thin;
 }
 
@@ -1173,7 +1237,7 @@
 }
 
 .heatmapGrid::-webkit-scrollbar-thumb {
-  background: var(--border-light);
+  background: var(--color-border);
   border-radius: 10px;
 }
 
@@ -1194,11 +1258,11 @@
 .heatmapCell:hover {
   transform: scale(1.4);
   z-index: 10;
-  box-shadow: 0 0 10px rgba(250, 204, 21, 0.5);
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
 }
 
-.cell-0 { background: var(--border-light); }
-.cell-1 { background: rgba(250, 204, 21, 0.15); }
-.cell-2 { background: rgba(250, 204, 21, 0.35); }
-.cell-3 { background: rgba(250, 204, 21, 0.65); }
-.cell-4 { background: var(--primary-yellow); }
+.cell-0 { background: var(--color-border); }
+.cell-1 { background: rgba(99, 102, 241, 0.15); }
+.cell-2 { background: rgba(99, 102, 241, 0.35); }
+.cell-3 { background: rgba(99, 102, 241, 0.65); }
+.cell-4 { background: var(--color-primary); }

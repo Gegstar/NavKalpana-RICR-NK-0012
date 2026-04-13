@@ -1,53 +1,40 @@
-.streakCard {
-  border-radius: var(--radius-xl);
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  overflow: hidden;
-  transition: var(--transition-smooth);
+/* StreakWidget.module.css – Uses global root variables */
+
+.container {
+  width: 100%;
 }
 
-.streakCard:hover {
-  background: var(--glass-bg-hover);
-  border-color: var(--glass-border-hover);
-}
-
-.cardContent {
-  padding: var(--spacing-xl) !important;
+.header {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: var(--spacing-xl);
-}
-
-.flameContainer {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  background: rgba(245, 158, 11, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-warning);
+  margin-bottom: var(--spacing-md);
 }
 
 .flameIcon {
-  font-size: 2.5rem !important;
+  color: var(--color-accent);
+  fill: var(--color-accent);
 }
 
-.countText {
-  font-weight: 900;
-  color: var(--color-text-primary);
-  line-height: 1;
-}
-
-.label {
-  font-weight: 700;
-  letter-spacing: 1.5px;
+.activeBadge {
+  background: var(--color-background);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
   color: var(--color-text-secondary);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-xs);
   text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border: 1px solid var(--color-border);
+}
+
+.streakCount {
+  font-weight: var(--font-weight-bold) !important;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-xs) !important;
+}
+
+.streakLabel {
+  color: var(--color-text-secondary) !important;
+  font-size: var(--font-size-sm);
 }

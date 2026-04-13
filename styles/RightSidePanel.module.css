@@ -1,110 +1,416 @@
-.sidePanel {
+/* RightSidePanel.module.css – Uses global root variables */
+
+.panel {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-lg);
 }
 
-.sideCard {
+/* Event Calendar */
+.eventCalendarCard {
   background: var(--color-surface);
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
-  border: 1px solid var(--glass-border);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
 }
 
-.cardHeader {
+.calendarHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: var(--spacing-md);
 }
 
+.calendarTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+}
+
+.calendarIcon {
+  color: var(--color-primary);
+}
+
+.monthNav {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.navButton {
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xs);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.navButton:hover {
+  background: var(--color-background);
+  color: var(--color-primary);
+}
+
+.currentMonth {
+  font-size: var(--font-size-xs);
+  font-weight: 800;
+  color: var(--color-text-primary);
+}
+
 .calendarGrid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
+  gap: 2px;
 }
 
-.calDayHead {
-  font-size: 0.65rem;
-  font-weight: bold;
+.dayLabel {
   text-align: center;
-  color: var(--color-text-muted);
-  padding-bottom: var(--spacing-xs);
-}
-
-.calDay {
-  font-size: 0.75rem;
-  text-align: center;
-  padding: 4px 0;
-  border-radius: 4px;
   color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  padding: var(--spacing-xs) 0;
+}
+
+.calendarDay {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-primary);
+  border-radius: var(--radius-sm);
+  position: relative;
+  cursor: default;
 }
 
 .today {
-  background: var(--color-primary-glow);
-  color: var(--color-primary);
-  font-weight: bold;
+  background: var(--color-primary);
+  color: white;
+  font-weight: var(--font-weight-bold);
 }
 
-.progressCircleContainer {
+.eventDot {
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  background: var(--color-primary);
+  border-radius: 50%;
+}
+
+/* Monthly Tracker */
+.monthlyTracker {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.trackerTitle {
+  font-size: var(--font-size-md) !important;
+  font-weight: var(--font-weight-bold) !important;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-md) !important;
+}
+
+.trackerContent {
   display: flex;
-  justify-content: center;
-  margin: var(--spacing-md) 0;
+  align-items: center;
+  gap: var(--spacing-md);
 }
 
-.circularChart {
-  width: 120px;
-  height: 120px;
+.circularProgress {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
 }
 
-.circle {
-  transition: stroke-dasharray 0.5s ease;
+.progressSvg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
 }
 
-.percentage {
-  font-size: 0.5rem;
-  font-weight: bold;
+.progressCircleBg {
+  fill: none;
+  stroke: var(--color-border);
+  stroke-width: 6;
+}
+
+.progressCircleFill {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 6;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.5s ease;
+}
+
+.progressValue {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
 }
 
 .trackerStats {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--spacing-md);
-  margin-top: var(--spacing-md);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
 }
 
 .statMini {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: var(--color-bg-deep);
-  padding: var(--spacing-sm);
-  border-radius: var(--radius-md);
-}
-
-.statMini span {
-  font-size: 0.65rem;
-  color: var(--color-text-muted);
+  justify-content: space-between;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
 }
 
 .statMini strong {
-  font-size: 0.875rem;
   color: var(--color-text-primary);
+  font-weight: var(--font-weight-semibold);
 }
 
-.skillsPills {
+.quizCard {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-sm);
+  background: var(--color-background);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.quizCard:hover {
+  background: var(--color-surface);
+  transform: translateX(4px);
+  box-shadow: var(--shadow-sm);
+}
+
+.dateBadge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 40px;
+}
+
+.miniMonth {
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+}
+
+.miniDay {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  line-height: 1;
+}
+
+.quizInfo {
+  flex: 1;
+}
+
+.quizInfo h4 {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0 0 2px;
+}
+
+.quizInfo p {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.arrowIcon {
+  color: var(--color-text-muted);
+  transition: transform var(--transition-fast);
+}
+
+.quizCard:hover .arrowIcon {
+  transform: translateX(4px);
+  color: var(--color-primary);
+}
+
+/* Skills Section */
+.skillsSection {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.skillsTitle {
+  font-size: var(--font-size-md) !important;
+  font-weight: var(--font-weight-bold) !important;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-md) !important;
+}
+
+.skillsGrid {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-sm);
 }
 
 .skillPill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  padding: var(--spacing-xs) var(--spacing-md);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-primary);
+  transition: all var(--transition-fast);
+}
+
+.skillPill:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.checkIcon {
+  color: var(--color-primary);
+}
+
+/* Leaderboard */
+.leaderboardCard {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.leaderboardTitle {
+  font-size: var(--font-size-md) !important;
+  font-weight: var(--font-weight-bold) !important;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-md) !important;
+}
+
+.leaderGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.leaderItem {
   display: flex;
   align-items: center;
-  gap: 4px;
-  font-size: 0.7rem;
-  background: var(--color-bg-deep);
-  padding: 4px 8px;
-  border-radius: 20px;
-  color: var(--color-text-secondary);
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xs) 0;
+}
+
+.rankBadge {
+  width: 24px;
+  height: 24px;
+  background: var(--color-background);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-xs);
+  font-weight: 800;
+  color: var(--color-text-primary);
+}
+
+.leaderName {
+  flex: 1;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.leaderScore {
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+  font-weight: 800;
+}
+
+/* ══════════════════════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+   ══════════════════════════════════════════════════════ */
+
+/* When the right panel is rendered full-width (stacked below main) */
+@media (max-width: 1100px) {
+  .panel {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-lg);
+  }
+}
+
+@media (max-width: 768px) {
+  .panel {
+    grid-template-columns: 1fr;
+  }
+
+  .eventCalendarCard,
+  .monthlyTracker,
+  .skillsSection,
+  .leaderboardCard {
+    padding: var(--spacing-md);
+  }
+
+  .trackerContent {
+    gap: var(--spacing-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .calendarGrid {
+    gap: 1px;
+  }
+
+  .calendarDay {
+    font-size: 10px;
+  }
+
+  .trackerContent {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .trackerStats {
+    width: 100%;
+  }
+
+  .skillsGrid {
+    gap: var(--spacing-xs);
+  }
+
+  .skillPill {
+    font-size: 10px;
+    padding: 3px 10px;
+  }
+
+  .quizCard {
+    padding: var(--spacing-xs);
+  }
 }

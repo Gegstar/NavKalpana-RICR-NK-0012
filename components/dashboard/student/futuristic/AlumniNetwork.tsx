@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
+import { Box, Typography, Button } from "@mui/material";
 import { Users, UserPlus, GraduationCap } from "lucide-react";
-import styles from "@/styles/StudentDashboard.module.css";
+import styles from "@/styles/AlumniNetwork.module.css";
 
 interface Alumni {
   id: number;
@@ -18,41 +19,44 @@ interface AlumniNetworkProps {
 
 export default function AlumniNetwork({ alumni }: AlumniNetworkProps) {
   return (
-    <section className={styles.alumniSection}>
-      <div className={styles.sectionTitle} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
-        <Users size={24} color="var(--primary-yellow)" />
-        <h2 style={{ fontSize: '1.25rem', fontWeight: 700 }}>Notable Alumni</h2>
-      </div>
+    <Box component="section" className={styles.section}>
+      <Box className={styles.sectionHeader}>
+        <Users size={24} className={styles.sectionIcon} />
+        <Typography variant="h2" className={styles.sectionTitle}>
+          Notable Alumni
+        </Typography>
+      </Box>
 
-      <div className={styles.alumniContainer}>
-        {alumni.length > 0 ? (
-          alumni.slice(0, 5).map((person) => (
-            <div key={person.id} className={styles.alumniCard}>
-              <img 
-                src={person.avatar} 
-                className={styles.alumniAvatar} 
-                alt={person.name} 
+      {alumni.length > 0 ? (
+        <Box className={styles.scrollContainer}>
+          {alumni.slice(0, 10).map((person) => (
+            <Box key={person.id} className={styles.alumniCard}>
+              <img
+                src={person.avatar}
+                className={styles.avatar}
+                alt={person.name}
               />
-              <h4>{person.name}</h4>
-              <p className={styles.role}>{person.position}</p>
-              
-              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
-                <GraduationCap size={12} color="var(--text-secondary)" />
-                <span className={styles.batch}>Class of {person.batch}</span>
-              </div>
+              <Typography className={styles.name}>{person.name}</Typography>
+              <Typography className={styles.position}>{person.position}</Typography>
 
-              <button className={styles.connectBtn}>
-                <UserPlus size={14} />
+              <Box className={styles.batchWrapper}>
+                <GraduationCap size={12} className={styles.batchIcon} />
+                <Typography component="span" className={styles.batchText}>
+                  Class of {person.batch}
+                </Typography>
+              </Box>
+
+              <Button className={styles.connectButton} startIcon={<UserPlus size={14} />}>
                 Connect
-              </button>
-            </div>
-          ))
-        ) : (
-          <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)', width: '100%' }}>
-            Your network is growing. Check back soon.
-          </div>
-        )}
-      </div>
-    </section>
+              </Button>
+            </Box>
+          ))}
+        </Box>
+      ) : (
+        <Box className={styles.emptyState}>
+          Your network is growing. Check back soon.
+        </Box>
+      )}
+    </Box>
   );
 }

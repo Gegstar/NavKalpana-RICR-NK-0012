@@ -1,5 +1,6 @@
-/* StudentSidebar.module.css – Senior Layout Architect Standard */
+/* StudentSidebar.module.css – Mobile-First Responsive */
 
+/* ── Sidebar Base ───────────────────────────────────────────────── */
 .sidebar {
   height: 100vh;
   background: var(--bg-white);
@@ -11,12 +12,21 @@
   position: relative;
   z-index: 1000;
   width: 260px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE/Edge */
+}
+
+.sidebar::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
 }
 
 .collapsed {
   width: 80px;
 }
 
+/* ── Toggle Button (desktop collapse) ──────────────────────────── */
 .toggleBtn {
   position: absolute;
   right: -12px;
@@ -43,6 +53,7 @@
   transform: scale(1.1);
 }
 
+/* ── Logo ───────────────────────────────────────────────────────── */
 .logoContainer {
   padding: 0 1rem;
   margin-bottom: 2.5rem;
@@ -52,6 +63,7 @@
   min-height: 48px;
 }
 
+/* ── Nav Menu ───────────────────────────────────────────────────── */
 .navMenu {
   flex: 1;
   display: flex;
@@ -71,6 +83,7 @@
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  min-height: 44px; /* accessible touch target */
 }
 
 .navItem svg {
@@ -105,6 +118,7 @@
   border-radius: 0 4px 4px 0;
 }
 
+/* ── Collapsed nav ──────────────────────────────────────────────── */
 .collapsed .navItem {
   justify-content: center;
   padding: 0.75rem 0;
@@ -115,6 +129,7 @@
   display: none;
 }
 
+/* ── Logout section ─────────────────────────────────────────────── */
 .logoutWrapper {
   margin-top: auto;
   padding-top: 1.5rem;
@@ -138,6 +153,7 @@
   text-transform: none !important;
   transition: all 0.3s ease !important;
   justify-content: flex-start !important;
+  min-height: 44px !important;
 }
 
 .logoutBtn:hover {
@@ -150,6 +166,7 @@
   padding: 0.75rem 0 !important;
 }
 
+/* ── Theme Box ──────────────────────────────────────────────────── */
 .themeBox {
   display: flex;
   align-items: center;
@@ -164,4 +181,36 @@
   justify-content: center;
   padding: 0.5rem 0;
   background: transparent;
+}
+
+/* ── Responsive ─────────────────────────────────────────────────── */
+
+/* Tablet & below: hide the collapse toggle (hamburger in layout takes over) */
+@media (max-width: 1024px) {
+  .toggleBtn {
+    display: none;
+  }
+
+  .sidebar {
+    width: 280px !important;
+  }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+  .sidebar {
+    width: 260px !important;
+    padding: 1rem 0.5rem;
+  }
+
+  .logoContainer {
+    margin-bottom: 1.5rem;
+    padding: 0 0.5rem;
+  }
+
+  .navItem {
+    gap: 0.75rem;
+    padding: 0.7rem 0.75rem;
+    font-size: 0.9rem;
+  }
 }

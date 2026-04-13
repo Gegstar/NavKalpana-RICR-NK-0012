@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import { Box, Typography, Stack } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Flame } from "lucide-react";
-import styles from "@/styles/StudentDashboard.module.css";
+import styles from "@/styles/StreakWidget.module.css";
 
 interface StreakWidgetProps {
   days: number;
@@ -11,25 +11,19 @@ interface StreakWidgetProps {
 
 export default function StreakWidget({ days }: StreakWidgetProps) {
   return (
-    <Box>
-      <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
-        <Flame size={32} color="var(--color-accent)" fill="var(--color-accent)" />
-        <Typography 
-          variant="caption" 
-          sx={{ 
-            bgcolor: 'var(--bg-light)', 
-            px: 1, 
-            py: 0.5, 
-            borderRadius: 1, 
-            color: 'var(--text-secondary)',
-            fontWeight: 'bold'
-          }}
-        >
+    <Box className={styles.container}>
+      <Box className={styles.header}>
+        <Flame size={32} className={styles.flameIcon} />
+        <Typography component="span" className={styles.activeBadge}>
           ACTIVE
         </Typography>
-      </Stack>
-      <Typography variant="h3" fontWeight="bold">{days} Days</Typography>
-      <Typography variant="body2" color="text.secondary">Learning Streak</Typography>
+      </Box>
+      <Typography variant="h3" className={styles.streakCount}>
+        {days} Days
+      </Typography>
+      <Typography variant="body2" className={styles.streakLabel}>
+        Learning Streak
+      </Typography>
     </Box>
   );
 }

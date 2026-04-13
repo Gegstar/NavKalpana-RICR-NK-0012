@@ -1,10 +1,12 @@
 "use client";
 
 import React, { useRef } from "react";
+import { Box } from "@mui/material";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, MeshWobbleMaterial } from "@react-three/drei";
 import * as THREE from "three";
 import { useThemeColor } from "@/hooks/useThemeColor";
+import styles from "./NeonTorus.module.css";
 
 interface NeonTorusProps {
   score: number;
@@ -39,7 +41,7 @@ function GlowingTorus({ score }: NeonTorusProps) {
           roughness={0.1}
         />
       </mesh>
-      
+
       {/* Background track */}
       <mesh rotation={[0, 0, 0]}>
         <torusGeometry args={[1.5, 0.35, 16, 100, Math.PI * 2]} />
@@ -55,12 +57,12 @@ function GlowingTorus({ score }: NeonTorusProps) {
 
 export default function NeonTorus({ score }: NeonTorusProps) {
   return (
-    <div style={{ width: "100%", height: "180px" }}>
+    <Box className={styles.container}>
       <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} intensity={1} />
         <GlowingTorus score={score} />
       </Canvas>
-    </div>
+    </Box>
   );
 }

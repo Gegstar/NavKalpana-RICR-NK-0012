@@ -1,66 +1,224 @@
-.enrolledCard {
-  border-radius: var(--radius-xl);
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
-  height: 100%;
+/* EnrolledCourses.module.css – Netflix‑style horizontal scroll */
+
+.section {
+  width: 100%;
+  margin-bottom: var(--spacing-2xl);
 }
 
-.cardContent {
-  padding: var(--spacing-xl) !important;
-}
-
-.label {
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  color: var(--color-text-secondary);
-  text-transform: uppercase;
-  margin-bottom: var(--spacing-lg) !important;
-  display: block;
-}
-
-.courseList {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xl);
-}
-
-.itemHeader {
+.sectionHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
 }
 
-.courseTitle {
-  font-weight: 700;
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.headerIcon {
+  color: var(--color-primary);
+}
+
+.headerTitle {
+  font-size: var(--font-size-xl) !important;
+  font-weight: var(--font-weight-bold) !important;
   color: var(--color-text-primary);
 }
 
-.instructor {
-  color: var(--color-text-secondary);
-}
-
-.resumeButton {
-  border-radius: 10px !important;
+.viewAllButton {
+  background: transparent !important;
+  border: 1px solid var(--color-border) !important;
+  color: var(--color-text-secondary) !important;
+  padding: var(--spacing-xs) var(--spacing-md) !important;
+  border-radius: var(--radius-full) !important;
+  font-size: var(--font-size-xs) !important;
+  font-weight: var(--font-weight-medium) !important;
   text-transform: none !important;
-  background-color: rgba(99, 102, 241, 0.1) !important;
+  transition: all var(--transition-fast) !important;
+}
+
+.viewAllButton:hover {
+  border-color: var(--color-primary) !important;
   color: var(--color-primary) !important;
-  transition: var(--transition-base) !important;
+  background: rgba(99, 102, 241, 0.04) !important;
 }
 
-.resumeButton:hover {
-  background-color: rgba(99, 102, 241, 0.2) !important;
+/* Netflix‑style scroll container */
+.coursesGrid {
+  display: flex;
+  gap: var(--spacing-lg);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: var(--spacing-xs) var(--spacing-xs) var(--spacing-md);
+  margin: 0 calc(-1 * var(--spacing-xs));
+  -webkit-overflow-scrolling: touch;
 }
 
-.progressBar {
-  height: 6px !important;
-  border-radius: 3px !important;
-  background-color: var(--color-bg-dark) !important;
+/* Custom scrollbar */
+.coursesGrid::-webkit-scrollbar {
+  height: 4px;
 }
 
-.progressBar :global(.MuiLinearProgress-bar) {
-  background-color: var(--color-primary) !important;
-  border-radius: 3px;
+.coursesGrid::-webkit-scrollbar-track {
+  background: var(--color-border);
+  border-radius: var(--radius-sm);
 }
+
+.coursesGrid::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: var(--radius-sm);
+}
+
+/* Each card snaps and takes exactly 1/3 of container width minus gaps */
+.courseCard {
+  flex: 0 0 calc((100% - 2 * var(--spacing-lg)) / 3);
+  scroll-snap-align: start;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  transition: all var(--transition-base);
+  display: flex;
+  flex-direction: column;
+}
+
+.courseCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-primary-light);
+}
+
+.courseInfo {
+  margin-bottom: var(--spacing-md);
+}
+
+.courseInfo h4 {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--spacing-xs);
+  line-height: 1.3;
+}
+
+.courseInfo p {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.progressWrapper {
+  margin: var(--spacing-md) 0;
+}
+
+.progressLabel {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.progressBarRoot {
+  height: 6px;
+  background: var(--color-border);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--color-primary);
+  border-radius: var(--radius-full);
+  transition: width 0.5s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.courseFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+}
+
+.continueBtn {
+  background: transparent !important;
+  border: 1px solid var(--color-border) !important;
+  color: var(--color-text-primary) !important;
+  padding: var(--spacing-xs) var(--spacing-md) !important;
+  border-radius: var(--radius-full) !important;
+  font-size: var(--font-size-xs) !important;
+  font-weight: var(--font-weight-medium) !important;
+  text-transform: none !important;
+  display: inline-flex !important;
+  align-items: center;
+  gap: var(--spacing-xs) !important;
+  transition: all var(--transition-fast) !important;
+}
+
+.continueBtn:hover {
+  background: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+  color: white !important;
+}
+
+.arrowIcon {
+  color: var(--color-text-muted);
+  transition: transform var(--transition-fast);
+}
+
+.courseCard:hover .arrowIcon {
+  transform: translateX(4px);
+  color: var(--color-primary);
+}
+
+.emptyState {
+  padding: var(--spacing-3xl);
+  text-align: center;
+  color: var(--color-text-secondary);
+  width: 100%;
+  font-size: var(--font-size-sm);
+}
+
+/* Responsive: show 2 cards on tablets, 1 on mobile */
+@media (max-width: 900px) {
+  .courseCard {
+    flex: 0 0 calc((100% - var(--spacing-lg)) / 2);
+  }
+}
+
+@media (max-width: 600px) {
+  .sectionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+  }
+
+  .courseCard {
+    flex: 0 0 100%;
+  }
+}
+
+/* Netflix‑style scroll container – no visible scrollbar */
+.coursesGrid {
+  display: flex;
+  gap: var(--spacing-lg);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: var(--spacing-xs) var(--spacing-xs) var(--spacing-md);
+  margin: 0 calc(-1 * var(--spacing-xs));
+  -webkit-overflow-scrolling: touch;
+  
+  /* Hide scrollbar for all browsers */
+  scrollbar-width: none;           /* Firefox */
+  -ms-overflow-style: none;        /* IE/Edge */
+}
+
+.coursesGrid::-webkit-scrollbar {
+  display: none;                   /* Chrome/Safari */
+}
+
+/* Rest of the CSS remains unchanged */

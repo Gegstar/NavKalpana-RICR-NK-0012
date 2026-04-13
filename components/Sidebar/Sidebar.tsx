@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { 
   LayoutDashboard, BookOpen, GraduationCap, BookUser, 
   LogOut, ChevronLeft, ChevronRight, Calendar, 
-  Settings, Users, ClipboardList, BarChart3
+  Settings, Users, ClipboardList, BarChart3, Brain
 } from "lucide-react";
 
 import styles from "@/styles/StudentSidebar.module.css";
@@ -43,13 +43,14 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
 
   const menuConfigs: Record<string, MenuItem[]> = {
     STUDENT: [
-      { name: "Dashboard", icon: <LayoutDashboard size={20} />, path: "/dashboard" },
-      { name: "My Courses", icon: <BookOpen size={20} />, path: "/my-courses" },
-      { name: "All Courses", icon: <BookUser size={20} />, path: "/courses" },
-      { name: "Assignments", icon: <ClipboardList size={20} />, path: "/assignments" },
-      { name: "Quizzes", icon: <GraduationCap size={20} />, path: "/quizzes" },
-      { name: "Attendance", icon: <Calendar size={20} />, path: "/attendance" },
-      { name: "Profile", icon: <Users size={20} /> , path: "/student-profile"}
+      { name: "Dashboard",  icon: <LayoutDashboard size={20} />, path: "/dashboard" },
+      { name: "My Courses", icon: <BookOpen size={20} />,        path: "/my-courses" },
+      { name: "All Courses",icon: <BookUser size={20} />,        path: "/courses" },
+      { name: "Assignments",icon: <ClipboardList size={20} />,   path: "/assignments" },
+      { name: "Quizzes",    icon: <GraduationCap size={20} />,   path: "/quizzes" },
+      { name: "Attendance", icon: <Calendar size={20} />,        path: "/attendance" },
+      { name: "Study",      icon: <Brain size={20} />,           path: "/study-productivity" },
+      { name: "Profile",    icon: <Users size={20} />,           path: "/student-profile" },
     ],
     ADMIN: [
       { name: "Dashboard", icon: <LayoutDashboard size={20} />, path: "/dashboard" },

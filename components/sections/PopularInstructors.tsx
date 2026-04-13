@@ -29,7 +29,6 @@ const instructors = [
     rating: 4.8,
     students: 12000,
     courses: 12,
-    avatar: '/images/instructors/inst1.jpg',
   },
   {
     id: 2,
@@ -38,7 +37,6 @@ const instructors = [
     rating: 4.7,
     students: 9800,
     courses: 8,
-    avatar: '/images/instructors/inst2.jpg',
   },
   {
     id: 3,
@@ -47,7 +45,6 @@ const instructors = [
     rating: 4.9,
     students: 15000,
     courses: 15,
-    avatar: '/images/instructors/inst3.jpg',
   },
   {
     id: 4,
@@ -56,7 +53,6 @@ const instructors = [
     rating: 4.6,
     students: 8700,
     courses: 10,
-    avatar: '/images/instructors/inst4.jpg',
   },
 ];
 
@@ -118,7 +114,6 @@ trigger = ScrollTrigger.create({
               <Card className={styles.card} elevation={0} sx={{ height: '100%' }}>
                 <CardContent className={styles.cardContent}>
                   <Avatar
-                    src={instructor.avatar}
                     alt={instructor.name}
                     className={styles.avatar}
                   />

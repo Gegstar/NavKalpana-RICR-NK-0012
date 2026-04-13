@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Box, Typography, Stack, Tooltip } from "@mui/material";
+import styles from "@/styles/ActivityBarChart.module.css";
 
 interface ActivityBarChartProps {
   activity: number[];
@@ -11,40 +12,24 @@ export default function ActivityBarChart({ activity }: ActivityBarChartProps) {
   const days = ["M", "T", "W", "T", "F", "S", "S"];
 
   return (
-    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <Typography variant="h6" fontWeight="bold" sx={{ mb: 2 }}>Study Productivity</Typography>
-      
-      <Stack 
-        direction="row" 
-        spacing={1.5} 
-        alignItems="flex-end" 
-        sx={{ flex: 1, height: '100%', mt: 'auto' }}
-      >
+    <Box className={styles.container}>
+      <Typography variant="h6" className={styles.title}>
+        Study Productivity
+      </Typography>
+
+      <Stack className={styles.barStack}>
         {activity.map((val, i) => (
-          <Box 
-            key={i} 
-            sx={{ 
-              flex: 1, 
-              display: 'flex', 
-              flexDirection: 'column', 
-              alignItems: 'center', 
-              gap: 1 
-            }}
-          >
+          <Box key={i} className={styles.barWrapper}>
             <Tooltip title={`${val} hours`} arrow>
               <Box
-                sx={{
-                  width: '100%',
-                  bgcolor: 'var(--primary-yellow)',
+                className={styles.bar}
+                style={{
                   height: `${val}%`,
-                  borderRadius: '4px 4px 0 0',
-                  opacity: 0.6 + (val / 150),
-                  transition: 'all 0.3s ease',
-                  '&:hover': { opacity: 1, transform: 'scaleX(1.1)', boxShadow: '0 0 12px var(--primary-yellow)' }
+                  opacity: 0.6 + val / 150,
                 }}
               />
             </Tooltip>
-            <Typography variant="caption" sx={{ color: 'var(--text-secondary)', fontWeight: 'bold' }}>
+            <Typography variant="caption" className={styles.dayLabel}>
               {days[i]}
             </Typography>
           </Box>
