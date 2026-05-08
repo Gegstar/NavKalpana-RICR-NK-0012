@@ -22,6 +22,7 @@ export default function BusinessUnitDetailPage() {
   const { id } = useParams();
   const router = useRouter();
 
+  console.log(id)
   const isNew = id === "new";
 
   const [data, setData] = useState<any>({

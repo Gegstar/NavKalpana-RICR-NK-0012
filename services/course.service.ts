@@ -1,26 +1,38 @@
-import api from "@/lib/api";
+import api from '@/lib/api';
+import { Course } from '@/models/course.model';
 
 class CourseService {
-  private baseUrl = "/courses";
+  private baseUrl = '/courses';
 
-  async getAllCourses() {
-    const response = await api.get(`${this.baseUrl}`);
-    return response.data;
+  async getAllCourses(): Promise<Course[]> {
+    const response = await api.get(this.baseUrl);
+    return response.data.data;
   }
 
-  async getCourseById(id: string) {
+  async getCourseById(id: string): Promise<Course> {
     const response = await api.get(`${this.baseUrl}/${id}`);
     return response.data;
   }
 
-  async createCourse(data: any) {
-    const response = await api.post(`${this.baseUrl}`, data);
+  async createCourse(data: Partial<Course>): Promise<Course> {
+    const response = await api.post(this.baseUrl, data);
     return response.data;
   }
 
-  // ✅ Add this method
-  async markLessonComplete(courseId: number, lessonId: number) {
-    const response = await api.post(`${this.baseUrl}/${courseId}/lessons/${lessonId}/complete`);
+  async updateCourse(id: string, data: Partial<Course>): Promise<Course> {
+    const response = await api.patch(`${this.baseUrl}/${id}`, data);
+    return response.data;
+  }
+
+  async deleteCourse(id: string) {
+    const response = await api.delete(`${this.baseUrl}/${id}`);
+    return response.data;
+  }
+
+  async markLessonComplete(courseId: string, lessonId: string) {
+    const response = await api.post(
+      `${this.baseUrl}/${courseId}/lessons/${lessonId}/complete`
+    );
     return response.data;
   }
 }
