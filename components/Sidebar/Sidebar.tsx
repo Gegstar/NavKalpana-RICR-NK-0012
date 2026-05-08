@@ -57,6 +57,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
       { name: "Business Units", icon: <Users size={20} />, path: "/business-units" },
       { name: "Users", icon: <Users size={20} />, path: "/users" },
       { name: "Courses", icon: <BookOpen size={20} />, path: "/courses" },
+      { name: "Lessons", icon: <BookUser size={20} />, path: "/lessons" },
       { name: "Settings", icon: <Settings size={20} />, path: "/settings" },
     ],
     SUPER_ADMIN: [
@@ -69,6 +70,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
       { name: "Dashboard", icon: <LayoutDashboard size={20} />, path: "/dashboard" },
       { name: "My Courses", icon: <BookOpen size={20} />, path: "/courses" },
       { name: "Assignments", icon: <ClipboardList size={20} />, path: "/assignments" },
+      { name: "Lessons", icon: <BookUser size={20} />, path: "/lessons" },
       { name: "Quizzes", icon: <GraduationCap size={20} />, path: "/quizzes" },
       { name: "Students", icon: <Users size={20} />, path: "/students" },
       { name: "Analytics", icon: <BarChart3 size={20} />, path: "/analytics" },

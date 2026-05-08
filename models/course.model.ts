@@ -23,23 +23,9 @@ export interface Course {
     name?: string | null;
   } | null;
 
-  modules?: CourseModule[];
 
   // TIMESTAMPS
   createdAt: string;
   updatedAt: string;
 }
 
-export interface CourseModule {
-  id: string;
-  title: string;
-  description?: string | null;
-  lessons?: CourseLesson[];
-}
-
-export interface CourseLesson {
-  id: string;
-  title: string;
-  description?: string | null;
-  completed?: boolean;
-}
