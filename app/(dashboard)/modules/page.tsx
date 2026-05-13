@@ -74,11 +74,11 @@ function Page() {
   // =========================================================
 
   const handleCreate = () => {
-    router.push('/module/new');
+    router.push('/modules/new');
   };
 
   const handleEdit = (id: string) => {
-    router.push(`/module/${id}`);
+    router.push(`/modules/${id}`);
   };
 
   // =========================================================

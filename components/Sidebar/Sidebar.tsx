@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { 
   LayoutDashboard, BookOpen, GraduationCap, BookUser, 
   LogOut, ChevronLeft, ChevronRight, Calendar, 
-  Settings, Users, ClipboardList, BarChart3, Brain
+  Settings, Users, ClipboardList, BarChart3, Brain, ClipboardCheck 
 } from "lucide-react";
 
 import styles from "@/styles/StudentSidebar.module.css";
@@ -57,6 +57,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
       { name: "Business Units", icon: <Users size={20} />, path: "/business-units" },
       { name: "Users", icon: <Users size={20} />, path: "/users" },
       { name: "Courses", icon: <BookOpen size={20} />, path: "/courses" },
+      { name: "Modules", icon: <ClipboardCheck size={20} />, path: "/modules" },
       { name: "Lessons", icon: <BookUser size={20} />, path: "/lessons" },
       { name: "Settings", icon: <Settings size={20} />, path: "/settings" },
     ],

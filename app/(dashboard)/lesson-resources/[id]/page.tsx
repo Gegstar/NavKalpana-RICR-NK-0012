@@ -1,7 +1,15 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import {
+  useEffect,
+  useState,
+} from 'react';
+
+import {
+  useParams,
+  useRouter,
+} from 'next/navigation';
+
 import {
   Box,
   TextField,
@@ -13,58 +21,110 @@ import {
   MenuItem,
 } from '@mui/material';
 
-import { lessonResourceService } from '@/services/lesson-resources.service';
-import { fileUploadService } from '@/services/fileUpload.service';
-import { lessonService } from '@/services/lesson.service';
 import {
-  LessonResourceType,
-} from '@/models/lesson-resources.model';
+  lessonResourceService,
+} from '@/services/lesson-resourses.service';
+
+import { LessonResourceType} from '@/models/lesson-resources.model'
+import {
+  lessonService,
+} from '@/services/lesson.service';
+
+import {
+  fileUploadService,
+} from '@/services/fileUpload.service';
+
+import {
+  toastService,
+} from '@/services/toast.service';
+
 import { Lesson } from '@/models/lessons.model';
-import { toastService } from '@/services/toast.service';
+
 import '@/styles/App.css';
 
 export default function LessonResourceDetailPage() {
   const { id } = useParams();
+
   const router = useRouter();
 
   const isNew = id === 'new';
 
-  const [loading, setLoading] = useState(!isNew);
-  const [uploading, setUploading] = useState(false);
+  // =====================================================
+  // STATES
+  // =====================================================
 
-  const [lessons, setLessons] = useState<Lesson[]>([]);
+  const [uploading, setUploading] =
+    useState(false);
+
+  const [loading, setLoading] =
+    useState(!isNew);
+
+  const [lessons, setLessons] =
+    useState<Lesson[]>([]);
 
   const [data, setData] = useState({
     lessonId: '',
-    resourceType: LessonResourceType.FILE,
+
+    lessonTitle: '',
+
     title: '',
+
+    resourceType: LessonResourceType.VIDEO,
+
     resourceUrl: '',
-    position: 0,
+
+    position: 1,
+
     metadata: {},
   });
 
-  // ================= FETCH LESSONS =================
+  // =====================================================
+  // FETCH LESSONS
+  // =====================================================
+
   const fetchLessons = async () => {
     try {
-      const res = await lessonService.getAllLessons();
+      const res =
+        await lessonService.getAllLessons();
+
       setLessons(res || []);
     } catch (err) {
       toastService.apiError(err);
     }
   };
 
-  // ================= FETCH RESOURCE =================
-  const fetchLessonResource = async (resourceId: string) => {
+  // =====================================================
+  // FETCH RESOURCE
+  // =====================================================
+
+  const fetchResource = async (
+    resourceId: string,
+  ) => {
     try {
-      const res = await lessonResourceService.getLessonResourceById(resourceId);
+      const res =
+        await lessonResourceService.getResourceById(
+          resourceId,
+        );
 
       setData({
         lessonId: res.lessonId || '',
-        resourceType: res.resourceType,
+
+        lessonTitle:
+          res.lessonTitle || '',
+
         title: res.title || '',
-        resourceUrl: res.resourceUrl || '',
-        position: res.position || 0,
-        metadata: res.metadata || {},
+
+        resourceType:
+          res.resourceType || 'VIDEO',
+
+        resourceUrl:
+          res.resourceUrl || '',
+
+        position:
+          res.position || 1,
+
+        metadata:
+          res.metadata || {},
       });
     } catch (err) {
       toastService.apiError(err);
@@ -73,52 +133,81 @@ export default function LessonResourceDetailPage() {
     }
   };
 
+  // =====================================================
+  // USE EFFECT
+  // =====================================================
+
   useEffect(() => {
-    const init = async () => {
-      await fetchLessons();
+    fetchLessons();
 
-      if (!isNew && id) {
-        await fetchLessonResource(id as string);
-      } else {
-        setLoading(false);
-      }
-    };
-
-    init();
+    if (!isNew && id) {
+      fetchResource(id as string);
+    } else {
+      setLoading(false);
+    }
   }, [id]);
 
-  // ================= CHANGE =================
-  const handleChange = (field: string, value: any) => {
+  // =====================================================
+  // CHANGE
+  // =====================================================
+
+  const handleChange = (
+    field: string,
+    value: any,
+  ) => {
     setData((prev) => ({
       ...prev,
       [field]: value,
     }));
   };
 
-  // ================= FILE UPLOAD =================
-  const handleFileUpload = async (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  // =====================================================
+  // FILE UPLOAD
+  // =====================================================
 
+  const handleFileUpload = async (
+    file: File,
+  ) => {
     try {
       setUploading(true);
 
-      const uploaded = await toastService.promise(
-        fileUploadService.upload(
+      // VIDEO → HLS
+      if (
+        data.resourceType === 'VIDEO'
+      ) {
+        const res =
+          await fileUploadService.uploadHlsVideo(
+            file,
+          );
+
+        handleChange(
+          'resourceUrl',
+          res.playlistUrl,
+        );
+
+        toastService.success(
+          'Video uploaded successfully',
+        );
+
+        return;
+      }
+
+      // NORMAL FILE
+      const res =
+        await fileUploadService.upload(
           file,
           file.name,
-          'lesson-resources'
-        ),
-        {
-          loading: 'Uploading file...',
-          success: 'File uploaded successfully!',
-          error: 'File upload failed',
-        }
+          'lesson-resources',
+        );
+
+      handleChange(
+        'resourceUrl',
+        res.url,
       );
 
-      handleChange('resourceUrl', uploaded?.url);
+      toastService.success(
+        'File uploaded successfully',
+      );
     } catch (err) {
       toastService.apiError(err);
     } finally {
@@ -126,195 +215,346 @@ export default function LessonResourceDetailPage() {
     }
   };
 
-  // ================= SUBMIT =================
-  const handleSubmit = async (e: React.FormEvent) => {
+  // =====================================================
+  // SUBMIT
+  // =====================================================
+
+  const handleSubmit = async (
+    e: React.FormEvent,
+  ) => {
     e.preventDefault();
 
-    if (!data.lessonId || !data.resourceUrl) {
-      toastService.error(
-        'Lesson and resource URL are required'
-      );
-      return;
-    }
-
     try {
+      const payload = {
+        lessonId: data.lessonId,
+
+        title: data.title,
+
+        resourceType:
+          data.resourceType,
+
+        resourceUrl:
+          data.resourceUrl,
+
+        position: Number(
+          data.position,
+        ),
+
+        metadata: data.metadata,
+      };
+
       if (isNew) {
         await toastService.promise(
-          lessonResourceService.createLessonResource(data),
+          lessonResourceService.createResource(
+            payload,
+          ),
           {
-            loading: 'Creating lesson resource...',
-            success: 'Lesson resource created!',
-            error: 'Failed to create lesson resource',
-          }
+            loading:
+              'Creating resource...',
+
+            success:
+              'Resource created successfully',
+
+            error:
+              'Failed to create resource',
+          },
         );
       } else {
         await toastService.promise(
-          lessonResourceService.updateLessonResource(
+          lessonResourceService.updateResource(
             id as string,
-            data
+            payload,
           ),
           {
-            loading: 'Updating lesson resource...',
-            success: 'Lesson resource updated!',
-            error: 'Failed to update lesson resource',
-          }
+            loading:
+              'Updating resource...',
+
+            success:
+              'Resource updated successfully',
+
+            error:
+              'Failed to update resource',
+          },
         );
       }
 
-      router.push('/lesson-resources');
+      router.push(
+        '/lesson-resources',
+      );
     } catch (err) {
-      toastService.apiError(err);
+      console.error(err);
     }
   };
 
-  // ================= LOADING =================
+  // =====================================================
+  // LOADING
+  // =====================================================
+
   if (loading) {
     return (
-      <Box display="flex" justifyContent="center" mt={8}>
+      <Box
+        display="flex"
+        justifyContent="center"
+        mt={10}
+      >
         <CircularProgress />
       </Box>
     );
   }
 
+  // =====================================================
+  // UI
+  // =====================================================
+
   return (
-     <Paper className="form-container form-80">
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        mb={3}
-      >
+    <Paper className="form-container form-80">
+      {/* HEADER */}
+
+      <Box className="form-header">
         <Typography variant="h5">
           {isNew
             ? 'Create Lesson Resource'
             : 'Edit Lesson Resource'}
         </Typography>
 
-        <Box display="flex" gap={1}>
+        <Box className="form-header-actions">
           <Button
-            color="error"
             onClick={() =>
-              router.push('/lesson-resources')
+              router.push(
+                '/lesson-resources',
+              )
             }
+            color="error"
           >
             Cancel
           </Button>
 
           <Button
             type="submit"
-            form="lesson-resource-form"
+            form="form"
             variant="contained"
+            disabled={uploading}
           >
             Save
           </Button>
         </Box>
       </Box>
 
+      {/* FORM */}
+
       <Box
         component="form"
-        id="lesson-resource-form"
+        id="form"
         onSubmit={handleSubmit}
       >
-        <FormGroup>
-          <Box
-            display="grid"
-            gridTemplateColumns="1fr 1fr"
-            gap={2}
-          >
+        <FormGroup className="form-group">
+          <Typography variant="h6">
+            Resource Info
+          </Typography>
+
+          {/* LESSON */}
+
+          <div className="form-row grid-cols-2">
             <TextField
               select
               label="Lesson"
               value={data.lessonId}
-              onChange={(e) =>
-                handleChange('lessonId', e.target.value)
-              }
+              onChange={(e) => {
+                const lessonId =
+                  e.target.value;
+
+                const lesson =
+                  lessons.find(
+                    (l) =>
+                      l.id ===
+                      lessonId,
+                  );
+
+                setData((prev) => ({
+                  ...prev,
+
+                  lessonId,
+
+                  lessonTitle:
+                    lesson?.title ||
+                    '',
+                }));
+              }}
               fullWidth
               required
             >
-              {lessons.map((lesson) => (
-                <MenuItem
-                  key={lesson.id}
-                  value={lesson.id}
-                >
-                  {lesson.title}
-                </MenuItem>
-              ))}
-            </TextField>
-
-            <TextField
-              select
-              label="Resource Type"
-              value={data.resourceType}
-              onChange={(e) =>
-                handleChange(
-                  'resourceType',
-                  e.target.value
-                )
-              }
-              fullWidth
-            >
-              {Object.values(LessonResourceType).map(
-                (type) => (
-                  <MenuItem key={type} value={type}>
-                    {type}
+              {lessons.map(
+                (lesson) => (
+                  <MenuItem
+                    key={lesson.id}
+                    value={lesson.id}
+                  >
+                    {lesson.title}
                   </MenuItem>
-                )
+                ),
               )}
             </TextField>
 
             <TextField
+              label="Lesson Title"
+              value={
+                data.lessonTitle
+              }
+              disabled
+              fullWidth
+            />
+          </div>
+
+          {/* TITLE + TYPE */}
+
+          <div className="form-row grid-cols-2">
+            <TextField
               label="Title"
               value={data.title}
               onChange={(e) =>
-                handleChange('title', e.target.value)
-              }
-              fullWidth
-            />
-
-            <TextField
-              label="Position"
-              type="number"
-              value={data.position}
-              onChange={(e) =>
                 handleChange(
-                  'position',
-                  Number(e.target.value)
-                )
-              }
-              fullWidth
-            />
-          </Box>
-
-          <Box mt={3}>
-            <Typography mb={1}>
-              Upload File / Video / PDF
-            </Typography>
-
-            <input
-              type="file"
-              onChange={handleFileUpload}
-            />
-
-            {uploading && (
-              <Box mt={1}>
-                <CircularProgress size={20} />
-              </Box>
-            )}
-          </Box>
-
-          <Box mt={2}>
-            <TextField
-              label="Resource URL"
-              value={data.resourceUrl}
-              onChange={(e) =>
-                handleChange(
-                  'resourceUrl',
-                  e.target.value
+                  'title',
+                  e.target.value,
                 )
               }
               fullWidth
               required
             />
-          </Box>
+
+            <TextField
+              select
+              label="Resource Type"
+              value={
+                data.resourceType
+              }
+              onChange={(e) =>
+                handleChange(
+                  'resourceType',
+                  e.target.value,
+                )
+              }
+              fullWidth
+            >
+              <MenuItem value="VIDEO">
+                VIDEO
+              </MenuItem>
+
+              <MenuItem value="PDF">
+                PDF
+              </MenuItem>
+
+              <MenuItem value="IMAGE">
+                IMAGE
+              </MenuItem>
+
+              <MenuItem value="LINK">
+                LINK
+              </MenuItem>
+
+              <MenuItem value="AUDIO">
+                AUDIO
+              </MenuItem>
+
+              <MenuItem value="ZIP">
+                ZIP
+              </MenuItem>
+            </TextField>
+          </div>
+
+          {/* FILE */}
+
+          <div className="form-row grid-cols-2">
+            <Button
+              variant="outlined"
+              component="label"
+              disabled={uploading}
+            >
+              {uploading
+                ? 'Uploading...'
+                : 'Upload File'}
+
+              <input
+                type="file"
+                hidden
+                accept={
+                  data.resourceType ===
+                  'VIDEO'
+                    ? 'video/mp4'
+                    : '*'
+                }
+                onChange={async (
+                  e,
+                ) => {
+                  const file =
+                    e.target
+                      .files?.[0];
+
+                  if (!file)
+                    return;
+
+                  await handleFileUpload(
+                    file,
+                  );
+                }}
+              />
+            </Button>
+
+            <TextField
+              label="Resource URL"
+              value={
+                data.resourceUrl
+              }
+              onChange={(e) =>
+                handleChange(
+                  'resourceUrl',
+                  e.target.value,
+                )
+              }
+              fullWidth
+            />
+          </div>
+
+          {/* POSITION + METADATA */}
+
+          <div className="form-row grid-cols-2">
+            <TextField
+              label="Position"
+              type="number"
+              value={
+                data.position
+              }
+              onChange={(e) =>
+                handleChange(
+                  'position',
+                  e.target.value,
+                )
+              }
+              fullWidth
+            />
+
+            <TextField
+              label="Metadata JSON"
+              multiline
+              rows={4}
+              value={JSON.stringify(
+                data.metadata,
+                null,
+                2,
+              )}
+              onChange={(e) => {
+                try {
+                  handleChange(
+                    'metadata',
+                    JSON.parse(
+                      e.target
+                        .value,
+                    ),
+                  );
+                } catch {}
+              }}
+              fullWidth
+            />
+          </div>
         </FormGroup>
       </Box>
     </Paper>
