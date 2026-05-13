@@ -181,7 +181,7 @@ export default function ModuleDetailPage() {
         );
       }
 
-      router.push("/module");
+      router.push("/modules");
     } catch (err) {
       console.error(err);
     }

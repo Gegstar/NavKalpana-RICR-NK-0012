@@ -6,7 +6,7 @@ import type { NextRequest } from "next/server";
 // ==========================
 const accessControl: Record<string, string[]> = {
   SUPER_ADMIN: ["/dashboard", "/users", "/settings", "/my-courses", "/business-units"],
-  ADMIN: ["/dashboard", "/courses", "/students", "/business-units","/module","/course","/courses/:id","/lessons"],
+  ADMIN: ["/dashboard", "/courses", "/students", "/business-units","/module","/course","/courses/:id","/lessons","/lesson-resources"],
   TEACHER: ["/courses", "/lessons", "/profile"],
   STUDENT: ["/courses", "/profile", "/dashboard", "/student/dashboard", "/super_admin", "/my-courses"],
 };
