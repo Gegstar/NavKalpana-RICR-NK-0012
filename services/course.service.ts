@@ -1,8 +1,8 @@
-import api from '@/lib/api';
-import { Course } from '@/models/course.model';
+import api from "@/lib/api";
+import { Course, ViewCourse } from "@/models/course.model";
 
 class CourseService {
-  private baseUrl = '/courses';
+  private baseUrl = "/courses";
 
   async getAllCourses(): Promise<Course[]> {
     const response = await api.get(this.baseUrl);
@@ -11,6 +11,11 @@ class CourseService {
 
   async getCourseById(id: string): Promise<Course> {
     const response = await api.get(`${this.baseUrl}/${id}`);
+    return response.data;
+  }
+  async viewCourse(id: string): Promise<ViewCourse> {
+    const response = await api.get(`${this.baseUrl}/view/${id}`);
+
     return response.data;
   }
 
@@ -31,7 +36,7 @@ class CourseService {
 
   async markLessonComplete(courseId: string, lessonId: string) {
     const response = await api.post(
-      `${this.baseUrl}/${courseId}/lessons/${lessonId}/complete`
+      `${this.baseUrl}/${courseId}/lessons/${lessonId}/complete`,
     );
     return response.data;
   }

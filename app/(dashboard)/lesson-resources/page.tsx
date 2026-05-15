@@ -91,11 +91,11 @@ function Page() {
   // =====================================================
 
   const handleCreate = () => {
-    router.push('/lesson-resource/new');
+    router.push('/lesson-resources/new');
   };
 
   const handleEdit = (id: string) => {
-    router.push(`/lesson-resource/${id}`);
+    router.push(`/lesson-resources/${id}`);
   };
 
   // =====================================================
@@ -207,7 +207,7 @@ function Page() {
       {
         accessorKey: 'resourceType',
         header: 'Type',
-        size: 150,
+        size: 100,
 
         Cell: ({ cell }: any) => {
           const type =
@@ -233,7 +233,7 @@ function Page() {
       {
         accessorKey: 'position',
         header: 'Position',
-        size: 80,
+        size: 50,
       },
 
       {
@@ -254,7 +254,7 @@ function Page() {
       {
         accessorKey: 'createdAt',
         header: 'Created At',
-
+        size:20,
         Cell: ({ cell }: any) =>
           cell.getValue()
             ? new Date(
