@@ -59,6 +59,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
       { name: "Courses", icon: <BookOpen size={20} />, path: "/courses" },
       { name: "Modules", icon: <ClipboardCheck size={20} />, path: "/modules" },
       { name: "Lessons", icon: <BookUser size={20} />, path: "/lessons" },
+      { name: "Lessons Resources", icon: <ClipboardCheck size={20} />, path: "/lesson-resources" },
       { name: "Settings", icon: <Settings size={20} />, path: "/settings" },
     ],
     SUPER_ADMIN: [

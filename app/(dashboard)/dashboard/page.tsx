@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useApp } from "@/context/AppContext";
-
+import { useAppSelector } from "@/store/store"; 
 // ✅ Import Dashboards
 import StudentDashboard from "@/components/dashboard/student/StudentDashboard";
 import SuperAdminDashboard from "@/components/dashboard/SuperAdminDashboard";
@@ -11,7 +11,8 @@ import AdminDashboard from "@/components/dashboard/AdminDashboard";
 import InstructorDashboard from "@/components/dashboard/instructor/InstructorDashboard";
 
 export default function DashboardPage() {
-  const { user, role } = useApp();
+  const { user} = useApp();
+  const role = useAppSelector((state) => state.user.role);
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 
@@ -22,7 +23,6 @@ export default function DashboardPage() {
     }
   }, [user]);
 
-  // 🚫 Not logged in → redirect
   useEffect(() => {
     if (!loading && !user) {
       router.push("/auth/login");
