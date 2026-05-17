@@ -7,12 +7,7 @@ import {
   Typography,
   Grid,
   Avatar,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
   Chip,
-  Divider,
 } from '@mui/material';
 import {
   People,
@@ -64,7 +59,7 @@ export default function LiveUsers() {
     const interval = setInterval(() => {
       // Randomly change active count (±3)
       setActiveCount(prev => Math.max(10, prev + Math.floor(Math.random() * 7) - 3));
-      
+
       // Update users list (add/remove random users)
       setUsers(prev => {
         const newUsers = [...prev];
@@ -170,33 +165,26 @@ export default function LiveUsers() {
           </Box>
         </Paper>
 
-        {/* Active Users List */}
+        {/* Active Users List – rewritten without List/ListItemText */}
         <Paper className={styles.usersCard}>
           <Typography variant="h6" gutterBottom>
             Currently Active Users
           </Typography>
-          <List className={styles.userList}>
-            {users.map((user, idx) => (
-              <React.Fragment key={user.id}>
-                <ListItem className={styles.userItem}>
-                  <ListItemAvatar>
-                    <Avatar src={user.avatar} />
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={user.name}
-                    secondary={
-                      <Box component="span" className={styles.userMeta}>
-                        <Chip label={user.country} size="small" variant="outlined" />
-                        <Typography variant="caption">Viewing: {user.currentPage}</Typography>
-                      </Box>
-                    }
-                  />
-                  <Chip label="Active now" size="small" color="success" />
-                </ListItem>
-                {idx < users.length - 1 && <Divider variant="inset" component="li" />}
-              </React.Fragment>
+          <Box className={styles.userList}>
+            {users.map((user) => (
+              <Box key={user.id} className={styles.userItem}>
+                <Avatar src={user.avatar} className={styles.avatar} />
+                <Box className={styles.userInfo}>
+                  <Typography className={styles.userName}>{user.name}</Typography>
+                  <Box className={styles.userMeta}>
+                    <Chip label={user.country} size="small" variant="outlined" />
+                    <Typography variant="caption">Viewing: {user.currentPage}</Typography>
+                  </Box>
+                </Box>
+                <Chip label="Active now" size="small" color="success" />
+              </Box>
             ))}
-          </List>
+          </Box>
         </Paper>
       </Container>
     </Box>

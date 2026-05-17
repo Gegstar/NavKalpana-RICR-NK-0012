@@ -6,7 +6,7 @@ import type { NextRequest } from "next/server";
 // ==========================
 const accessControl: Record<string, string[]> = {
   SUPER_ADMIN: ["/dashboard", "/users", "/settings", "/my-courses", "/business-units"],
-  ADMIN: ["/dashboard", "/courses", "/students", "/business-units","/module","/course","/courses/:id","/lessons","/lesson-resources","/view-course"],
+  ADMIN: ["/dashboard", "/manage-students","/manage-teachers","/course-tracking","/live-users","/analytics","/courses", "/students", "/business-units","/module","/course","/courses/:id","/lessons","/lesson-resources","/view-course"],
   TEACHER: ["/courses", "/lessons", "/profile","/view-course"],
   STUDENT: ["/courses", "/profile", "/dashboard", "/student/dashboard", "/super_admin", "/my-courses","/view-course"],
 };
@@ -21,17 +21,6 @@ const publicRoutes = [
   "/auth/superadmin_login",
   "/auth/staff_login",
   "/auth/forgot_password",
-  "/dashboard",
-  "/my-courses",
-  "/courses",
-  "/learning-list",
-  "/assignments",
-  "/quizzes",
-  "/attendance",
-  "/learning-support",
-  "/student-profile",
-  "/manage-students"
-  
 ];
 
 // ==========================

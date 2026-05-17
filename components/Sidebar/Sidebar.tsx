@@ -3,15 +3,39 @@
 import React, { Dispatch, SetStateAction } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { 
-  LayoutDashboard, BookOpen, GraduationCap, BookUser, 
-  LogOut, ChevronLeft, ChevronRight, Calendar, 
-  Settings, Users, ClipboardList, BarChart3, Brain, ClipboardCheck 
+import {
+  Box,
+  IconButton,
+  Typography,
+  Button,
+} from "@mui/material";
+import {
+  LayoutDashboard,
+  BookOpen,
+  GraduationCap,
+  BookUser,
+  LogOut,
+  ChevronLeft,
+  ChevronRight,
+  Calendar,
+  Settings,
+  Users,
+  ClipboardList,
+  BarChart3,
+  Brain,
+  ClipboardCheck,
+  Activity,
+  Building2,
+  Layers,
+  FolderOpen,
+  FileText,
+  HelpCircle,
+  UserCheck,
 } from "lucide-react";
 
 import styles from "@/styles/StudentSidebar.module.css";
 import { authService } from "@/services/auth.service";
-import { useAppSelector } from "@/store/store"; 
+import { useAppSelector } from "@/store/store";
 import Logo from "@/components/ui/Logo";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 
@@ -43,59 +67,71 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
 
   const menuConfigs: Record<string, MenuItem[]> = {
     STUDENT: [
-      { name: "Dashboard",  icon: <LayoutDashboard size={20} />, path: "/dashboard" },
-      { name: "My Courses", icon: <BookOpen size={20} />,        path: "/my-courses" },
-      { name: "All Courses",icon: <BookUser size={20} />,        path: "/courses" },
-      { name: "Assignments",icon: <ClipboardList size={20} />,   path: "/assignments" },
-      { name: "Quizzes",    icon: <GraduationCap size={20} />,   path: "/quizzes" },
-      { name: "Attendance", icon: <Calendar size={20} />,        path: "/attendance" },
-      { name: "Study",      icon: <Brain size={20} />,           path: "/study-productivity" },
-      { name: "Profile",    icon: <Users size={20} />,           path: "/student-profile" },
+      { name: "Dashboard", icon: <LayoutDashboard size={20} />, path: "/dashboard" },
+      { name: "My Courses", icon: <BookOpen size={20} />, path: "/my-courses" },
+      { name: "All Courses", icon: <BookUser size={20} />, path: "/courses" },
+      { name: "Assignments", icon: <ClipboardList size={20} />, path: "/assignments" },
+      { name: "Quizzes", icon: <GraduationCap size={20} />, path: "/quizzes" },
+      { name: "Attendance", icon: <Calendar size={20} />, path: "/attendance" },
+      { name: "Study", icon: <Brain size={20} />, path: "/study-productivity" },
+      { name: "Profile", icon: <Users size={20} />, path: "/student-profile" },
     ],
     ADMIN: [
       { name: "Dashboard", icon: <LayoutDashboard size={20} />, path: "/dashboard" },
-      { name: "Business Units", icon: <Users size={20} />, path: "/business-units" },
-      { name: "Users", icon: <Users size={20} />, path: "/users" },
+      { name: "Manage Students", icon: <UserCheck size={20} />, path: "/manage-students" },
+      { name: "Manage Teachers", icon: <GraduationCap size={20} />, path: "/manage-teachers" },
+      { name: "Course Tracking", icon: <ClipboardCheck size={20} />, path: "/course-tracking" },
+      { name: "Live Users", icon: <Activity size={20} />, path: "/live-users" },
+      { name: "Analytics", icon: <BarChart3 size={20} />, path: "/analytics" },
+      
       { name: "Courses", icon: <BookOpen size={20} />, path: "/courses" },
       { name: "Modules", icon: <ClipboardCheck size={20} />, path: "/modules" },
       { name: "Lessons", icon: <BookUser size={20} />, path: "/lessons" },
       { name: "Lessons Resources", icon: <ClipboardCheck size={20} />, path: "/lesson-resources" },
-      { name: "Settings", icon: <Settings size={20} />, path: "/settings" },
+      { name: "Settings", icon: <Settings size={20} />, path: "/settings" }
     ],
     SUPER_ADMIN: [
       { name: "Dashboard", icon: <LayoutDashboard size={20} />, path: "/dashboard" },
-      { name: "Business Units", icon: <Users size={20} />, path: "/business-units" },
+      { name: "Business Units", icon: <Building2 size={20} />, path: "/business-units" },
       { name: "Users", icon: <Users size={20} />, path: "/users" },
       { name: "Settings", icon: <Settings size={20} />, path: "/settings" },
     ],
     INSTRUCTOR: [
       { name: "Dashboard", icon: <LayoutDashboard size={20} />, path: "/dashboard" },
       { name: "My Courses", icon: <BookOpen size={20} />, path: "/courses" },
+      { name: "Modules", icon: <Layers size={20} />, path: "/modules" },
+      { name: "Lessons", icon: <FolderOpen size={20} />, path: "/lessons" },
+      { name: "Lesson Resources", icon: <FileText size={20} />, path: "/lesson-resources" },
       { name: "Assignments", icon: <ClipboardList size={20} />, path: "/assignments" },
-      { name: "Lessons", icon: <BookUser size={20} />, path: "/lessons" },
-      { name: "Quizzes", icon: <GraduationCap size={20} />, path: "/quizzes" },
+      { name: "Quizzes", icon: <HelpCircle size={20} />, path: "/quizzes" },
       { name: "Students", icon: <Users size={20} />, path: "/students" },
       { name: "Analytics", icon: <BarChart3 size={20} />, path: "/analytics" },
-    ]
+    ],
   };
 
   const menuItems = menuConfigs[role as keyof typeof menuConfigs] || menuConfigs.STUDENT;
 
   return (
-    <aside className={`${styles.sidebar} ${isCollapsed ? styles.collapsed : ""}`}>
-      <button 
-        className={styles.toggleBtn} 
+    <Box
+      component="aside"
+      className={`${styles.sidebar} ${isCollapsed ? styles.collapsed : ""}`}
+    >
+      {/* Toggle button */}
+      <IconButton
+        className={styles.toggleBtn}
         onClick={() => setIsCollapsed(!isCollapsed)}
         aria-label="Toggle Sidebar"
       >
         {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
-      </button>
+      </IconButton>
 
-      <div className={styles.logoContainer}>
+      {/* Logo */}
+      <Box className={styles.logoContainer}>
         <Logo variant={isCollapsed ? "icon" : "full"} size="medium" />
-      </div>
+      </Box>
 
-      <nav className={styles.navMenu}>
+      {/* Navigation */}
+      <Box component="nav" className={styles.navMenu}>
         {menuItems.map((item) => (
           <Link
             key={item.name}
@@ -103,22 +139,39 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: SidebarProps) => {
             className={`${styles.navItem} ${pathname === item.path ? styles.navActive : ""}`}
           >
             {item.icon}
-            {!isCollapsed && <span>{item.name}</span>}
+            {!isCollapsed && <Typography component="span">{item.name}</Typography>}
           </Link>
         ))}
-      </nav>
+      </Box>
 
-      <footer className={styles.logoutWrapper}>
-        <div className={styles.themeBox}>
+      {/* Footer */}
+      <Box component="footer" className={styles.logoutWrapper}>
+        <Box className={styles.themeBox}>
           <ThemeToggle />
-          {!isCollapsed && <span style={{ marginLeft: '12px', fontSize: '0.85rem', fontWeight: 600 }}>Theme</span>}
-        </div>
-        <button onClick={handleLogout} className={styles.logoutBtn}>
-          <LogOut size={20} />
-          {!isCollapsed && <span>Sign Out</span>}
-        </button>
-      </footer>
-    </aside>
+          {!isCollapsed && (
+            <Typography
+              sx={{
+                ml: 1.5,
+                fontSize: "0.85rem",
+                fontWeight: 600,
+                color: "var(--color-text-primary)",
+              }}
+            >
+              Theme
+            </Typography>
+          )}
+        </Box>
+        <Button
+          onClick={handleLogout}
+          className={styles.logoutBtn}
+          startIcon={<LogOut size={20} />}
+          fullWidth
+          sx={{ justifyContent: isCollapsed ? "center" : "flex-start" }}
+        >
+          {!isCollapsed && "Sign Out"}
+        </Button>
+      </Box>
+    </Box>
   );
 };
 

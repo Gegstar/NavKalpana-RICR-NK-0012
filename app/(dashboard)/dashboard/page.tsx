@@ -8,7 +8,7 @@ import { useAppSelector } from "@/store/store";
 import StudentDashboard from "@/components/dashboard/student/StudentDashboard";
 import SuperAdminDashboard from "@/components/dashboard/SuperAdminDashboard";
 import AdminDashboard from "@/components/dashboard/AdminDashboard";
-import InstructorDashboard from "@/components/dashboard/instructor/InstructorDashboard";
+import InstructorDashboard from "@/components/dashboard/instructor/InstructorDashboard.old";
 
 export default function DashboardPage() {
   const { user} = useApp();

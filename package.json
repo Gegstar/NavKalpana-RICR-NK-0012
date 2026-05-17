@@ -14,7 +14,7 @@
     "@emotion/styled": "^11.14.1",
     "@gsap/react": "^2.1.2",
     "@mui/icons-material": "^7.3.10",
-    "@mui/lab": "^9.0.0-beta.2",
+    "@mui/lab": "^7.0.0",
     "@mui/material": "^7.3.10",
     "@mui/material-nextjs": "^7.3.9",
     "@mui/x-date-pickers": "^8.27.2",
